@@ -55,6 +55,6 @@
             </tr>
         </table>
         </center>
-    </cfif>ssd
+    </cfif>
 </cfoutput>
 <cfinclude  template="..\includes\foot.cfm">
