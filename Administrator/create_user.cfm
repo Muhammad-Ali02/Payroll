@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="head.cfm">
+<cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- |________________________________\|/_Back End _\|/________________________________|--->
         <cfparam  name = "merror" default = 0>
@@ -66,4 +66,4 @@
         </center>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="head.cfm">
+    <cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedin')>
         <!--- ____________________________________ Back End ______________________________________________ --->
         <cfquery name = "get_employees"> <!--- to print All employees list --->
@@ -137,15 +137,21 @@
                         <cfcontent type = "application/octet-stream" file = "#expandPath('.')#\pay_slip#url.generate#.pdf" deletefile = "yes">
         <cfelse>
             <form action = "pay_slip.cfm" method = "get">
-                <select class = "form-select" name = "generate" required="true"> 
-                    <option disabled> Select Employee </option> 
-                        <cfloop query="get_employees">
-                            <option value = "#employee_id#"> #name# </option>
-                        </cfloop>
-                    </select>
-                <input type = "submit" value = "Generate Pay Slip">
-            </form>
+                <div class = "row">   
+                    <div class = "col-md-6">     
+                            <select class = "form-select" name = "generate" required="true"> 
+                                <option disabled> Select Employee </option> 
+                                    <cfloop query="get_employees">
+                                        <option value = "#employee_id#"> #name# </option>
+                                    </cfloop>
+                                </select>
+                    </div>
+                    <div class = "col-md-6">
+                            <input type = "submit" class = "btn btn-outline-dark" value = "Generate Pay Slip">
+                        </form>
+                    </div>
+                </div>
         </cfif>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

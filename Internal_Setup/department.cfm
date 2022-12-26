@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="head.cfm">
+<cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- |________________________________\|/_Back End _\|/________________________________|--->
         <cfparam  name = "merror" default = "0">
@@ -9,7 +9,7 @@
                 select * 
                 from department 
                 where department_id = "#url.edit#"
-                and is_deleted != "Y"
+                and is_deleted <> "Y" or is_deleted is null
             </cfquery>
             <cfif get_data.recordcount eq 0>
                 <cfset existing_department = 0>
@@ -28,7 +28,7 @@
                     insert into department (department_name, description)
                     values ('#form.txt_department_name#', '#form.txt_department_description#')
                 </cfquery>
-                <center> <strong> <p class = "text-success"> Department Created successfully </p> </strong> </center>
+                <cflocation  url="all_departments.cfm?created=true">
             </cfif>
         <cfelseif structKeyExists(form, 'update')>
             <cfquery name = "update_department">
@@ -36,7 +36,7 @@
                 set department_name = '#form.txt_department_name#', description = '#form.txt_department_description#'
                 where department_name = "#form.txt_department_name#"
             </cfquery>
-            <p class = "text-success" style = "text-align:center; font-weight:bold;"> *Department Updated Successfuly <p>
+            <cflocation  url="all_departments.cfm?updated=true">
         </cfif>
         <!--- |________________________________\|/_Front End _\|/________________________________|--->
         <cfif existing_department eq 0>
@@ -53,7 +53,7 @@
                                 <br>
                                 <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif> > <!--- name "update" will update existing data, name "create" will insert new data --->
                                 <hr>
-                                <input type = "submit" class = "btn btn-info" <cfif structKeyExists(url, 'edit')> value = "Update Department" <cfelse> value = "Create Department" </cfif> >
+                                <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> value = "Update Department" <cfelse> value = "Create Department" </cfif> >
                             </form>
                         <td>
                     </tr>
@@ -62,4 +62,4 @@
         </cfif>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

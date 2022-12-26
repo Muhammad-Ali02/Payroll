@@ -1,3 +1,3 @@
-<cfinclude  template="head.cfm">
+<cfinclude  template="includes\head.cfm">
     <h1> Wellcome to BJS Soft Solution </h1>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="includes\foot.cfm">

@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="head.cfm">
+    <cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <cfif structKeyExists(url, 'edit_process_detail')>
             <!--- Query to get Employee for edit --->
@@ -50,7 +50,7 @@
                 from all_leaves a
                 inner join leaves b on a.leave_id = b.leave_id 
                 where a.employee_id = "#url.edit_process_detail#" 
-                and a.status = "Y"
+                and a.action = "Approved"
                 group by b.leave_id
             </cfquery>
             <!--- Query used to get all paid Leave Days of an Employee --->
@@ -59,7 +59,7 @@
                 from all_leaves a
                 inner join leaves b on a.leave_id = b.leave_id 
                 where a.employee_id = "#url.edit_process_detail#" 
-                and a.status = "Y" 
+                and a.action = "Approved" 
                 and leave_type = "Paid"
             </cfquery>
             <!--- Query used to get all Hlaf Leave Days of an Employee --->
@@ -68,7 +68,7 @@
                 from all_leaves a
                 inner join leaves b on a.leave_id = b.leave_id 
                 where a.employee_id = "#url.edit_process_detail#" 
-                and a.status = "Y" 
+                and a.action = "Approved" 
                 and leave_type = "halfPaid"
             </cfquery>
             <!--- Query used to get all non paid Leave Days of an Employee --->
@@ -77,7 +77,7 @@
                 from all_leaves a
                 inner join leaves b on a.leave_id = b.leave_id 
                 where a.employee_id = "#url.edit_process_detail#" 
-                and a.status = "Y" 
+                and a.action = "Approved" 
                 and leave_type = "NonPaid"
             </cfquery>
             <!--- Calculating Working Days of Current Month --->
@@ -104,7 +104,7 @@
             <cfset basic_rate = get_employee.basic_salary / working_days>
         <!---________________________________________________________Create/Update Front End _________________________________________________________--->
             <h4> Details: </h4>
-            <div class = "container">    
+            <div class = "container mb-3">    
                 <div class="row">
                     <div class = "col-8">
                         <p> Employee ID: #get_employee.employee_id# </p> 
@@ -119,7 +119,7 @@
                 </div>
             </div>
             <form action = "process_detail.cfm?updated" method = "post">
-                <div class = "container">
+                <div class = "container mb-3">
                     <div class = "row container">
                         <div class = "col-2">
                             Working Days: <input type = "number" name = "working_days" readonly = "true" value = "#working_days#" class = "form-control">
@@ -147,36 +147,36 @@
                 </div>
                 <!---  Allowed Allowances --->
                 <div class = "row">
-                    <div class = "col-4 bg-secondary text-white">
-                        <h4> Allowances: </h4> <br>
+                    <div class = "col-4 bg-light">
+                        <h4>Allowances:</h4>
                             <cfloop query="get_allowance">
                                 #name#:
                                 <input type = "hidden" name = "allowance_id#id#" value = "#id#">
-                                <input type = "number"  min = "0" name = "allowance_amount#id#" id = "allowance_amount#id#" value = "#amount#"> <br>
+                                <input type = "number"  min = "0" name = "allowance_amount#id#" id = "allowance_amount#id#" value = "#amount#" class = "form-control"> <br>
                             </cfloop>
                     </div>
                     <!--- Deductions --->
-                    <div class = "col-4 bg-secondary text-white">
+                    <div class = "col-4 bg-light">
                         <h4> Deductions: </h4>
                             <cfloop query="get_deduction">
                                 #name#:
                                 <input type = "hidden" name = "deduction_id#id#" value = "#id#">
-                                <input type = "number"  min = "0" id = "deduction_amount#id#" name = "deduction_amount#id#" value = "#amount#"> <br>
+                                <input type = "number"  min = "0" id = "deduction_amount#id#" name = "deduction_amount#id#" value = "#amount#" class = "form-control"> <br>
                             </cfloop>
                     </div>
                     <!--- Leaves --->
-                    <div class = "col-4 bg-secondary text-white">
+                    <div class = "col-4 bg-light">
                         <h4> Leaves: </h4>
                             <cfset total_leaves = 0> <!--- variable used in loop to get total leaves --->
                             <cfloop query="leave_count"> <!--- Loop Will Print all leaves availed by employee --->
                                 #title#:
-                                <input type = "number"  min = "0" id = "leave_days#id#" name = "leave_days#id#" value = "#leave_days#" readonly = "true"> <br>
+                                <input type = "number"  min = "0" id = "leave_days#id#" name = "leave_days#id#" value = "#leave_days#" readonly = "true" class = "form-control"> <br>
                                 <cfset total_leaves = total_leaves + leave_days>
                             </cfloop>
-                            Total Leaves: <input type = "number" name = "total_leaves" value = "#total_leaves#" readonly = "true"><br>
-                            Paid Leaves: <input type = "number"  min = "0" name = "paid_leaves" value = "#paid_leave_count.leave_days#" readonly = "true"> <br>
-                            Half Pay Leaves: <input type = "number"  min = "0" name = "half_paid_leaves" value = "#half_paid_leave_count.leave_days#" readonly = "true"> <br>
-                            Leaves Without Pay: <input type = "number"  min = "0" name = "non_paid_leaves" value = "#Non_paid_leave_count.leave_days#" readonly = "true">
+                            Total Leaves: <input type = "number" class = "form-control" name = "total_leaves" value = "#total_leaves#" readonly = "true"><br>
+                            Paid Leaves: <input type = "number" class = "form-control" min = "0" name = "paid_leaves" value = "#paid_leave_count.leave_days#" readonly = "true"> <br>
+                            Half Pay Leaves: <input type = "number" class = "form-control" min = "0" name = "half_paid_leaves" value = "#half_paid_leave_count.leave_days#" readonly = "true"> <br>
+                            Leaves Without Pay: <input type = "number"  class = "form-control" min = "0" name = "non_paid_leaves" value = "#Non_paid_leave_count.leave_days#" readonly = "true">
                     </div>
                 </div>
                 <input name = "employee_id" value = "#get_employee.employee_id#" type = "hidden">
@@ -186,7 +186,7 @@
                 <input name = "transaction_mode" value = "#get_bank_details.mode#" type = "hidden">
                 <input name = "txt_bank_name" value = "#get_bank_details.name#" type = "hidden">
                 <input name = "bank_account_no" value = "#get_bank_details.account#" type = "hidden">
-                <input type = "submit" value = "Save" class = "btn btn-outline-info">
+                <input type = "submit" value = "Save" class = "btn btn-outline-dark">
             </form>
         <cfelseif structKeyExists(url, 'updated')>
         <!--- _________________________________________ Back End _________________________________________________ --->
@@ -307,7 +307,7 @@
                 select employee_id as id, first_name as name, designation as designation, basic_salary as basic_salary
                 from employee
             </cfquery>
-            <table class = "table table-info table-striped table-hover">
+            <table class = "table table-secondary table-striped table-hover">
                 <tr>
                     <th> Employee ID </th>
                     <th> Employee Name </th>
@@ -319,7 +319,13 @@
                     <td> #id# </td>
                     <td> #name# </td>
                     <td> #designation# </td>
-                    <td> <a href="process_detail.cfm?edit_process_detail=#id#"> edit </a> </td>
+                    <td> <a href="process_detail.cfm?edit_process_detail=#id#"> 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                            </svg>  
+                         </a> 
+                    </td>
                 </tr>
                 </cfloop>
             </table>
@@ -349,4 +355,4 @@
         </script>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

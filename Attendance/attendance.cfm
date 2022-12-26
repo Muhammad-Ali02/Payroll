@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="head.cfm">
+<cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, "loggedIn")>
         <cfquery name = "get_employees"> <!--- to print All employees list --->
             select concat(employee_id,' | ',first_name,' ', middle_name, ' ', last_name) as name , employee_id
@@ -9,7 +9,7 @@
             <cfquery name = "attendance_sheet">
                 select * 
                 from attendance 
-                where attendance.date > "#form.date#" 
+                where attendance.date >= "#form.date#" 
                 and employee_id = "#form.employee_id#"
             </cfquery>
         </cfif>
@@ -17,20 +17,23 @@
         <h1 style = "text-align: center; color: blue;"> ATTENDANCE SHEET </h1>
         <form action = "attendance.cfm" method = "post">
             <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') > 
-            <table>
-                <tr>
-                    <td>From Date: <input type = "date" name = "date" value = "#current_date#"> </td>
-                    <td>
+            <div class = "row mb-4">
+                <div class = "col-md-3">
+                    From Date: <input type = "date"  class = "form-control" name = "date" value = "#current_date#">
+                </div>
+                <div class = "col-md-4">
+                    Select Employee:
                         <select class = "form-select" name = "Employee_id" required="true"> 
                             <option disabled> Select Employee </option> 
                             <cfloop query="get_employees">
                                 <option value = "#employee_id#"> #name# </option>
                             </cfloop>
                         </select>
-                    </td>
-                    <td><input type = "submit" value = "Search"> </td>
-                </tr>
-            </table> 
+                </div>
+                <div class = "col-md-3">
+                    <input type = "submit" class = "btn btn-outline-dark mt-4" value = "Search">
+                </div>
+            </div>    
         </form>
         <cfif structKeyExists(form, "employee_id")>
             <cfquery name = "get_employee">
@@ -79,4 +82,4 @@
         </cfif>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

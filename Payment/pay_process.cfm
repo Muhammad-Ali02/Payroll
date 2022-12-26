@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="head.cfm">
+    <cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- ___________________________________________________ Back end ________________________________________________ --->
         <!--- Query to print dynamic drop dwon list of all employees --->
@@ -86,15 +86,21 @@
         </cfif>
         <!--- ___________________________________________________ Front End _________________________________________________ --->
         <form action = "pay_process.cfm?run_pay_process=true" method = 'post'>
-            <select name = "employee_id" required> 
-                <option disabled> Select Employee </option>
-                <option value = "All"> All </option>
-                    <cfloop query="get_employee_list">
-                        <option value = "#ID#"> #name# </option>
-                    </cfloop>
-            </select>
-            <input type = "submit" name = "run_process" value = "Run Pay Process">
+            <div class = "row">
+                <div class = "col-md-6">    
+                    <select name = "employee_id" required class = "form-select"> 
+                        <option disabled>Select Employee</option>
+                        <option value = "All"> All </option>
+                            <cfloop query="get_employee_list">
+                                <option value = "#ID#"> #name# </option>
+                            </cfloop>
+                    </select>
+                </div>
+                <div class = "col-md-6">
+                    <input type = "submit" name = "run_process" value = "Run Pay Process" class = "btn btn-outline-dark">
+                </div>
+            </div>
         </form>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

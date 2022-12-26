@@ -10,7 +10,7 @@
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="css/style5.css">
+    <link rel="stylesheet" href="..\css\style5.css">
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -19,7 +19,7 @@
 </head>
 <body>
 <cfif not structKeyExists(session, 'loggedIn')>
-    <cflocation  url="user_login.cfm">
+    <cflocation  url="..\login\user_login.cfm">
 </cfif>
 <cfoutput>
     <div class="wrapper">
@@ -29,7 +29,7 @@
         <!--- <h3>BJS Soft Solution</h3> --->
                 <div class = "container">
                     <a href = "https://bjssoftsolutions.com/" target = "blank">
-                        <img src = "img\logo.png" alt "BJS Soft Solution" >
+                        <img src = "..\img\logo.png" alt "BJS Soft Solution" >
                     </a>
                 </div>
             </div>
@@ -37,7 +37,7 @@
             <ul class="list-unstyled components">
 <!---                 <p>BJS Payroll</p> --->
                 <li>
-                    <a href="all_employees.cfm"> 
+                    <a href="..\employees\all_employees.cfm"> 
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                             <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
                         </svg>
@@ -54,10 +54,10 @@
                     </a>
                     <ul class="collapse list-unstyled" id="attendanceSubmenu">
                         <li>
-                            <a href="attendance.cfm">Attendance Sheet</a>
+                            <a href="..\attendance\attendance.cfm">Attendance Sheet</a>
                         </li>
                         <li>
-                            <a href="add_attendance.cfm">Manual Attendance</a>
+                            <a href="..\attendance\add_attendance.cfm">Manual Attendance</a>
                         </li>
                     </ul>
                 </li>
@@ -71,10 +71,10 @@
                     </a>
                     <ul class="collapse list-unstyled" id="adminSubmenu">
                         <li>
-                            <a href="all_users.cfm">Manange Users</a>
+                            <a href="..\administrator\all_users.cfm">Manange Users</a>
                         </li>
                         <li>
-                            <a href="index.cfm">!Leave Management</a>
+                            <a href="..\index.cfm">!Leave Management</a>
                         </li>
                     </ul>
                 </li>
@@ -88,10 +88,10 @@
                     </a>
                     <ul class="collapse list-unstyled" id="processSubmenu">
                         <li>
-                            <a href="pay.cfm">Pay Process</a>
+                            <a href="..\payment\pay.cfm">Pay Process</a>
                         </li>
                         <li>
-                            <a href="pay_slip.cfm">Generate Payslip</a>
+                            <a href="..\payment\pay_slip.cfm">Generate Payslip</a>
                         </li>
                     </ul>
                 </li>
@@ -105,10 +105,10 @@
                     </a>
                     <ul class="collapse list-unstyled" id="employeeSubmenu">
                         <li>
-                            <a href="setting.cfm">System Setting</a>
+                            <a href="..\general_setup\setting.cfm">System Setting</a>
                         </li>
                         <li>
-                            <a href="all_workingdays.cfm">Manange Working Days</a>
+                            <a href="..\general_setup\all_workingdays.cfm">Manange Working Days</a>
                         </li>
                     </ul>
                 </li>
@@ -123,19 +123,19 @@
                     </a>
                     <ul class="collapse list-unstyled" id="internalSubmenu">
                         <li>
-                            <a href="all_designation.cfm">Designations</a>
+                            <a href="..\internal_setup\all_designation.cfm">Designations</a>
                         </li>
                         <li>
-                            <a href="all_departments.cfm" >Departments</a>
+                            <a href="..\internal_setup\all_departments.cfm" >Departments</a>
                         </li>
                         <li>
-                            <a href="all_allowance.cfm">Allowances</a>
+                            <a href="..\internal_setup\all_allowance.cfm">Allowances</a>
                         </li>
                         <li>
-                            <a href="all_deduction.cfm">Deductions</a>
+                            <a href="..\internal_setup\all_deduction.cfm">Deductions</a>
                         </li>
                         <li>
-                            <a href="all_leaves.cfm">Leaves</a>
+                            <a href="..\internal_setup\all_leaves.cfm">Leaves</a>
                         </li>
                     </ul>
                 </li>
@@ -169,14 +169,16 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
-                                <a class="nav-link" href="index.cfm">
+                                <a class="nav-link" href="..\index.cfm">
+                                    <!--- Home Icon --->
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
                                         <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
                                     </svg>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="user_login.cfm?logout=true">
+                                <!--- logout icon --->
+                                <a class="nav-link" href="..\login\user_login.cfm?logout=true">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
                                         <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>

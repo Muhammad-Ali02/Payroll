@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="head.cfm">
+<cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- |________________________________\|/_Back End _\|/________________________________|--->
         <cfparam  name = "merror" default = 0>
@@ -23,7 +23,7 @@
                     insert into Deduction (Deduction_name, Deduction_amount, is_percent, description)
                     values ('#form.txt_Deduction_name#', '#form.Deduction_amount#', '#form.is_percent#', '#form.txt_description#')
                 </cfquery>
-                <center> <strong> <p class = "text-success"> Deduction added successfully </p> </strong> </center>
+                <cflocation  url="all_deduction.cfm?created=true">
             </cfif>
         <cfelseif structKeyExists(form, 'update')>
             <!--- update Query --->
@@ -32,7 +32,7 @@
                 set Deduction_amount = "#form.Deduction_amount#"
                 where Deduction_name = "#form.txt_Deduction_name#"
             </cfquery>
-            <p class = "text-success" style = "text-align:center; font-weight:bold;"> *Deduction information Updated Successfuly <p>
+            <cflocation  url="all_deduction.cfm?updated=true">
         </cfif>
         <!--- |________________________________\|/_Front End _\|/________________________________|--->
         <center>
@@ -53,7 +53,7 @@
                             <textarea name = "txt_description" placeholder = "Write Description Maximum words 200" maxlength = "200" rows = "5" cols = "30" required><cfif #merror# eq 1 >#form.txt_description#<cfelseif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
                         <br>
                         <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "Update" <cfelse> "Add" </cfif> > <!--- name "update" will update existing data, name "add" will insert new data --->
-                        <input type = "submit" class = "btn btn-info" <cfif structKeyExists(url, 'edit')> value = "Update Deduction" <cfelse> value = "Add Deduction" </cfif> >
+                        <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> value = "Update Deduction" <cfelse> value = "Add Deduction" </cfif> >
                     </form>
                 <td>
             </tr>
@@ -61,4 +61,4 @@
         </center>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

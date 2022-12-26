@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="head.cfm">
+    <cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <cfset date1 = dateformat(now(), "mmmm")>
         <cfif structKeyExists(form, 'current_month')>
@@ -19,25 +19,34 @@
                     set current_month = '#form.current_month#', current_year = '#form.current_year#'
                 </cfquery>
             </cfif>
+            <h1 class = "text-success"> Setting Updated </h1>
         </cfif>
         <cfquery name = "existing_data">
             select * from setup
             where current_month > 0
         </cfquery>
         <form action = "setting.cfm" method = "post">
-            Current Month: 
-            <select name = "current_month">
-                <cfloop from = "1" to="12" index="i">
-                    <option value = "#i#" <cfif i eq existing_data.current_month> selected </cfif> > #monthAsString(i)# </option>
-                </cfloop>
-            </select>
-            Current Year:
-            <select name = "current_year">
-                <cfloop from = "2022" to="2050" index="i">
-                    <option value = "#i#" <cfif i eq existing_data.current_year> selected </cfif> > #i# </option>
-                </cfloop>
-            </select>
-            <input type = "submit" value = "Save" class = "btn btn-outline-success">
+                <div class = "row">  
+                    <div class = "col-md-6">          
+                            Current Month: 
+                            <select name = "current_month" class = "form-select">
+                                <cfloop from = "1" to="12" index="i">
+                                    <option value = "#i#" <cfif i eq existing_data.current_month> selected </cfif> > #monthAsString(i)# </option>
+                                </cfloop>
+                            </select>
+                    </div>
+                    <div class = "col-md-4">
+                            Current Year:
+                            <select name = "current_year" class = "form-select">
+                                <cfloop from = "2022" to="2050" index="i">
+                                    <option value = "#i#" <cfif i eq existing_data.current_year> selected </cfif> > #i# </option>
+                                </cfloop>
+                            </select>
+                    </div>
+                    <div class = "col-md-2 mt-4">
+                            <input type = "submit" value = "Save" class = "btn btn-outline-dark">
+                    </div>
+                </div>
         </form>
         <!--- <script>
         // function monthList(){
@@ -52,4 +61,4 @@
         <!---     </script> --->
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

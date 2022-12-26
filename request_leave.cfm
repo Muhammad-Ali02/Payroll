@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="head.cfm">
+    <cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <form action = "request_leave.cfm" method = "post">
             Employee ID: <input type = "text"  min = "0" name = "txt_employee_id">
@@ -96,4 +96,4 @@
         </cfif>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">

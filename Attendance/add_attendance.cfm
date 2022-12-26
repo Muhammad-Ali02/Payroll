@@ -1,0 +1,128 @@
+<cfoutput>
+<cfinclude  template="..\includes\head.cfm">
+<cfif structKeyExists(session, 'loggedin')>
+    <cfquery name = "get_employees">
+        select concat(first_name," ", middle_name, " " , last_name) as name , employee_id
+        from employee
+    </cfquery>
+<!--- In Case of All Employees --->
+    <cfif structKeyExists(form, 'multiple_employees')>
+        <cfset inserted_employees = 0>
+        <cfset updated_employees = 0>
+        <cfloop query = "get_employees" >
+            <cfif isDefined('form.chk_time#employee_id#')> <!--- for employees that are selected in checkbox --->
+                <cfquery name = "get_duplicate_date">
+                    select date from attendance
+                    where date = '#form.attendance_date#' and employee_id = '#evaluate('form.employee_id#employee_id#')#'
+                </cfquery>
+                <cfif get_duplicate_date.recordCount eq 0>
+                    <cfquery name = "insert_checked_employees">
+                        insert into attendance (employee_id, date, time_in, time_out)
+                        values ( '#evaluate('form.employee_id#employee_id#')#' , '#form.attendance_date#', '#evaluate('form.time_in#employee_id#')#' , '#evaluate('form.time_out#employee_id#')#')
+                    </cfquery>
+                    <cfset inserted_employees = inserted_employees + 1>
+                <cfelse>
+                    <cfquery name = "update_attendance">
+                        update attendance 
+                        set time_in = '#evaluate('form.time_in#employee_id#')#' , time_out = '#evaluate('form.time_out#employee_id#')#'
+                        where date = '#form.attendance_date#' and employee_id = '#evaluate('form.employee_id#employee_id#')#'
+                    </cfquery>
+                    <cfset updated_employees = updated_employees + 1>
+                </cfif>
+            </cfif>
+        </cfloop>
+        <h3 class = "text-success"> Attendance of #inserted_employees# Employees Inserted. </h3>
+        <h3 class = "text-success"> Attendance of #updated_employees# Employees Updated. </h3>
+    </cfif>
+<!--- __________________________________ Front End ________________________________________ --->
+
+    <form action = "add_attendance.cfm" method = "post">
+        <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') >
+            <div class = "row mb-3">
+                <div class = "col-md-3">  
+                    Date:      
+                    <input type = "date" value = "#current_date#" name = "attendance_date" required class = "form-control" <cfif isDefined('update_time')> value = "#form.attendance_date#" </cfif> > 
+                </div>
+                <div class = "col-md-3">
+                    Time In: <input type = "time" value = "09:00" name = "time_in" class = "form-control">
+                </div>
+                <div class = "col-md-3">
+                    Time Out: <input type = "time" value = "18:00" name = "time_out" class = "form-control">
+                </div>
+                <div class = "col-md-3 mt-4">
+                    <input type = "submit" class = "btn btn-outline-dark" name = "update_time" value = "Submit">
+                </div>
+            </div>
+    </form>
+    <cfif isDefined('update_time')>    
+        <form action = "add_attendance.cfm" method = "post"> 
+            <p style = "display:inline; color:red; font-weight:bold;" > *Only Selected Employees will be updated</p>
+            <table class = "table table-secondary table-striped table-hover">
+                <tr>
+                    <th> Employee ID </th>
+                    <th> Employee Name </th>
+                    <th> Time In </th>
+                    <th> Time Out </th>
+                    <th style = "text-align:center">
+                            <button type = "button" class = "btn btn-outline-success" onclick = "javascript:selectAll();" > 
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
+                                    <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z"/>
+                                    <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+                                </svg>
+                            </button> 
+                            <button type = "button" class = "btn btn-outline-secondary" onclick = "javascript:deSelectAll();"> 
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-slash-square" viewBox="0 0 16 16">
+                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    <path d="M11.354 4.646a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                </svg> 
+                            </button> 
+                    </th>
+                    <input  type = "date" name = "attendance_date" value = "#form.attendance_date#" required hidden = "true">
+
+                </tr>
+                <cfloop query = "get_employees">
+                <tr>
+                    <td>
+                        #employee_id#
+                        <input value = '#employee_id#' name = "employee_id#employee_id#" readonly type = "hidden"> 
+                    </td>
+                    <td>
+                        #name# 
+                        <input value = '#name#' name = "first_name#employee_id#" readonly type = "hidden">
+                    </td>
+                    <td>
+                        <input type = "time" class = "form-control" value = "#form.time_in#" name = "time_in#employee_id#"> 
+                    </td>
+                    <td>
+                        <input type = "time" class = "form-control" value = "#form.time_out#" name = "time_out#employee_id#"> 
+                    </td>
+                    <td style = "text-align:center"> 
+                        <input type = "checkbox" name = "chk_time#employee_id#" class = "chk_box" type = "hidden"> 
+                    </td>
+                </tr>
+                </cfloop>
+            </table>
+                <input type = "submit" class = "btn btn-outline-dark" name = "multiple_employees" value = "Submit">
+        </form>
+    </cfif>
+
+<!--- JavaScript for Selecting and Deselecting All Checkboxes --->
+        <script>  
+            function selectAll(){  
+                var elmnt = document.getElementsByClassName('chk_box');  
+                for(var i=0; i<elmnt.length; i++){  
+                    if(elmnt[i].type=='checkbox')  
+                        elmnt[i].checked=true;  
+                }  
+            }  
+            function deSelectAll(){  
+                var elmnt = document.getElementsByClassName('chk_box');  
+                for(var i=0; i<elmnt.length; i++){  
+                    if(elmnt[i].type=='checkbox')  
+                        elmnt[i].checked=false;    
+                }  
+            }     
+        </script>
+</cfif>
+</cfoutput>
+<cfinclude  template="..\includes\foot.cfm">

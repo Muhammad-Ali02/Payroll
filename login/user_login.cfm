@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="bootstrap.cfm">
+    <cfinclude  template="..\includes\bootstrap.cfm">
     <cfif structKeyExists(URL, 'logout')>
         <cfset createObject("component", '\components.user_authentication').user_logout() />
     </cfif>
@@ -16,7 +16,7 @@
                     <!--- login processing --->
                     <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, form.user_password)>
                     <cfif structKeyExists(session, 'loggedIn')>
-                            <cflocation  url="index.cfm">
+                            <cflocation  url="..\index.cfm">
                     </cfif>
                 </cfif>
             <cfelse>
@@ -40,6 +40,6 @@
             </div>
         </div>
     <cfelse>
-        <cflocation  url="index.cfm">
+        <cflocation  url="..\index.cfm">
     </cfif>
 </cfoutput>

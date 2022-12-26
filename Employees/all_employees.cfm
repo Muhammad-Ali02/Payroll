@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="head.cfm">
+    <cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <cfif structKeyExists(url, 'edited')>
             <h3 style="color:green; text-align:center"> *Employee #url.edited# Updated Successfully </h3>
@@ -44,4 +44,4 @@
         </table>
     </cfif>
 </cfoutput>
-<cfinclude  template="foot.cfm">
+<cfinclude  template="..\includes\foot.cfm">
