@@ -133,8 +133,8 @@
                 </body>
             </html>
             </cfdocument>
-                        <cfheader name = "content-disposition" value = "attachment;filename=pay_slip#url.generate#.pdf">
-                        <cfcontent type = "application/octet-stream" file = "#expandPath('.')#\pay_slip#url.generate#.pdf" deletefile = "yes">
+            <cfheader name = "content-disposition" value = "attachment;filename=pay_slip#url.generate#.pdf">
+            <cfcontent type = "application/octet-stream" file = "#expandPath('.')#\pay_slip#url.generate#.pdf" deletefile = "yes">
         <cfelse>
             <form action = "pay_slip.cfm" method = "get">
                 <div class = "row">   
