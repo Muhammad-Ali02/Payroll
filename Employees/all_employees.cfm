@@ -7,6 +7,7 @@
         <cfquery name = "all_employees">
             select emp.employee_id as id, concat(emp.first_name," ",emp.middle_name," ",emp.last_name) as name, dep.department_name as department, des.designation_title as designation
             from employee emp, designation des, department dep
+            where emp.department = dep.department_id and emp.designation = des.designation_id
         </cfquery>
         <div>
             <a href = "employee.cfm" target = "_self">

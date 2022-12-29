@@ -31,8 +31,8 @@
                 </cfif>
             </cfif>
         </cfloop>
-        <h3 class = "text-success"> Attendance of #inserted_employees# Employees Inserted. </h3>
-        <h3 class = "text-success"> Attendance of #updated_employees# Employees Updated. </h3>
+        <p class = "text-success"> Attendance of #inserted_employees# Employees Inserted. </p>
+        <p class = "text-success"> Attendance of #updated_employees# Employees Updated. </p>
     </cfif>
 <!--- __________________________________ Front End ________________________________________ --->
 
@@ -54,7 +54,7 @@
                 </div>
             </div>
     </form>
-    <cfif isDefined('update_time')>    
+    <cfif isDefined('update_time')> 
         <form action = "add_attendance.cfm" method = "post"> 
             <p style = "display:inline; color:red; font-weight:bold;" > *Only Selected Employees will be updated</p>
             <table class = "table table-bordered table-hover mt-3">

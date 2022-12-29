@@ -4,9 +4,9 @@
         <cfif structKeyExists(url, 'edit_process_detail')>
             <!--- Query to get Employee for edit --->
             <cfquery name = "get_employee">
-                select concat(first_name,' ', middle_name,' ', last_name) as employee_name, employee_id, designation, basic_salary
-                from employee
-                where employee_id = "#url.edit_process_detail#"
+                select concat(emp.first_name,' ', emp.middle_name,' ', emp.last_name) as employee_name, emp.employee_id, des.designation_title as designation, emp.basic_salary
+                from employee emp, designation des
+                where emp.employee_id = "#url.edit_process_detail#" and des.designation_id = emp.designation
             </cfquery>
             <!--- Query to get current month of pay process  --->
             <cfquery name = "setting_info">
@@ -304,8 +304,9 @@
         <cfelse>
         <!--- below part will show employee list on front end --->
             <cfquery name = "all_employees">
-                select employee_id as id, first_name as name, designation as designation, basic_salary as basic_salary
-                from employee
+                select emp.employee_id as id, concat(emp.first_name,' ', emp.middle_name,' ', emp.last_name) as name, des.designation_title as designation, emp.basic_salary as basic_salary
+                from employee emp, designation des
+                where emp.designation = des.designation_id
             </cfquery>
             <table class = "table table-secondary table-striped table-hover">
                 <tr>
@@ -334,7 +335,7 @@
         <script>
         // Now not using this function
         // this function calculating working days static.... A dynamic calculation is performing in cf code.... no using javascript 
-            function getDates () {
+        /*    function getDates () {
                 const dates = []
                 var from_date = new Date(document.getElementById("fromDate").value);    
                 var to_date = new Date(document.getElementById("toDate").value);
@@ -352,6 +353,7 @@
                 document.getElementById("total_days").value = dates.length;
                 return dates //dates[0].getDay();
                 }
+            */
         </script>
     </cfif>
 </cfoutput>

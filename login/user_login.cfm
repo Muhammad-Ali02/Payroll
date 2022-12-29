@@ -2,6 +2,7 @@
     <cfinclude  template="..\includes\bootstrap.cfm">
     <cfif structKeyExists(URL, 'logout')>
         <cfset createObject("component", '\components.user_authentication').user_logout() />
+        <cflocation  url="user_login.cfm">
     </cfif>
     <cfif not structKeyExists(session, 'loggedIn')>
         <cfif isDefined('form.txt_user_name')>

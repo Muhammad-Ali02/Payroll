@@ -206,7 +206,7 @@
                         <cfset remaining_months = 12 - month(#form.joining_date#) + 1> <!--- +1 for current month --->
                         <cfset net_balance = balance_per_month * remaining_months>
                         <cfquery name = "insert_leaves"> 
-                            insert into employee_leaves (employee_id, leave_id, leaves_balance, status)
+                            insert into employee_leaves (employee_id, leave_id, leaves_allowed, status)
                             values ('#get_employee.id#', '#evaluate('form.chk_leaves#id#')#', '#net_balance#' , 'Y')
                         </cfquery>
                     </cfif>
@@ -405,7 +405,13 @@
                             </cfquery>
                             <!--- variables for calculation of leave balance --->
                             <cfset balance_per_month = get_leave_balance.leave_balance / 12 >
-                            <cfset remaining_months = 12 - month(#form.joining_date#) + 1> <!--- +1 for current month if not using +1 employee will not awarded by the leaves of joining month--->
+                            <cfset currentDate = dateFormat(now(),'dd-mm-yyyy')>
+                            <cfif day(currentDate) gt 22 >
+                                <cfset currentMonth = 0>
+                            <cfelse>
+                                <cfset currentMonth = 1>
+                            </cfif>
+                            <cfset remaining_months = 12 - month(#form.joining_date#) + currentMonth> <!--- currentMonth = 1 for current month if currentMonth = 0 employee will not awarded by the leaves of joining month--->
                             <cfset net_balance = balance_per_month * remaining_months>
                             <cfquery name = "insert_leaves"> <!--- Insert Leaves ---> 
                                 insert into employee_leaves (employee_id, leave_id, leaves_allowed, status)
