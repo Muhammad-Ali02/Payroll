@@ -55,34 +55,7 @@
             </cfquery>
             <cfset firstDay = createDate(#setting_info.current_year#, #setting_info.current_month#, 1)>
             <cfset lastDay = createDate(#setting_info.current_year#, #setting_info.current_month#, daysInMonth(firstDay))> 
-            <!--- Loop to check for working days of current month by comparing each date of month with the working days group's days --->
-            <cfset working_days = 0>
-                <cfloop from = "#day(firstDay)#" to = "#day(lastday)#" index = "i"> 
-                    <cfset date = createDate(#setting_info.current_year#, #setting_info.current_month#, #i#)>
-                    <cfset day_of_week = dayOfWeek(#date#)>
-                        <cfif  evaluate("workingdays.#dayOfWeekAsString('#day_of_week#')#") eq 1.0 >
-                            <cfset working_days = working_days + 1>
-                        <cfelseif evaluate("workingdays.#dayOfWeekAsString('#day_of_week#')#") eq 0.5>
-                            <cfset working_days = working_days + 0.5>
-                        </cfif>
-                </cfloop>
             <cfif leave_list.recordcount neq 0>
-                <table class = "table mt-4 table-bordered">
-                    <thead class = "thead-dark">
-                        <th> Leave Title </th>
-                        <th> Total Allowed</th>
-                        <th> Availed </th>
-                        <th> Balance </th>
-                    </thead>
-                    <cfloop query = "leave_list">
-                        <tr>
-                            <td> #leave_title# </td>
-                            <td> #leaves_allowed# </td>
-                            <td> #leaves_allowed# </td>
-                            <td> #leaves_balance# </td>
-                        </tr>
-                    </cfloop>
-                </table>
                 <form action = "request_leave.cfm" method = "post">
                     <div class = "row">
                         <div class = "col-md-3">
@@ -121,7 +94,11 @@
                     </div>
                 </form>
             <cfelse>
-                <p>Dear #session.loggedin.username#! You are Not Allowed to Request a Leave. Please Contact HR Department.</p>
+        <!--- query result used to show a message if employee not allowed any leave ---> 
+            <cfquery name = "get_employee">
+                select concat(first_name,' ',middle_name,' ',last_name) as employee_name from employee
+            </cfquery>
+                <p>Dear #get_employee.employee_name# You are Not Allowed to Request a Leave. Please Contact HR Department.</p>
             </cfif>
                 <cfset offDays=ArrayNew(1)>
                 <cfloop index="i" from="1" to="7">

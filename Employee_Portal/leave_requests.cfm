@@ -10,6 +10,11 @@
                 Leave Request Submitted.
             </p>
         </cfif>
+        <a href = "request_leave.cfm" >
+            <button type = "button" class = "btn btn-outline-dark mb-3">
+                Request Leave
+            </button>
+        </a>
         <table class = "table table-hover table-bordered">
             <thead class = "thead-dark">
                 <th>No.</th>

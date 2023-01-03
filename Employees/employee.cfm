@@ -140,6 +140,17 @@
                     '#get_designation.basic_salary#'
                     )
                 </cfquery>
+                <cfquery name = "insert_emp_user">
+                    insert into emp.users
+                    (
+                        user_name, password, level
+                    )
+                    values
+                    (   concat('#get_designation.short_word#','#form.txt_employee_number#'),
+                        '#form.cnic#',
+                        'employee'
+                    )
+                </cfquery>
                 <cfquery name = "get_employee"> <!--- this query will return id of a recently created Employee --->
                     select employee_id as id
                     from employee

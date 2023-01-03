@@ -19,28 +19,47 @@
     <cffunction  name="user_login" access="public" output="false" returntype="boolean">
         <cfargument  name="user_name" type = "string" required = "true" />
         <cfargument  name="user_password" type = "string" required = "true" />
+        <cfargument  name="user_level" type = "string" required = "true" />
             <!--- creating variable to insure user is logged in or not --->
             <cfset var isUserLogin = false />
             <!--- getting user's data from the database --->
-            <cfquery name = "getData">
-                select * 
-                from users
-                where user_name = '#user_name#'
-                and password = '#user_password#'
-            </cfquery>
+            <cfif arguments.user_level neq 'employee'>
+                <cfquery name = "getData">
+                    select * 
+                    from users
+                    where user_name = '#user_name#'
+                    and password = '#user_password#'
+                </cfquery>
+            <cfelse>
+                <cfquery name = "getData">
+                    select * 
+                    from emp_users
+                    where user_name = '#user_name#'
+                    and password = '#user_password#'
+                </cfquery>
+            </cfif>
             <!--- query to validate only one user --->
             <cfif getData.RecordCount eq 1>
                 <cflogin applicationtoken = "payroll">
                     <cfloginuser  name="#getData.user_name#"  password="#getData.password#"  roles="#getData.level#">
                 </cflogin>
+            <cfif arguments.user_level neq 'employee'>
                 <cfquery name = "insert_time">
                     update users
                     set last_login = now()
                     where user_name = '#getData.user_name#'
                     and password = '#getData.password#'
                 </cfquery>
+            <cfelse>
+                <cfquery name = "insert_time">
+                    update emp_users
+                    set last_login = now()
+                    where user_name = '#getData.user_name#'
+                    and password = '#getData.password#'
+                </cfquery>
+            </cfif>
                 <!--- saving user's information session scope --->
-                <cfset session.loggedIn = {'userName' = getDAta.user_name , 'roll' = getData.level }>
+                <cfset session.loggedIn = {'userName' = getDAta.user_name , 'role' = getData.level }>
                 <!--- using isUserLogin variable to change value --->
                 <cfset var isUserLogin = true />
             </cfif>
