@@ -76,7 +76,7 @@ a, a:hover, a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #080118;
+    /* background: #080118; */
 }
 
 #sidebar ul.components {
@@ -224,4 +224,14 @@ a.article, a.article:hover {
         transform: rotate(-45deg) translate(1px, -1px);
     }
 
+}
+
+.left{
+    transform: rotate(360deg);
+    transition: all 1s ease 0s;
+}
+
+.right{
+    transform: rotate(180deg);
+    transition: all 1s ease 0s;
 }

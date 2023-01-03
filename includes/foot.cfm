@@ -14,6 +14,17 @@
                 $(this).toggleClass('active');
             });
         });
+
+        $(document).ready(function(){
+            $('#sidebarCollapse').click(function(){
+               if($('#sidebar').hasClass('active')){
+                $(this).children().addClass('right')
+               }else{
+                $(this).children().removeClass('right')
+                $(this).children().addClass('left')
+               }
+            })
+        })
     </script>
 </body>
 </html>

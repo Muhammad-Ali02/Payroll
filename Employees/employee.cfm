@@ -711,15 +711,6 @@
 </cfoutput>
         <!--- Javascript functions --->
         <script type="text/javascript">
-            <!--- Below Function Used to Show/Hide Amount boxes when checked/uncheked of Allowance, Deduction---> 
-            /* function Checked(name, amount, id) {
-                if (document.getElementById(name+id).checked == true) {
-                document.getElementById(amount+id).style.visibility = 'visible';
-                } 
-                else {
-                document.getElementById(amount+id).style.visibility = 'hidden';
-                }
-            } */
             // Arrays to store query result (IDs of Allowances and Deductions)
             const allowance_id = [];
             const deduction_id = [];

@@ -1,6 +1,37 @@
 <cfoutput>
     <cfinclude  template="..\includes\head.cfm">
-    <cfif structKeyExists(session, 'loggedIn')>
+        <cfif structKeyExists(session, 'loggedIn')>
+            <!--- Back End to Insert Leaves --->
+            <!--- Insert Leaves in All leaves Table --->
+            <cfif structKeyExists(form, 'leave_id')>
+                <cfquery name = "insert_leave_request">
+                    insert into all_leaves
+                    (
+                        employee_id, 
+                        leave_id, 
+                        from_date, 
+                        to_date, 
+                        leave_days,
+                        reason, 
+                        request_date, 
+                        action,
+                        action_by
+                    )
+                    values
+                    (
+                        '#session.loggedin.username#', 
+                        '#form.leave_id#', 
+                        '#form.from_date#', 
+                        '#form.to_date#', 
+                        '#form.leave_days#',
+                        '#form.txt_reason#', 
+                        now(), 
+                        'Pending',
+                        'None'
+                    )
+                </cfquery>
+                <cflocation  url="leave_requests.cfm?request_submitted=true">
+            </cfif>
             <cfquery name = "Leave_list"> <!---With the help of Result, generate a dynamic list of Available Leaves --->
                 select L.leave_title, L.leave_id, E.leaves_allowed, E.leaves_availed, E.leaves_balance
                 from leaves L
@@ -35,10 +66,6 @@
                             <cfset working_days = working_days + 0.5>
                         </cfif>
                 </cfloop>
-            <cfparam name = "Title" default = "0">
-            <cfparam name = "Allowed" default = "0">
-            <cfparam name = "Availed" default = "0">
-            <cfparam name = "Balance" default = "0">
             <cfif leave_list.recordcount neq 0>
                 <table class = "table mt-4 table-bordered">
                     <thead class = "thead-dark">
@@ -48,19 +75,15 @@
                         <th> Balance </th>
                     </thead>
                     <cfloop query = "leave_list">
-                        <cfset Title =  leave_title>
-                        <cfset Allowed =  leaves_allowed>
-                        <cfset Availed =  leaves_availed>
-                        <cfset Balance =  leaves_balance>
                         <tr>
-                            <td> #Title# </td>
-                            <td> #Allowed# </td>
-                            <td> #Availed# </td>
-                            <td> #Balance# </td>
+                            <td> #leave_title# </td>
+                            <td> #leaves_allowed# </td>
+                            <td> #leaves_allowed# </td>
+                            <td> #leaves_balance# </td>
                         </tr>
                     </cfloop>
                 </table>
-                <form action = "leave_requests.cfm" method = "post">
+                <form action = "request_leave.cfm" method = "post">
                     <div class = "row">
                         <div class = "col-md-3">
                             <label for = "fromDate"> From Date: </label> 
@@ -68,15 +91,15 @@
                         </div>
                         <div class = "col-md-3">
                             <label for = "toDate" > To Date: </label> 
-                            <input type = "date" class = "form-control" value = "#dateFormat(now(),'yyyy-mm-dd')#"  name = "to_date" id = "toDate" required onblur="getDates(); console.log(getDates()); " >
+                            <input type = "date" class = "form-control" value = "#dateFormat(now(),'yyyy-mm-dd')#"  name = "to_date" id = "toDate" required onblur="getDates();" >
                         </div>
                         <div class = "col-md-3">
-                            <label for = "total_days"> Days:</label>
-                            <input type = "number" name = "total_days" value = "0" readonly id = "total_days" class = "form-control"> 
+                            <label for = "leave_days"> Days:</label>
+                            <input type = "number" name = "leave_days" value = "0" readonly id = "leave_days" class = "form-control"> 
                         </div>
                         <div class = "col-md-3">
                             <label for = "leave_title"> Leave Title: </label>
-                            <select name = "Leave_title" class = "form-select">
+                            <select name = "Leave_id" class = "form-select">
                                 <option disabled> Available Leaves </option>
                                 <cfloop query = "Leave_list"> <!--- printing dynamic list --->
                                     <option value = "#leave_id#"> #leave_title# </option>
@@ -89,7 +112,7 @@
                     </p>
                     <div class = "row">
                         <label for = "reason" class = "mt-3">Reason? </label>
-                        <textarea name = "reason" class = "form-control" id = "reason" placeholder = "Please Enter a Valid Reason For Leave"></textarea>
+                        <textarea name = "txt_reason" class = "form-control" id = "txt_reason" placeholder = "Please Enter a Valid Reason For Leave" required></textarea>
                     </div>
                     <div class = "row">
                         <div class = "col-md-3 mt-3">
@@ -98,7 +121,7 @@
                     </div>
                 </form>
             <cfelse>
-                <p>Dear #session.loggedin.username#! Leaves are not Allowed to You. Please Contact HR Department.</p>
+                <p>Dear #session.loggedin.username#! You are Not Allowed to Request a Leave. Please Contact HR Department.</p>
             </cfif>
                 <cfset offDays=ArrayNew(1)>
                 <cfloop index="i" from="1" to="7">
@@ -142,7 +165,7 @@
                         }
                         currentDate = addDays.call(currentDate, 1);
                     }
-                    document.getElementById("total_days").value = dates.length;
+                    document.getElementById("leave_days").value = dates.length;
                     //focus date
                     var validating = false;
                     if(dates.length == 0){
@@ -168,6 +191,6 @@
                 }
                 getDates();
             </script>
-    </cfif>
+        </cfif>
 </cfoutput>
 <cfinclude  template="..\includes\foot.cfm">
