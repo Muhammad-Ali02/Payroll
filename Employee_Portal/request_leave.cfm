@@ -4,33 +4,48 @@
             <!--- Back End to Insert Leaves --->
             <!--- Insert Leaves in All leaves Table --->
             <cfif structKeyExists(form, 'leave_id')>
-                <cfquery name = "insert_leave_request">
-                    insert into all_leaves
-                    (
-                        employee_id, 
-                        leave_id, 
-                        from_date, 
-                        to_date, 
-                        leave_days,
-                        reason, 
-                        request_date, 
-                        action,
-                        action_by
-                    )
-                    values
-                    (
-                        '#session.loggedin.username#', 
-                        '#form.leave_id#', 
-                        '#form.from_date#', 
-                        '#form.to_date#', 
-                        '#form.leave_days#',
-                        '#form.txt_reason#', 
-                        now(), 
-                        'Pending',
-                        'None'
-                    )
+                <!--- query to check if leave request already exist in the table then no insert new request --->
+                <cfquery name = "check_existing">
+                    select * 
+                    from all_leaves
+                    where (from_date >= '#form.from_date#' and from_date <= '#form.to_date#')
+                    and (to_date >= '#form.from_date#' and to_date <= '#form.to_date#')
+                    and employee_id = '#session.loggedin.username#' 
+                    <!--- Just for Later use if want to alow leave request again if rejected ---> 
+                    <!--- and action != 'rejected' ---> 
                 </cfquery>
-                <cflocation  url="leave_requests.cfm?request_submitted=true">
+                <cfif check_existing.recordcount eq 0>
+                    <!--- insert leave requests --->
+                    <cfquery name = "insert_leave_request">
+                        insert into all_leaves
+                        (
+                            employee_id, 
+                            leave_id, 
+                            from_date, 
+                            to_date, 
+                            leave_days,
+                            reason, 
+                            request_date, 
+                            action,
+                            action_by
+                        )
+                        values
+                        (
+                            '#session.loggedin.username#', 
+                            '#form.leave_id#', 
+                            '#form.from_date#', 
+                            '#form.to_date#', 
+                            '#form.leave_days#',
+                            '#form.txt_reason#', 
+                            now(), 
+                            'Pending',
+                            'None'
+                        )
+                    </cfquery>
+                    <cflocation  url="leave_requests.cfm?request_submitted=true">
+                <cfelse>
+                    <cflocation  url="leave_requests.cfm?request_submitted=false">
+                </cfif>
             </cfif>
             <cfquery name = "Leave_list"> <!---With the help of Result, generate a dynamic list of Available Leaves --->
                 select L.leave_title, L.leave_id, E.leaves_allowed, E.leaves_availed, E.leaves_balance
