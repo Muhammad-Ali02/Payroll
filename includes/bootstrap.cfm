@@ -1,4 +1,5 @@
 
+<link rel="stylesheet" href="..\css\login.css">
 <!-- Latest compiled and minified CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- Latest compiled JavaScript -->
@@ -8,9 +9,5 @@
   integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA="
   crossorigin="anonymous"></script>
 <style>
-  #backgroundpic{
-    background-image: url("img\login.jpg");
-    height: 100%;
-    width:100%;
-  }
+  
 </style>
