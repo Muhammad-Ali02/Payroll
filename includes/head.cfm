@@ -9,7 +9,7 @@
     <cfinclude  template="bootstrap.cfm">
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <!-- Our Custom CSS -->
+    <!-- Custom CSS For Sidebar -->
     <link rel="stylesheet" href="..\css\style5.css">
 
     <!-- Font Awesome JS -->
