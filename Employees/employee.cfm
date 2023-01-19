@@ -295,159 +295,169 @@
                 where employee_id = "#form.txt_employee_id#"
             </cfquery>
             <!--- Queries for Updating Employee Allowances --->
-            <cfloop query = "get_allowance">
-                <cfif isDefined('form.chk_allowance#id#')>  <!--- condition to verify the checkbox is checked or not --->
-                        <cfquery name = "get_allowances">
-                            select * from employee_allowance
-                            where employee_id = '#form.txt_employee_id#' and allowance_id = '#evaluate('form.chk_allowance#id#')#'
-                        </cfquery>
-                        <cfif get_allowances.recordCount eq 0> 
-                            <cfquery name = "insert_newly_selected">
-                                insert into employee_allowance (employee_id, allowance_id,allowance_amount, added_date , status)
-                                values ('#form.txt_employee_id#', '#evaluate('form.chk_allowance#id#')#', '#evaluate('form.allowance_amount#id#')#', now(), "Y")
+            <cfif structKeyExists(form, 'chk_allowances')>
+                <cfloop query = "get_allowance">
+                    <cfif isDefined('form.chk_allowance#id#')>  <!--- condition to verify the checkbox is checked or not --->
+                            <cfquery name = "get_allowances">
+                                select * from employee_allowance
+                                where employee_id = '#form.txt_employee_id#' and allowance_id = '#evaluate('form.chk_allowance#id#')#'
                             </cfquery>
-                            <cfquery name = "insert_newly_selected_pay">
-                                insert into pay_allowance (employee_id, allowance_id, allowance_amount, status)
-                                values ('#form.txt_employee_id#', '#evaluate('form.chk_allowance#id#')#', '#evaluate('form.allowance_amount#id#')#', 'Y')
-                            </cfquery>
-                        <cfelse>
-                            <cfquery name = "update_existing">
-                                update employee_allowance
-                                set allowance_amount = '#evaluate('form.allowance_amount#id#')#', status = "Y"
-                                where allowance_id = '#evaluate('form.chk_allowance#id#')#' and employee_id = '#form.txt_employee_id#'
-                            </cfquery>
-                            <cfquery name = "update_existing_pay">
-                                update pay_allowance
-                                set allowance_amount = '#evaluate('form.allowance_amount#id#')#', status = "Y"
-                                where allowance_id = '#evaluate('form.chk_allowance#id#')#' and employee_id = '#form.txt_employee_id#'
-                            </cfquery>
-                        </cfif>
-                <cfelse> 
-                    <cfquery name = "disable_existing"> <!--- in case of unchecked checkboxes --->  
-                        update employee_allowance a, (select allowance_id from employee_allowance
-                            where allowance_id in (
-                                select allowance_id
-                                from employee_allowance
-                                where employee_id = '#form.txt_employee_id#' and allowance_id = '#id#'
-                            )) as b
-                        set status = "N", disabled_date = now(), disabled_by = '#session.loggedin.username#'
-                        where employee_id  = '#form.txt_employee_id#' and a.allowance_id = b.allowance_id
-                    </cfquery>
-                    <!--- If check box not checked update pay deduction's status as "N" --->
-                    <cfquery name = "disable_existing_pay"> <!--- in case of unchecked checkboxes --->  
-                        update pay_allowance a, (select allowance_id from pay_allowance
-                            where allowance_id in (
-                                select allowance_id
-                                from pay_allowance
-                                where employee_id = '#form.txt_employee_id#' and allowance_id = '#id#'
-                            )) as b
-                        set status = "N"
-                        where employee_id  = '#form.txt_employee_id#' 
-                        and a.allowance_id = b.allowance_id
-                    </cfquery>
-                </cfif>
-            </cfloop>
-            <!--- Queries for Updating Employee Deductions --->
-            <cfloop query = "get_deduction">
-                <cfif isDefined('form.chk_deduction#id#')> 
-                    <cfquery name = "get_deductions">
-                        select * from employee_deduction
-                        where employee_id = '#form.txt_employee_id#' and deduction_id = '#evaluate('form.chk_deduction#id#')#'
-                    </cfquery>
-                    <cfif get_deductions.recordCount eq 0> 
-                        <cfquery name = "insert_newly_selected_deduction">
-                            insert into employee_deduction (employee_id, deduction_id,deduction_amount, added_date , status)
-                            values ('#form.txt_employee_id#', '#evaluate('form.chk_deduction#id#')#', '#evaluate('form.deduction_amount#id#')#', now(), 'Y')
+                            <cfif get_allowances.recordCount eq 0> 
+                                <cfquery name = "insert_newly_selected"> <!--- update employee allowance --->
+                                    insert into employee_allowance (employee_id, allowance_id,allowance_amount, added_date , status)
+                                    values ('#form.txt_employee_id#', '#evaluate('form.chk_allowance#id#')#', '#evaluate('form.allowance_amount#id#')#', now(), "Y")
+                                </cfquery>
+                                <cfquery name = "insert_newly_selected_pay"> <!--- update pay allowance --->
+                                    insert into pay_allowance (employee_id, allowance_id, allowance_amount, status)
+                                    values ('#form.txt_employee_id#', '#evaluate('form.chk_allowance#id#')#', '#evaluate('form.allowance_amount#id#')#', 'Y')
+                                </cfquery>
+                            <cfelse>
+                                <cfquery name = "update_existing"> <!--- update employee allowance --->
+                                    update employee_allowance
+                                    set allowance_amount = '#evaluate('form.allowance_amount#id#')#', status = "Y"
+                                    where allowance_id = '#evaluate('form.chk_allowance#id#')#' and employee_id = '#form.txt_employee_id#'
+                                </cfquery>
+                                <cfquery name = "update_existing_pay"> <!--- update pay allowance --->
+                                    update pay_allowance
+                                    set allowance_amount = '#evaluate('form.allowance_amount#id#')#', status = "Y"
+                                    where allowance_id = '#evaluate('form.chk_allowance#id#')#' and employee_id = '#form.txt_employee_id#'
+                                </cfquery>
+                            </cfif>
+                    <cfelse> 
+                        <cfquery name = "disable_existing"> <!--- in case of unchecked checkboxes --->  
+                            update employee_allowance a, (select allowance_id from employee_allowance
+                                where allowance_id in (
+                                    select allowance_id
+                                    from employee_allowance
+                                    where employee_id = '#form.txt_employee_id#' and allowance_id = '#id#'
+                                )) as b
+                            set status = "N", disabled_date = now(), disabled_by = '#session.loggedin.username#'
+                            where employee_id  = '#form.txt_employee_id#' and a.allowance_id = b.allowance_id
                         </cfquery>
-                        <!--- pay deduction --->
-                        <cfquery name = "insert_newly_selected_pay_deduction">
-                            insert into pay_deduction (employee_id, deduction_id, deduction_amount, status)
-                            values ('#form.txt_employee_id#', '#evaluate('form.chk_deduction#id#')#', '#evaluate('form.deduction_amount#id#')#', 'Y')
-                        </cfquery>
-                    <cfelse>
-                        <cfquery name = "update_existing_deduction">
-                            update employee_deduction
-                            set deduction_amount = '#evaluate('form.deduction_amount#id#')#', status = 'Y', disabled_date = now(), disabled_by = '#session.loggedin.username#'
-                            where deduction_id = '#evaluate('form.chk_deduction#id#')#' and employee_id = '#form.txt_employee_id#'
-                        </cfquery>
-                        <!--- pay deduction --->
-                        <cfquery name = "update_existing_pay_deduction">
-                            update pay_deduction
-                            set deduction_amount = '#evaluate('form.deduction_amount#id#')#', status = 'Y'
-                            where deduction_id = '#evaluate('form.chk_deduction#id#')#' and employee_id = '#form.txt_employee_id#'
+                        <!--- If check box not checked update pay allowance's status as "N" --->
+                        <cfquery name = "disable_existing_pay"> <!--- in case of unchecked checkboxes --->  
+                            update pay_allowance a, (select allowance_id from pay_allowance
+                                where allowance_id in (
+                                    select allowance_id
+                                    from pay_allowance
+                                    where employee_id = '#form.txt_employee_id#' and allowance_id = '#id#'
+                                )) as b
+                            set status = "N"
+                            where employee_id  = '#form.txt_employee_id#' 
+                            and a.allowance_id = b.allowance_id
                         </cfquery>
                     </cfif>
-                <cfelse> 
-                    <cfquery name = "disable_existing_deduction"> <!--- in case of unchecked --->  
-                            update employee_deduction a, (select deduction_id from employee_deduction
-                                where deduction_id in (
-                                    select deduction_id
-                                    from employee_deduction
-                                    where employee_id = '#form.txt_employee_id#' and deduction_id = '#id#'
-                                )) as b
-                            set status = "N"
-                            where employee_id  = '#form.txt_employee_id#' and a.deduction_id = b.deduction_id
-                    </cfquery>
-                    <!--- pay deduction --->
-                    <cfquery name = "disable_existing_pay_deduction"> <!--- in case of unchecked --->  
-                            update pay_deduction a, (select deduction_id from pay_deduction
-                                where deduction_id in (
-                                    select deduction_id
-                                    from pay_deduction
-                                    where employee_id = '#form.txt_employee_id#' and deduction_id = '#id#'
-                                )) as b
-                            set status = "N"
-                            where employee_id  = '#form.txt_employee_id#' and a.deduction_id = b.deduction_id
-                    </cfquery>
-                </cfif>
-            </cfloop>
-            <!--- Queries for Updating Employee Leaves --->
-            <cfloop query = "get_leaves">
-                <cfif isDefined('form.chk_leaves#id#')>  <!--- condition to verify the checkbox is checked or not --->
-                        <cfquery name = "get_existing_leaves">
-                            select * from employee_leaves
-                            where employee_id = '#form.txt_employee_id#' and leave_id = '#evaluate('form.chk_leaves#id#')#'
+                </cfloop>
+            </cfif>
+            <!--- Queries for Updating Employee Deductions --->
+            <cfif structKeyExists(form, 'chk_deductions')>
+                <cfloop query = "get_deduction">
+                    <cfif isDefined('form.chk_deduction#id#')> 
+                        <cfquery name = "get_deductions">
+                            select * from employee_deduction
+                            where employee_id = '#form.txt_employee_id#' and deduction_id = '#evaluate('form.chk_deduction#id#')#'
                         </cfquery>
-                        <cfif get_existing_leaves.recordCount eq 0>
-                            <cfquery name = "get_leave_balance"> <!--- result will use to calculate leave balance according to date of joining --->
-                                select allowed_per_year as leave_balance
-                                from leaves
-                                where leave_id = '#evaluate("form.chk_leaves#id#")#'
+                        <cfif get_deductions.recordCount eq 0> 
+                            <cfquery name = "insert_newly_selected_deduction">
+                                insert into employee_deduction (employee_id, deduction_id,deduction_amount, added_date , status)
+                                values ('#form.txt_employee_id#', '#evaluate('form.chk_deduction#id#')#', '#evaluate('form.deduction_amount#id#')#', now(), 'Y')
                             </cfquery>
-                            <!--- variables for calculation of leave balance --->
-                            <cfset balance_per_month = get_leave_balance.leave_balance / 12 >
-                            <cfset currentDate = dateFormat(now(),'dd-mm-yyyy')>
-                            <cfif day(currentDate) gt 22 >
-                                <cfset currentMonth = 0>
-                            <cfelse>
-                                <cfset currentMonth = 1>
-                            </cfif>
-                            <cfset remaining_months = 12 - month(#form.joining_date#) + currentMonth> <!--- currentMonth = 1 for current month if currentMonth = 0 employee will not awarded by the leaves of joining month--->
-                            <cfset net_balance = balance_per_month * remaining_months>
-                            <cfquery name = "insert_leaves"> <!--- Insert Leaves ---> 
-                                insert into employee_leaves (employee_id, leave_id, leaves_allowed, status)
-                                values ('#form.txt_employee_id#', '#evaluate('form.chk_leaves#id#')#', '#net_balance#', 'Y')
+                            <!--- pay deduction --->
+                            <cfquery name = "insert_newly_selected_pay_deduction">
+                                insert into pay_deduction (employee_id, deduction_id, deduction_amount, status)
+                                values ('#form.txt_employee_id#', '#evaluate('form.chk_deduction#id#')#', '#evaluate('form.deduction_amount#id#')#', 'Y')
                             </cfquery>
                         <cfelse>
-                            <cfquery name = "update_existing_leaves">
-                                update employee_leaves
-                                set status = 'Y'
-                                where leave_id = '#evaluate('form.chk_leaves#id#')#' and employee_id = '#form.txt_employee_id#'
+                            <cfquery name = "update_existing_deduction">
+                                update employee_deduction
+                                set deduction_amount = '#evaluate('form.deduction_amount#id#')#', status = 'Y', disabled_date = now(), disabled_by = '#session.loggedin.username#'
+                                where deduction_id = '#evaluate('form.chk_deduction#id#')#' and employee_id = '#form.txt_employee_id#'
+                            </cfquery>
+                            <!--- pay deduction --->
+                            <cfquery name = "update_existing_pay_deduction">
+                                update pay_deduction
+                                set deduction_amount = '#evaluate('form.deduction_amount#id#')#', status = 'Y'
+                                where deduction_id = '#evaluate('form.chk_deduction#id#')#' and employee_id = '#form.txt_employee_id#'
                             </cfquery>
                         </cfif>
-                <cfelse>
-                    <cfquery name = "disable_existing_leaves"> <!--- in case of unchecked checkboxes --->  
-                        update employee_leaves a, (select leave_id from employee_leaves
-                            where leave_id in (
-                                select leave_id
-                                from employee_leaves
-                                where employee_id = '#form.txt_employee_id#' and leave_id = '#id#'
-                            )) as b
-                        set status = "N", disabled_date = now(), disabled_by = '#session.loggedin.username#'
-                        where employee_id  = '#form.txt_employee_id#' and a.leave_id = b.leave_id
-                    </cfquery>
-                </cfif>
-            </cfloop>
+                    <cfelse> 
+                        <cfquery name = "disable_existing_deduction"> <!--- in case of unchecked --->  
+                                update employee_deduction a, (select deduction_id from employee_deduction
+                                    where deduction_id in (
+                                        select deduction_id
+                                        from employee_deduction
+                                        where employee_id = '#form.txt_employee_id#' and deduction_id = '#id#'
+                                    )) as b
+                                set status = "N"
+                                where employee_id  = '#form.txt_employee_id#' and a.deduction_id = b.deduction_id
+                        </cfquery>
+                        <!--- pay deduction --->
+                        <cfquery name = "disable_existing_pay_deduction"> <!--- in case of unchecked --->  
+                                update pay_deduction a, (select deduction_id from pay_deduction
+                                    where deduction_id in (
+                                        select deduction_id
+                                        from pay_deduction
+                                        where employee_id = '#form.txt_employee_id#' and deduction_id = '#id#'
+                                    )) as b
+                                set status = "N"
+                                where employee_id  = '#form.txt_employee_id#' and a.deduction_id = b.deduction_id
+                        </cfquery>
+                    </cfif>
+                </cfloop>
+            </cfif>
+            <!--- Queries for Updating Employee Leaves --->
+            <cfif structKeyExists(form, 'chk_leaves')>
+                <cfloop query = "get_leaves">
+                    <cfif isDefined('form.chk_leaves#id#')>  <!--- condition to verify the checkbox is checked or not --->
+                            <cfquery name = "get_existing_leaves">
+                                select * from employee_leaves
+                                where employee_id = '#form.txt_employee_id#' and leave_id = '#evaluate('form.chk_leaves#id#')#'
+                            </cfquery>
+                            <cfif get_existing_leaves.recordCount eq 0>
+                                <cfquery name = "get_leave_balance"> <!--- result will use to calculate leave balance according to date of joining --->
+                                    select allowed_per_year as leave_balance
+                                    from leaves
+                                    where leave_id = '#evaluate("form.chk_leaves#id#")#'
+                                </cfquery>
+                                <!--- variables for calculation of leave balance --->
+                                <cfset balance_per_month = get_leave_balance.leave_balance / 12 >
+                                <cfset currentDate = dateFormat(now(),'dd-mm-yyyy')>
+                                <cfif day(currentDate) gt 22 >
+                                    <cfset currentMonth = 0>
+                                <cfelse>
+                                    <cfset currentMonth = 1>
+                                </cfif>
+                                <cfif structKeyExists(form, 'chk_leave_calculation')>
+                                    <cfset remaining_months = 12>
+                                <cfelse>
+                                    <cfset remaining_months = 12 - month(#form.joining_date#) + currentMonth> <!--- currentMonth = 1 for current month if currentMonth = 0 employee will not awarded by the leaves of joining month--->
+                                </cfif>
+                                <cfset net_balance = balance_per_month * remaining_months>
+                                <cfquery name = "insert_leaves"> <!--- Insert Leaves ---> 
+                                    insert into employee_leaves (employee_id, leave_id, leaves_allowed, status)
+                                    values ('#form.txt_employee_id#', '#evaluate('form.chk_leaves#id#')#', '#net_balance#', 'Y')
+                                </cfquery>
+                            <cfelse>
+                                <cfquery name = "update_existing_leaves">
+                                    update employee_leaves
+                                    set status = 'Y'
+                                    where leave_id = '#evaluate('form.chk_leaves#id#')#' and employee_id = '#form.txt_employee_id#'
+                                </cfquery>
+                            </cfif>
+                    <cfelse>
+                        <cfquery name = "disable_existing_leaves"> <!--- in case of unchecked checkboxes --->  
+                            update employee_leaves a, (select leave_id from employee_leaves
+                                where leave_id in (
+                                    select leave_id
+                                    from employee_leaves
+                                    where employee_id = '#form.txt_employee_id#' and leave_id = '#id#'
+                                )) as b
+                            set status = "N", disabled_date = now(), disabled_by = '#session.loggedin.username#'
+                            where employee_id  = '#form.txt_employee_id#' and a.leave_id = b.leave_id
+                        </cfquery>
+                    </cfif>
+                </cfloop>
+            </cfif>
             <cflocation  url="all_employees.cfm?edited=#form.txt_employee_id#">
         </cfif>
         <!--- \|/_____________________________\|/_Front End_\|/__________________________________\|/ --->
@@ -704,6 +714,10 @@
                             <label for = "chk_leaves#id#" class = "form-check-label ml-5" > #title# </label>
                     </div>
                 </cfloop>
+                <div class = "form-group">
+                    <input name = "chk_leave_calculation" id = "chk_leave_calculation" class = "form-check-input ml-3" value = "1" type = "checkbox" <cfif not structKeyExists(url, 'edit')>checked = "true"</cfif>>
+                    <label for = "chk_leave_calculation" class = "form-check-label ml-5" > Calculate Leave Balance According to Date of Joining </label>
+                </div>
             </div> <!--- Ending Leaves --->
         </div>
         <!---   Payment Detail--->
@@ -732,21 +746,22 @@
         <!--- Action --->
         <div class="tab-pane fade" id="nav-action" role="tabpanel" aria-labelledby="nav-action-tab">
             <div class = "employee_box">
+                <cfif structKeyExists(url, 'edit')>
                 <div class = "row container">
                     <div class = "col-md-4">
-                        <input type = "checkbox" id = "Allowances" class = "form-check-input">
-                        <label for = "Allowances" class = "form-check-label">Update Allowances</label>
+                        <input type = "checkbox" name = "chk_allowances" id = "Allowances" class = "form-check-input">
+                        <label for = "Allowances"  class = "form-check-label">Update Allowances</label>
                     </div>
                     <div class = "col-md-4">
-                        <input type = "checkbox" id = "Deductions" class = "form-check-input">
+                        <input type = "checkbox" name = "chk_deductions" id = "Deductions" class = "form-check-input">
                         <label for = "Deductions" class = "form-check-label">Update Deductions</label>
                     </div>
                     <div class = "col-md-4">
-                        <input type = "checkbox" id = "leaves" class = "form-check-input">
+                        <input type = "checkbox" name = "chk_leaves" id = "leaves" class = "form-check-input">
                         <label for = "leaves" class = "form-check-label">Update Leaves</label>
                     </div>
                 </div>
-
+                </cfif>
                 <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif>>
                     <cfif structKeyExists(url, 'edit')> <input type = "hidden" name = "txt_employee_id" value = "#url.edit#"> </cfif>
                     <br>

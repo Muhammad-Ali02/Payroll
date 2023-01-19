@@ -326,3 +326,6 @@ label{
 .nav_head{
     background-color:rgba(19, 16, 32, 0.33);
 }
+.form-group{
+    text-align: center;
+}
