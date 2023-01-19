@@ -235,3 +235,94 @@ a.article, a.article:hover {
     transform: rotate(180deg);
     transition: all 1s ease 0s;
 }
+/* Employee Page */
+.employee_box{
+    background-color: rgba(0, 0, 0, 0.55);
+    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55);
+    /* margin-top: 150px; */
+    border-radius: 15px;
+    /* height: 400px; */
+    /* margin-top: 100px !important; */
+    padding: 30px;
+    margin: 30px;
+}
+ input{
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    color: #74747b !important;
+    /* font-weight: bold !important; */
+    border-color: #575758 !important;
+    border-radius: 8px !important;
+  }
+  textarea{
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    color: #74747b !important;
+    /* font-weight: bold !important; */
+    border-color: #575758 !important;
+    border-radius: 8px !important;
+  }
+
+select{
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    color: #74747b !important;
+    /* font-weight: bold !important; */
+    border-color: #575758 !important;
+    border-radius: 8px !important;
+  }
+input:hover{
+    background-color: black !important;
+    border-color: rgba(245, 4, 4, 0.55) !important;
+    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55);
+    color: white !important;
+  }
+textarea:hover{
+    background-color: black !important;
+    border-color: rgba(245, 4, 4, 0.55) !important;
+    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55);
+    color: white !important;
+  }
+
+select:hover{
+    background-color: black !important;
+    border-color: rgba(245, 4, 4, 0.55) !important;
+    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55);
+    color: white !important;
+  }
+.custom_button{
+    border-color: #575758 !important;
+  }
+.custom_button:hover{
+    background-color: black !important;
+    border-color: rgba(245, 4, 4, 0.55) !important;
+    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55) !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+  }
+  /* employee background */
+.active{
+    background-color: transparent !important;
+    /* background-color: #4c4858 !important;  */
+    /* color: rgb(245, 0, 0) !important; */
+    border-color: rgb(155, 152, 152) !important;
+  }
+  body{
+    background-color: #4c4858 !important; 
+    background-image: url('../img/logo.png');
+    background-repeat: no-repeat;
+    height: 50%;
+    /* background-position: center; */
+    background-size: cover;
+    background-attachment: fixed;
+  }
+  .nav-link{
+    color: rgb(155, 152, 152) !important;
+    border-color: red;   
+}
+label{
+  color: rgb(155, 152, 152) !important;
+}
+.navebar_icon:hover{
+    fill: red !important;
+    transform: scale(1.2);
+}
+.nav_head{
+    background-color:rgba(19, 16, 32, 0.33);
+}

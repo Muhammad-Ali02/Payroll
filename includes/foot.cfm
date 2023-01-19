@@ -14,7 +14,7 @@
                 $(this).toggleClass('active');
             });
         });
-
+        
         $(document).ready(function(){
             $('#sidebarCollapse').click(function(){
                if($('#sidebar').hasClass('active')){
@@ -22,6 +22,7 @@
                }else{
                 $(this).children().removeClass('right')
                 $(this).children().addClass('left')
+                $(this).css("background-color","transparent");
                }
             })
         })

@@ -452,7 +452,7 @@
         </cfif>
         <!--- \|/_____________________________\|/_Front End_\|/__________________________________\|/ --->
         <cfif structKeyExists(url, 'created')>
-            <h3 style="color:green; text-align:center"> Employee Created Successfully </h3>
+            <cflocation  url="all_employees.cfm?created=true">
         </cfif>
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -462,13 +462,14 @@
     <button class="nav-link" id="nav-deductions-tab" data-bs-toggle="tab" data-bs-target="##nav-deductions" type="button" role="tab" aria-controls="nav-deductions" aria-selected="false">Deductions</button>
     <button class="nav-link" id="nav-leaves-tab" data-bs-toggle="tab" data-bs-target="##nav-leaves" type="button" role="tab" aria-controls="nav-leaves" aria-selected="false">Leaves</button>
     <button class="nav-link" id="nav-payment-tab" data-bs-toggle="tab" data-bs-target="##nav-payment" type="button" role="tab" aria-controls="nav-payment" aria-selected="false">Payment</button>
+    <button class="nav-link" id="nav-action-tab" data-bs-toggle="tab" data-bs-target="##nav-action" type="button" role="tab" aria-controls="nav-action" aria-selected="false">Action</button>
   </div>
 </nav>
 <form action = "employee.cfm" method = "post">
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-personal" role="tabpanel" aria-labelledby="nav-home-tab">
         <!---   Personal Detail --->
-                <div class = "container">
+                <div class = "employee_box">
                         <div class = "row">
                             <div class = "col-md-2">
                                 <label  class="form-control-label" for = "employee_no"> Employee Number: </label> 
@@ -477,7 +478,7 @@
                         </div>
                         <div class = "row">
                             <div class = "col-md-4">
-                                <label  class="form-check-label" for = "first_name"> First Name*</label>
+                                <label  class="form-control-label" for = "first_name">First Name*</label>
                                 <input name = "txt_first_name" id = "first_name" class = "form-control" placeholder = "First Name" required <cfif duplicate eq "true"> value = "#form.txt_first_name#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.first_name#" </cfif>>
                             </div>
                             <div class = "col-md-4">
@@ -496,31 +497,35 @@
                             </div>
                             <div class = "col-md-4">
                                 <label  class="form-control-label" for = "cnic"> Employee's CNIC No. </label>
-                                <input type = "number"  minlength = "13" maxlength = "13"  name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>> </td> 
+                                <input type = "number"  minlength = "13" maxlength = "13" id = "cnic" name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>> </td> 
                             </div>
                             <div class = "col-md-4">
-                                Father/Husband CNIC No.: <input name = "txt_father_cnic" minlength = "13" maxlength = "13" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_name#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
+                                <label for = "txt_father_cnic" class = "form-control-label">Father/Husband CNIC No.: </label> 
+                                <input name = "txt_father_cnic" id = "txt_father_cnic" minlength = "13" maxlength = "13" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_name#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
                             </div>
                         </div>
                         <div class = "row">
                             <div class = "col-md-2">
-                                City*: <input type = "text" name = "txt_city" required class = "form-control" placeholder = "City Name"<cfif duplicate eq "true"> value = "#form.txt_city#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.city#" </cfif>> </td>
+                                <label for = "txt_city" class = "form-control-label">City*:</label> 
+                                <input type = "text" id = "txt_city" name = "txt_city" required class = "form-control" placeholder = "City Name"<cfif duplicate eq "true"> value = "#form.txt_city#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.city#" </cfif>> </td>
                             </div>
                             <div class = "col-md-2">
-                                Country*: <input type = "text" name = "txt_country" class = "form-control" placeholder = "Country Name" required <cfif duplicate eq "true"> value = "#form.txt_country#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.country#" </cfif>> </td>
+                                <label for = "txt_country" class = "form-control-label"> Country*: </label> 
+                                <input type = "text" name = "txt_country" id = "txt_country" class = "form-control" placeholder = "Country Name" required <cfif duplicate eq "true"> value = "#form.txt_country#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.country#" </cfif>> </td>
                             </div>
                             <div class = "col-md-8">
-                                Full Address*: <input type = "text" name = "txt_full_address" class = "form-control" placeholder = "Enter Full Address, Included Street, House etc" maxlength = "200" required <cfif duplicate eq "true"> value = "#form.txt_full_address#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.full_address#" </cfif>> </td>
+                                <label for = "txt_full_address" class = "form-control-label">Full Address*: </label> 
+                                <input type = "text" name = "txt_full_address" id = "txt_full_address" class = "form-control" placeholder = "Enter Full Address, Included Street, House etc" maxlength = "200" required <cfif duplicate eq "true"> value = "#form.txt_full_address#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.full_address#" </cfif>> </td>
                             </div>
                         </div>
                         <div class = "row">
                             <div class = "col-md-4">
-                                Designation: 
+                                <label for = "designation" class = "form-select-label">Designation:</label>
                                 <cfquery name = "designation_list"> <!---With the help of Result, generate a dynamic list of designations --->
                                     select designation_title as title, designation_id as id
                                     from designation
                                 </cfquery>
-                                <select name = "designation" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
+                                <select name = "designation" id = "designation" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
                                     <option disabled> Select Designation </option>  
                                     <cfloop query = "designation_list"> <!--- printing dynamic list --->
                                         <option value = "#ID#"<cfif structKeyExists(url, 'edit')> <cfif get_employee.designation eq ID> selected  </cfif> </cfif>> #title# </option>
@@ -528,21 +533,22 @@
                                 </select>
                             </div>
                             <div class = "col-md-2">
-                                DOB: <input type = "date" placeholder="YYYY-MM-DD" required  name = "dob" required class = "form-control"<cfif duplicate eq "true"> value = "#form.dob#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#dateFormat(get_employee.dob, 'yyyy-mm-dd')#" </cfif>>  </td>
+                                <label for = "dob" class = "form-control-label">DOB: </label> 
+                                <input type = "date" placeholder="YYYY-MM-DD" required  name = "dob" id = "dob" required class = "form-control"<cfif duplicate eq "true"> value = "#form.dob#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#dateFormat(get_employee.dob, 'yyyy-mm-dd')#" </cfif>>  </td>
                             </div>
                             <div class = "col-md-6">
                                 <div class = "row">
-                                    <div class = "col-md-3">
-                                        Marital Status: 
-                                        <select name = "marital_status" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
+                                    <div class = "col-md-4">
+                                        <label for = "marital_status" class = "form-control-label"> Marital Status:</label> 
+                                        <select name = "marital_status" id = "marital_status" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
                                             <option value = "S"> Single </option>
                                             <option value = "M" <cfif structKeyExists(form,'marital_status')> <cfif form.marital_status eq "married">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.marital_status eq "m"> selected </cfif> </cfif> >  Married </option>
                                             <option value = "W" <cfif structKeyExists(form,'marital_status')> <cfif form.marital_status eq "widow">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.marital_status eq "w"> selected </cfif> </cfif>> Widow </option>
                                         </select>
                                     </div>
-                                    <div class = "col-md-3">
-                                        Blood Group: 
-                                        <select name = "blood_group" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
+                                    <div class = "col-md-4">
+                                        <label for = "blood_group" class = "form-select-label"> Blood Group:</label> 
+                                        <select name = "blood_group" id = "blood_group" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
                                             <option value = "A+" > A+ </option>
                                             <option value = "A-" <cfif structKeyExists(form,'blood_group')> <cfif form.blood_group eq "A-">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.blood_group eq "A-"> selected </cfif> </cfif> >  A- </option>
                                             <option value = "B+" <cfif structKeyExists(form,'blood_group')> <cfif form.blood_group eq "B+">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.blood_group eq "B+"> selected </cfif> </cfif> >  B+ </option>
@@ -553,117 +559,121 @@
                                             <option value = "AB-" <cfif structKeyExists(form,'blood_group')> <cfif form.blood_group eq "AB-">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.blood_group eq "AB-"> selected </cfif> </cfif> >  AB- </option>
                                         </select>
                                     </div>
-                                    <div class = "col-md-3">
-                                        Religion: 
-                                        <select name = "religion" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
+                                    <div class = "col-md-4">
+                                        <label for = "religion" class = "form-select-label">Religion:</label> 
+                                        <select name = "religion" id = "religion" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
                                             <option value = "M" > Muslim </option>
                                             <option value = "N" <cfif structKeyExists(form,'religion')> <cfif form.religion eq "N">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.religion eq "N"> selected </cfif> </cfif> >  Non-Muslim </option>
                                         </select>
                                     </div>
-                                    <div class = "col-md-3">
-                                        Covid Vaccine: 
-                                        <select name = "covid_vaccination" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
-                                            <option value = "Yes" > Yes </option>
-                                            <option value = "No" <cfif structKeyExists(form,'covid_vaccination')> <cfif form.covid_vaccination eq "No">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.covid_vaccination eq "No"> selected </cfif> </cfif> >  No </option>
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class = "align-items-center  row">
-                            <div class = "col-md-2">
-                                        Gender:<br>
-                                        <label class="form-check-label" for = "chk_male"> Male:</label> 
-                                        <input type = "radio" name = "gender" value = "M" checked = "true" id = "chk_male" class = "form-check-inline"> 
-                                        <label class="form-check-label" for = "chk_femail"> Female:</label>
-                                        <input type = "radio" name = "gender" value = "F" id = "chk_femail" class = "form-check-inline" <cfif structKeyExists(form,'gender')> <cfif form.gender eq "F"> checked </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.gender eq "F"> checked </cfif> </cfif>>
+                        <div class = "row">
+                            <div class = "col-md-4">
+                                    <label class = "form-check-label">Gender:</label>
+                                    <input type = "radio" name = "gender" value = "M" checked = "true" id = "chk_male" class = "form-check-inline form-check-input ml-1"> 
+                                    <label class="form-input-label ml-4" for = "chk_male">Male</label>
+                                    <input type = "radio" name = "gender" value = "F" id = "chk_femail" class = "form-check-inline form-check-input ml-1" <cfif structKeyExists(form,'gender')> <cfif form.gender eq "F"> checked </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.gender eq "F"> checked </cfif> </cfif>>
+                                    <label class="form-input-label ml-4" for = "chk_femail">Female</label>
                             </div>
-                            <div class = "col-md-6 align-items-center">
-                                <div class = "align-items-center row">
-                                    <div class = "col-md-4">
-                                        Employment Type: 
-                                    </div>
-                                    <div class = "col-md-3 align-items-center">
-                                        <select name = "employment_type1" class="form-select form-select-md mb-3" aria-label=".form-select-md example" >
-                                            <option value = "Fulltime" > Full Time </option>
-                                            <option value = "Parttime" <cfif structKeyExists(form,'employment_type1')> <cfif form.employment_type1 eq "Parttime">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.employment_type1 eq "Parttime"> selected </cfif> </cfif> >  Part Time </option>
-                                        </select>
-                                    </div>
-                                    <div class = "col-md-4 align-items-center">
-                                        <select name = "employment_type2" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
-                                            <option value = "Permanent" > Permanent </option>
-                                                <option value = "Temporary" <cfif structKeyExists(form,'employment_type2')> <cfif form.employment_type2 eq "Temporary">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.employment_type2 eq "Temporary"> selected </cfif> </cfif> >  Temporary </option> 
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class = "col-md-4">
+                                <select name = "employment_type1" class="form-select form-select-md mb-3" aria-label=".form-select-md example" >
+                                    <option value = "Fulltime" > Full Time </option>
+                                    <option value = "Parttime" <cfif structKeyExists(form,'employment_type1')> <cfif form.employment_type1 eq "Parttime">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.employment_type1 eq "Parttime"> selected </cfif> </cfif> >  Part Time </option>
+                                </select>
                             </div>
-                            <div class = "col-md-2">
-                                Date of Joining: <input type = "date" name = "joining_date" required class = "form-control" <cfif duplicate eq "true"> value = "#form.joining_date#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#dateFormat(get_employee.joining_date, 'yyyy-mm-dd')#" </cfif> > </td> 
+                            <div class = "col-md-4">
+                                <select name = "employment_type2" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
+                                    <option value = "Permanent" > Permanent </option>
+                                        <option value = "Temporary" <cfif structKeyExists(form,'employment_type2')> <cfif form.employment_type2 eq "Temporary">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.employment_type2 eq "Temporary"> selected </cfif> </cfif> >  Temporary </option> 
+                                </select>
                             </div>
-                            <div class = "col-md-2">
-                                Date of Leaving: <input type = "date" name = "leaving_date" class = "form-control"<cfif duplicate eq "true"> value = "#form.leaving_date#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#dateFormat(get_employee.leaving_date, 'yyyy-mm-dd')#" </cfif> > </td> 
-                            </div>
+                            
                         </div>
                     <div class = "row">
-                        <div class = "col-md-5">
-                            Department:
-                            <select name = "department" class = "form-select">
+                        <div class = "col-md-4">
+                            <label for = "covid_vaccination" class = "form-select-label">Covid Vaccine:</label>
+                            <select name = "covid_vaccination" id = "covid_vaccination" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
+                                <option value = "Yes" > Yes </option>
+                                <option value = "No" <cfif structKeyExists(form,'covid_vaccination')> <cfif form.covid_vaccination eq "No">selected </cfif> </cfif> <cfif structKeyExists(url, 'edit')> <cfif get_employee.covid_vaccination eq "No"> selected </cfif> </cfif> >  No </option>
+                            </select>
+                        </div>
+                        <div class = "col-md-4">
+                            <label for = "joining_date" class = "form-control-label"> Date of Joining: </label> 
+                            <input type = "date" name = "joining_date" id = "joining_date" required class = "form-control" <cfif duplicate eq "true"> value = "#form.joining_date#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#dateFormat(get_employee.joining_date, 'yyyy-mm-dd')#" </cfif> > </td> 
+                        </div>
+                        <div class = "col-md-4">
+                            <label for = "leaving_date" class = "form-control-label"> Date of Leaving: </label>
+                            <input type = "date" name = "leaving_date" id = "leaving_date" class = "form-control"<cfif duplicate eq "true"> value = "#form.leaving_date#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#dateFormat(get_employee.leaving_date, 'yyyy-mm-dd')#" </cfif> > </td> 
+                        </div>
+                    </div>
+                    <div class = "row">
+                        <div class = "col-md-4">
+                            <label for = "department" class = "form-control-label"> Department: </label>
+                            <select name = "department" id = "department" class = "form-select">
                                 <cfloop query = "department_list"> <!--- printing dynamic list --->
                                     <option value = "#id#" <cfif structKeyExists(url, 'edit')> <cfif get_employee.department eq #ID# > selected </cfif> </cfif> > #name# </option>
                                 </cfloop>
                             </select>
                         </div>
-                        <div class = "col-md-5">
-                            Working Days Group:
-                            <select name = "workingdays_group" class = "form-select">
+                        <div class = "col-md-4">
+                            <label for = "workingdays_group" class = "form-control-label"> Working Days Group: </label>
+                            <select name = "workingdays_group" id = "workingdays_group" class = "form-select">
                                 <cfloop query = "get_workingdays_groups"> <!--- printing dynamic list --->
                                     <option value = "#id#" <cfif structKeyExists(url, 'edit')> <cfif get_employee.workingdays_group eq #id# > selected </cfif> </cfif> > #group_name# </option>
                                 </cfloop>
                             </select>
                         </div>
-                        <div class = "col-md-2">
+                        <div class = "col-md-4">
                             <cfif structKeyExists(url, 'edit')> 
-                                <label for = "basic_salary" > Basic Salary: </label>
+                                <label for = "basic_salary" class = "form-control-label"> Basic Salary: </label>
                                 <input id = "basic_salary" class = "form-control" value = "#get_employee.basic_salary#" name = "basic_salary">
                             </cfif>
                         </div>
                     </div>
                 </div> <!--- end personal detail --->
         </div>
+        <!--- Contact Information --->
         <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-            <h4>Contact Information</h4>
-            <div class = "row">
-                <div class = "col-6">
-                    Personal Email*: <input type = "email" name = "personal_email" class = "form-control" placeholder = "example@gamil.com" required <cfif duplicate eq "true"> value = "#form.personal_email#" class = "email" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.personal_email#" </cfif> >
+            <div class = "employee_box">    
+                <div class = "row">
+                    <div class = "col-6">
+                        <label for = "personal_email" class = "form-control-label"> Personal Email*: </label> 
+                        <input type = "email" id = "personal_email" name = "personal_email" class = "form-control" placeholder = "example@gamil.com" required <cfif duplicate eq "true"> value = "#form.personal_email#" class = "email" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.personal_email#" </cfif> >
+                    </div>
+                    <div class = "col-6">
+                        <label for = "official_email"> Official Email*: </label> 
+                        <input type = "email" id = "official_email" name = "official_email" class = "form-control" placeholder = "example@bjs.com" required <cfif duplicate eq "true"> value = "#form.official_email#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.official_email#" </cfif> > </td>
+                    </div>
                 </div>
-                <div class = "col-6">
-                    Official Email*: <input type = "email" name = "official_email" class = "form-control" placeholder = "example@bjs.com" required <cfif duplicate eq "true"> value = "#form.official_email#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.official_email#" </cfif> > </td>
-                </div>
-            </div>
-            <div class = "row">
-                <div class = "col-md-4">
-                    Contact No.* <input type = "number" minlength = "11" maxlength = "11" name = "contact" placeholder = "Minimum 11 Digits" class = "form-control" required <cfif duplicate eq "true"> value = "#form.contact#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.contact#" </cfif> >
-                </div>
-                <div class = "col-md-4">
-                    Emergency Contact No.1*: <input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact1" <cfif duplicate eq "true"> value = "#form.emergency_contact1#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact1#" </cfif> >
-                </div>
-                <div class = "col-md-4">
-                    Emergency Contact No.2:<input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact2" <cfif duplicate eq "true"> value = "#form.emergency_contact2#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact2#" </cfif> > </td>
+                <div class = "row">
+                    <div class = "col-md-4">
+                        <label for = "contact" class = "form-control-label"> Contact No.* </label> 
+                        <input type = "number" minlength = "11" maxlength = "11" name = "contact" id = "contact" placeholder = "Minimum 11 Digits" class = "form-control" required <cfif duplicate eq "true"> value = "#form.contact#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.contact#" </cfif> >
+                    </div>
+                    <div class = "col-md-4">
+                        <label for = "emergency_contact1" class = "form-control-label"> Emergency Contact No.1*: </label>
+                        <input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact1" id = "emergency_contact1" <cfif duplicate eq "true"> value = "#form.emergency_contact1#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact1#" </cfif> >
+                    </div>
+                    <div class = "col-md-4">
+                        <label for = "emergency_contact2" class = "form-control-label"> Emergency Contact No.2: </label>
+                        <input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact2" <cfif duplicate eq "true"> value = "#form.emergency_contact2#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact2#" </cfif> > </td>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="tab-pane fade" id="nav-allowances" role="tabpanel" aria-labelledby="nav-allowances-tab">
         <!---   Allowances --->
-            <div class = "container">
-                <h4>Allowances</h4>
+            <div class = "employee_box">
                 <div class = "row">
                     <cfloop query="get_allowance">
                         <div class = "col-5">    
-                            <label for = "chk_allowance#id#"> #name# </lable> 
-                            <input class = "form-check-inline" name = "chk_allowance#id#" id="chk_allowance#id#" onclick="javascript:allowance_deduction('allowance');" value = "#id#" type = "checkbox" <cfif structKeyExists(url, 'edit')> <cfloop query = "get_employee_allowance"> <cfif allowance_id eq get_allowance.id > checked </cfif> </cfloop> </cfif> > 
+                            <input class = "form-check-input ml-3" name = "chk_allowance#id#" id="chk_allowance#id#" onclick="javascript:allowance_deduction('allowance');" value = "#id#" type = "checkbox" <cfif structKeyExists(url, 'edit')> <cfloop query = "get_employee_allowance"> <cfif allowance_id eq get_allowance.id > checked </cfif> </cfloop> </cfif> > 
+                            <label for = "chk_allowance#id#" class = "form-check-label ml-5">#name#</lable> 
                         </div>
                         <div class = "col-7">
-                            <input class = "form-control" type = "number"  min = "0"name = "allowance_amount#id#" id = "allowance_amount#id#" style = "visibility:hidden;" value = "#amount#"><br>
+                            <input class = "form-control" type = "number"  min = "0" name = "allowance_amount#id#" id = "allowance_amount#id#" style = "visibility:hidden;" value = "#amount#"><br>
                         </div>
                     </cfloop>
                 </div>
@@ -671,53 +681,80 @@
         </div>
         <div class="tab-pane fade" id="nav-deductions" role="tabpanel" aria-labelledby="nav-deductions-tab">
         <!---   Deductions --->
-            <div class = "container">
-                <div class ="row">
-                    <h4>Deductions</h4>
-                </div>
+            <div class = "employee_box">
                 <div class = "row">
                     <cfloop query="get_deduction">
-                            <div class = "col-5">
-                                <label>#name#</label> <input class = "form-check-inline" name = "chk_deduction#id#" value = "#id#" id = "chk_deduction#id#" onclick="javascript:allowance_deduction('deduction');" type = "checkbox" <cfif structKeyExists(url, 'edit')> <cfloop query = "get_employee_deduction"> <cfif deduction_id eq get_deduction.id > checked  </cfif> </cfloop> </cfif>> 
-                            </div>
-                            <div class = "col-7">
-                                <input type = "number"  min = "0" class = "form-control" id = "deduction_amount#id#" name = "deduction_amount#id#" value = "#amount#" style="visibility:hidden;"> <br>
-                            </div>
+                        <div class = "col-5">
+                            <input class = "form-check-input ml-3" name = "chk_deduction#id#" value = "#id#" id = "chk_deduction#id#" onclick="javascript:allowance_deduction('deduction');" type = "checkbox" <cfif structKeyExists(url, 'edit')> <cfloop query = "get_employee_deduction"> <cfif deduction_id eq get_deduction.id > checked  </cfif> </cfloop> </cfif>> 
+                            <label for = "chk_deduction#id#" class = "form-check-label ml-5" >#name#</label> 
+                        </div>
+                        <div class = "col-7">
+                            <input type = "number"  min = "0" class = "form-control" id = "deduction_amount#id#" name = "deduction_amount#id#" value = "#amount#" style="visibility:hidden;"> <br>
+                        </div>
                     </cfloop>
                 </div>
             </div>
         </div>
         <div class="tab-pane fade" id="nav-leaves" role="tabpanel" aria-labelledby="nav-leaves-tab">
         <!---   Leaves --->
-            <div class = "container">
-                <h4> Leaves: </h4>
+            <div class = "employee_box">
                 <cfloop query="get_leaves"> <!--- Dynamic List of Leaves --->
                     <div class = "row align-items-center">
-                            <label for = "chk_leaves#id#"> #title# </label>
-                            <input name = "chk_leaves#id#" id="chk_leaves#id#" value = "#id#" type = "checkbox" <cfif structKeyExists(url, 'edit')> <cfloop query = "get_employee_leaves"> <cfif leave_id eq get_leaves.id and get_employee_leaves.status eq "Y" > checked </cfif> </cfloop> </cfif> >
+                            <input name = "chk_leaves#id#" class = "form-check-input ml-3"  id="chk_leaves#id#" value = "#id#" type = "checkbox" <cfif structKeyExists(url, 'edit')> <cfloop query = "get_employee_leaves"> <cfif leave_id eq get_leaves.id and get_employee_leaves.status eq "Y" > checked </cfif> </cfloop> </cfif> >
+                            <label for = "chk_leaves#id#" class = "form-check-label ml-5" > #title# </label>
                     </div>
                 </cfloop>
             </div> <!--- Ending Leaves --->
         </div>
+        <!---   Payment Detail--->
         <div class="tab-pane fade" id="nav-payment" role="tabpanel" aria-labelledby="nav-payment-tab">
-        <!---   Payment --->
-            <div class = "container">
-                    <h4> Payment Detail: </h4> <br>    
-                        <select name = "payment_mode" onchange = "javascript:bank('cash');" class = "form-select">
+            <div class = "employee_box">
+                <div class = "row">
+                    <div class = "col-md-4">
+                        <label for = "payment_mode" class = "form-select-label">Payment Method:</label>
+                        <select name = "payment_mode" id = "payment_mode" onchange = "javascript:bank('cash');" class = "form-select">
                             <option value = "cash" id = "cash"> Cash </option>
                             <option value = "cheque" id = "cheque" <cfif structKeyExists(url, 'edit')> <cfif get_employee.payment_mode eq "cheque" > selected </cfif> </cfif>> Cheque </option>
                             <option value = "transfer" id = "transfer" <cfif structKeyExists(url, 'edit')> <cfif get_employee.payment_mode eq "transfer" > selected </cfif> </cfif> > Bank Transfer </option>
                         </select>
+                    </div>
+                    <div class = "col-md-4">
+                        <label for = "bank_name" class = "form-select-label" id = "bank_label">Bank Name:</label>
                         <input class = "form-control" type = "text" id = "bank_name" name = "txt_bank_name" placeholder = "Enter Bank Name"  style="display:none;" <cfif structKeyExists(url, 'edit')> value = "#get_employee.bank_name#" </cfif> > <br>                      
+                    </div>
+                    <div class = "col-md-4">
+                        <label for = "bank_account_no" class = "form-select-label" id = "account_label">Bank Account No.:</label>
                         <input class = "form-control" type = "number" id = "bank_account_no" name = "bank_account_no" placeholder = "Enter Bank Account No." style="display:none;" <cfif structKeyExists(url, 'edit')> value = "#get_employee.bank_account_no#" </cfif>> <br>                      
+                    </div>
+                </div>
             </div>
         </div><!--- Ending payment detail --->
+        <!--- Action --->
+        <div class="tab-pane fade" id="nav-action" role="tabpanel" aria-labelledby="nav-action-tab">
+            <div class = "employee_box">
+                <div class = "row container">
+                    <div class = "col-md-4">
+                        <input type = "checkbox" id = "Allowances" class = "form-check-input">
+                        <label for = "Allowances" class = "form-check-label">Update Allowances</label>
+                    </div>
+                    <div class = "col-md-4">
+                        <input type = "checkbox" id = "Deductions" class = "form-check-input">
+                        <label for = "Deductions" class = "form-check-label">Update Deductions</label>
+                    </div>
+                    <div class = "col-md-4">
+                        <input type = "checkbox" id = "leaves" class = "form-check-input">
+                        <label for = "leaves" class = "form-check-label">Update Leaves</label>
+                    </div>
+                </div>
+
+                <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif>>
+                    <cfif structKeyExists(url, 'edit')> <input type = "hidden" name = "txt_employee_id" value = "#url.edit#"> </cfif>
+                    <br>
+                    <input type = "submit"  class = "btn btn-outline-dark " value = <cfif structKeyExists(url, 'edit')> "Update Employee" <cfelse> "Create Employee" </cfif>>
+                </form>
+            </div>
+        </div><!--- Ending Action --->
     </div><!--- Ending Tabs --->
-<input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif>>
-    <cfif structKeyExists(url, 'edit')> <input type = "hidden" name = "txt_employee_id" value = "#url.edit#"> </cfif>
-    <br>
-    <input type = "submit"  class = "btn btn-outline-dark" value = <cfif structKeyExists(url, 'edit')> "Update Employee" <cfelse> "Create Employee" </cfif>>
-</form>
 </cfif>
 </cfoutput>
         <!--- Javascript functions --->
@@ -769,12 +806,16 @@
                 if (document.getElementById(id).selected == true) {
                 document.getElementById("bank_name").style.display = 'none';
                 document.getElementById("bank_account_no").style.display = 'none';
+                document.getElementById("bank_label").style.visibility = "hidden";
+                document.getElementById("account_label").style.visibility = "hidden";
                 document.getElementById("bank_name").required = false;
                 document.getElementById("bank_account_no").required = false;
                 } 
                 else {
                 document.getElementById("bank_name").style.display = 'inline';
                 document.getElementById("bank_account_no").style.display = 'inline';
+                document.getElementById("bank_label").style.visibility = "visible";
+                document.getElementById("account_label").style.visibility = "visible";
                 document.getElementById("bank_name").required = true;
                 document.getElementById("bank_account_no").required = true;
                 }
