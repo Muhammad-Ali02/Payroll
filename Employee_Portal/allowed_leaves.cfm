@@ -9,7 +9,7 @@
     <!--- front end --->
     <cfif leave_list.recordcount neq 0>
         <a href = "request_leave.cfm" >
-            <button type = "button" class = "btn btn-outline-dark">
+            <button type = "button" class = "btn btn-outline-dark custom_button">
                 Request Leave
             </button>
         </a>

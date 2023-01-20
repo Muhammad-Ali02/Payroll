@@ -29,7 +29,7 @@
         </cfquery>
         <cfif all_designation.recordcount eq 0> <!--- If All Designation Deleted or Not Found Show a message otherwise print table of all designations --->
             <h1> 
-                No Designation! Please Add Some <a href = "designation.cfm" > <button class = "btn btn-primary cls_btn"> Add Designation </button> </a>
+                No Designation! Please Add Some <a href = "designation.cfm" > <button class = "btn btn-outline-dark custom_button"> Add Designation </button> </a>
             </h1>
         <cfelse>
             <!--- Front End --->
@@ -39,7 +39,7 @@
                 <p class = "text-success" style = "text-align:center; font-weight:bold;"> *New Designation Created Successfuly <p>
             </cfif>
             <a href = "designation.cfm">
-                <button type = "button" class = "btn btn-outline-dark mb-3">
+                <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
                     Create New Designation
                 </button>
             </a>

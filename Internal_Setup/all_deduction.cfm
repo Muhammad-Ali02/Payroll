@@ -31,7 +31,7 @@
         </cfquery>
         <cfif all_deduction.recordcount eq 0> <!--- If All deductions Deleted or Not Found Show a message otherwise print table of all designations --->
             <h1> 
-                No Deduction! Please Add Some <a href = "deduction.cfm" > <button class = "btn btn-primary cls_btn"> Add Deduction </button> </a>
+                No Deduction! Please Add Some <a href = "deduction.cfm" > <button class = "btn btn-outline-dark custom_button"> Add Deduction </button> </a>
             </h1>
         <cfelse>
             <!--- _______________________ Front End __________________________  --->
@@ -44,7 +44,7 @@
                 <p class = "text-success" style = "text-align:center; font-weight:bold;"> *New Deduction Created Successfuly <p>
             </cfif>
             <a href = "deduction.cfm">
-                <button type = "button" class = "btn btn-outline-dark mb-3">
+                <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
                     Create New Deduction
                 </button>
             </a>

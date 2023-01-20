@@ -1,9 +1,13 @@
 <cfoutput>
     <cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
-        <cfif structKeyExists(url, 'edited')>
-            <h3 style="color:green; text-align:center"> *Employee #url.edited# Updated Successfully </h3>
-        </cfif>
+        <script>
+            <cfif structKeyExists(url, 'edited')>
+                alert("Employee Information Updated Successfully");
+            <cfelseif structKeyExists(url, 'created')>
+                alert("Employee Created Successfully")
+            </cfif>
+        </script>
         <cfquery name = "all_employees">
             select emp.employee_id as id, concat(emp.first_name," ",emp.middle_name," ",emp.last_name) as name, dep.department_name as department, des.designation_title as designation
             from employee emp, designation des, department dep
@@ -11,7 +15,7 @@
         </cfquery>
         <div>
             <a href = "employee.cfm" target = "_self">
-                <button type = "button" class = "btn btn-outline-dark create_button mb-3">
+                <button type = "button" class = "btn btn-outline-dark create_button mb-3 custom_button">
                     New Employee
                 </button>
             </a>

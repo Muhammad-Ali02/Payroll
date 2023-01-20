@@ -24,7 +24,7 @@
                     insert into designation (designation_title, description, short_word, basic_salary)
                     values ('#form.txt_designation_title#', '#form.txt_description#', '#form.txt_short_word#', '#form.basic_salary#')
                 </cfquery>
-                <cflocation  url="all_departments.cfm?updated=true">
+                <cflocation  url="all_designation.cfm?updated=true">
             </cfif>
         <cfelseif structKeyExists(form, 'update')>
             <cfquery name = "update_designation">
@@ -32,7 +32,7 @@
                 set basic_salary = "#form.basic_salary#", description = '#form.txt_description#', short_word = '#form.txt_short_word#'
                 where designation_title = "#form.txt_designation_title#"
             </cfquery>
-            <cflocation  url="all_departments.cfm?updated=true">
+            <cflocation  url="all_designation.cfm?updated=true">
         </cfif>
         <!--- |________________________________\|/_Front End _\|/________________________________|--->
         <center>

@@ -14,7 +14,7 @@
     </cfif>
     <div>
         <a href = "loan_apply.cfm" target = "_self">
-            <button type = "button" class = "btn btn-outline-dark create_button mb-3">
+            <button type = "button" class = "btn btn-outline-dark create_button mb-3 custom_button">
                 Apply For Loan
             </button>
         </a>

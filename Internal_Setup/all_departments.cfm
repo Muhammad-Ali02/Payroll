@@ -44,7 +44,7 @@
                 <p class = "text-success" style = "text-align:center; font-weight:bold;"> *New Department Created Successfuly <p>
             </cfif>
             <a href = "department.cfm">
-                <button type = "button" class = "btn btn-outline-dark mb-3">
+                <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
                     Create New Department
                 </button>
             </a>
