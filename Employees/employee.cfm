@@ -39,9 +39,8 @@
         <!--- \|/_____________________________\|/_Back End_\|/__________________________________\|/ --->
         <cfparam  name="duplicate" default = "false">
         <!--- \|/_____________________________\|/_Create_\|/__________________________________\|/ --->    
-        <cfif structKeyExists(form, 'create')> <!--- query will get the last employee number --->
-            <!--- Query will return a cnic if already exist --->
-            <cfquery name = "get_data">
+        <cfif structKeyExists(form, 'create')>
+            <cfquery name = "get_data">  <!--- query will get the last employee number --->
                 select cnic as cnic, official_email as email
                 from employee
                 where cnic = '#form.cnic#' or official_email = '#form.official_email#'
@@ -141,7 +140,7 @@
                     )
                 </cfquery>
                 <cfquery name = "insert_emp_user">
-                    insert into emp.users
+                    insert into emp_users
                     (
                         user_name, password, level
                     )
@@ -226,7 +225,22 @@
                     insert into current_month_pay (employee_id, pay_status)
                     values ('#get_employee.id#', 'Y')    
                 </cfquery>
+                <cfset document_path = expandPath("employees/documents/#get_employee.id#")>
+                <cfif not directoryExists('#document_path#')>
+                    #directoryCreate('#document_path#')#
+                </cfif>
+                <cfloop index="file_no" from="1" to="14">
+                    <cfif structKeyExists(form, '#evaluate("file_#file_no#")#')>
+                        <cffile  action="upload"
+                            destination = "#document_path#"
+                            fileField = "#evaluate("file_#file_no#")#"
+                            nameConflict = "MakeUnique"
+                            allowedextensions = ".png, .jpg, .pdf, .doc, .docx"
+                        >
+                    </cfif>
+                </cfloop>
               
+            <cflocation  url="all_employees.cfm?created=true">
             </cfif>
         </cfif>
         <!--- \|/_____________________________\|/_Update_\|/__________________________________\|/ --->
@@ -461,9 +475,6 @@
             <cflocation  url="all_employees.cfm?edited=#form.txt_employee_id#">
         </cfif>
         <!--- \|/_____________________________\|/_Front End_\|/__________________________________\|/ --->
-        <cfif structKeyExists(url, 'created')>
-            <cflocation  url="all_employees.cfm?created=true">
-        </cfif>
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
     <button class="nav-link active" id="nav-personal-tab" data-bs-toggle="tab" data-bs-target="##nav-personal" type="button" role="tab" aria-controls="nav-personal" aria-selected="true">Personal Details</button>
@@ -512,7 +523,7 @@
                             </div>
                             <div class = "col-md-4">
                                 <label for = "txt_father_cnic" class = "form-control-label">Father/Husband CNIC No.: </label> 
-                                <input name = "txt_father_cnic" id = "txt_father_cnic" minlength = "13" maxlength = "13" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_name#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
+                                <input name = "txt_father_cnic" id = "txt_father_cnic" minlength = "13" maxlength = "13" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_cnic#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
                             </div>
                         </div>
                         <div class = "row">
@@ -751,13 +762,13 @@
                 </cfif>
                 <div class = "row mb-3">
                     <div class = "col-md-6">
-                        <label for = "file_cv" class = "form-control-label">CV (Only .docx or .PDF)</label>
+                        <label for = "file_1" class = "form-control-label">CV (Only .docx or .PDF)</label>
                     </div>
                     <div class = "col-md-3">
-                        <input type = "file" id = "file_cv" name = "file_cv" class = "form-control">
+                        <input type = "file" id = "file_1" name = "file_1" class = "form-control">
                     </div>
                     <div class = "col-md-3">
-                        <input type = "button" id = "file_cv_btn" name = "file_cv_btn" value = "Download" class = "form-control">
+                        <input type = "button" id = "file_1_btn" name = "file_1_btn" value = "Download" class = "form-control">
                     </div>
                 </div>
                 <div class = "row mb-3">
