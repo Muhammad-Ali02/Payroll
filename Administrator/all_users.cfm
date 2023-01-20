@@ -6,7 +6,7 @@
         </cfquery>
         <div>
             <a href = "create_user.cfm" target = "_self">
-                <button type = "button" class = "btn btn-outline-dark create_button mb-3">
+                <button type = "button" class = "btn btn-outline-dark create_button mb-3 custom_button">
                     Create User with Role 
                 </button>
             </a>

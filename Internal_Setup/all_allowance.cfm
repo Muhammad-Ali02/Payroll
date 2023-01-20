@@ -30,7 +30,7 @@
         </cfquery>
         <cfif all_allowance.recordcount eq 0> <!--- If All Allowance Deleted or Not Found Show a message otherwise print table of all designations --->
             <h1> 
-                No Allowance! Please Add Some <a href = "allowance.cfm" > <button class = "btn btn-primary cls_btn"> Add Allowance </button> </a>
+                No Allowance! Please Add Some <a href = "allowance.cfm" > <button class = "btn btn-primary cls_btn custom_button"> Add Allowance </button> </a>
             </h1>
         <cfelse>
             <!--- Front End --->
@@ -43,7 +43,7 @@
                 <p class = "text-success" style = "text-align:center; font-weight:bold;"> *New Allowance Created Successfuly <p>
             </cfif>
             <a href = "allowance.cfm">
-                <button type = "button" class = "btn btn-outline-dark mb-3">
+                <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
                     Create New Allowance
                 </button>
             </a>

@@ -226,7 +226,7 @@
                     insert into current_month_pay (employee_id, pay_status)
                     values ('#get_employee.id#', 'Y')    
                 </cfquery>
-                <cflocation url="employee.cfm?created=true">               
+              
             </cfif>
         </cfif>
         <!--- \|/_____________________________\|/_Update_\|/__________________________________\|/ --->
@@ -472,6 +472,7 @@
     <button class="nav-link" id="nav-deductions-tab" data-bs-toggle="tab" data-bs-target="##nav-deductions" type="button" role="tab" aria-controls="nav-deductions" aria-selected="false">Deductions</button>
     <button class="nav-link" id="nav-leaves-tab" data-bs-toggle="tab" data-bs-target="##nav-leaves" type="button" role="tab" aria-controls="nav-leaves" aria-selected="false">Leaves</button>
     <button class="nav-link" id="nav-payment-tab" data-bs-toggle="tab" data-bs-target="##nav-payment" type="button" role="tab" aria-controls="nav-payment" aria-selected="false">Payment</button>
+    <button class="nav-link" id="nav-files-tab" data-bs-toggle="tab" data-bs-target="##nav-files" type="button" role="tab" aria-controls="nav-files" aria-selected="false">Files</button>
     <button class="nav-link" id="nav-action-tab" data-bs-toggle="tab" data-bs-target="##nav-action" type="button" role="tab" aria-controls="nav-action" aria-selected="false">Action</button>
   </div>
 </nav>
@@ -743,6 +744,168 @@
                 </div>
             </div>
         </div><!--- Ending payment detail --->
+        <!--- Files --->
+        <div class="tab-pane fade" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
+            <div class = "employee_box">
+                <cfif structKeyExists(url, 'edit')>
+                </cfif>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_cv" class = "form-control-label">CV (Only .docx or .PDF)</label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_cv" name = "file_cv" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_cv_btn" name = "file_cv_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_experience_letter" class = "form-control-label">Experience Letter (Only .docx or .PDF) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_experience_letter" name = "file_experience_letter" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_experience_letter_btn" name = "file_experience_letter_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_id_front" class = "form-control-label">ID Card Front (Only .jpg or .png) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_id_front" name = "file_id_front" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_id_front_btn" name = "file_id_front_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_id_back" class = "form-control-label">ID Card Back (Only .jpg or .png) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_id_back" name = "file_id_back" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_id_back_btn" name = "file_id_back_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_Covid19" class = "form-control-label">Covid19 Vaccination (Only .jpg or .png or .pdf) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_Covid19" name = "file_Covid19" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_Covid19_btn" name = "file_Covid19_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_Offer_letter" class = "form-control-label">Offer Letter (Only .pdf) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_Offer_letter" name = "file_Offer_letter" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_Offer_letter_btn" name = "file_Offer_letter_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_agreement" class = "form-control-label">Agreement (Only .pdf) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_agreement" name = "file_agreement" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_agreement_btn" name = "file_agreement_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_recent_degreee" class = "form-control-label">Most Recent Degree (Only .pdf or .jpg or .png) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_recent_degreee" name = "file_recent_degreee" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_recent_degreee_btn" name = "file_recent_degreee_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_photo_profile" class = "form-control-label">Profile Photo (Only .jpg or .png) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_photo_profile" name = "file_photo_profile" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_photo_profile_btn" name = "file_photo_profile_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_photo_passport" class = "form-control-label">Passport Size Photo (Only .jpg or .png) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_photo_passport" name = "file_photo_passport" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_photo_passport_btn" name = "file_photo_passport_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_photo_formal" class = "form-control-label">Formal Photograph (Only .jpg or .png) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_photo_formal" name = "file_photo_formal" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_photo_passport_btn" name = "file_photo_passport_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_certificate1" class = "form-control-label">Other Certificate 1 (Only .jpg or .png or .pdf) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_certificate1" name = "file_certificate1" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_certificate1_btn" name = "file_certificate1_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_certificate2" class = "form-control-label">Other Certificate 2 (Only .jpg or .png or .pdf) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_certificate2" name = "file_certificate2" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_certificate2_btn" name = "file_certificate2_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+                <div class = "row mb-3">
+                    <div class = "col-md-6">
+                        <label for = "file_documents" class = "form-control-label">Other Documents (Only .jpg or .png or .pdf) </label>
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "file" id = "file_documents" name = "file_documents" class = "form-control">
+                    </div>
+                    <div class = "col-md-3">
+                        <input type = "button" id = "file_documents_btn" name = "file_documents_btn" value = "Download" class = "form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--- End Files --->
         <!--- Action --->
         <div class="tab-pane fade" id="nav-action" role="tabpanel" aria-labelledby="nav-action-tab">
             <div class = "employee_box">
@@ -765,7 +928,7 @@
                 <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif>>
                     <cfif structKeyExists(url, 'edit')> <input type = "hidden" name = "txt_employee_id" value = "#url.edit#"> </cfif>
                     <br>
-                    <input type = "submit"  class = "btn btn-outline-dark " value = <cfif structKeyExists(url, 'edit')> "Update Employee" <cfelse> "Create Employee" </cfif>>
+                    <input type = "submit"  class = "btn btn-outline-dark" value = <cfif structKeyExists(url, 'edit')> "Update Employee" <cfelse> "Create Employee" </cfif>>
                 </form>
             </div>
         </div><!--- Ending Action --->

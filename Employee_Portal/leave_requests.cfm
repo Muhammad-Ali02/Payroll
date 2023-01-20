@@ -17,7 +17,7 @@
             </cfif>
         </cfif>
         <a href = "request_leave.cfm" >
-            <button type = "button" class = "btn btn-outline-dark mb-3">
+            <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
                 Request Leave
             </button>
         </a>

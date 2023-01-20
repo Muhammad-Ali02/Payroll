@@ -288,13 +288,17 @@ select:hover{
     color: white !important;
   }
 .custom_button{
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    color: #74747b !important;
+    /* font-weight: bold !important; */
     border-color: #575758 !important;
+    border-radius: 8px !important;
   }
 .custom_button:hover{
     background-color: black !important;
     border-color: rgba(245, 4, 4, 0.55) !important;
-    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55) !important;
-    color: rgba(255, 255, 255, 0.55) !important;
+    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55);
+    color: white !important;
   }
   /* employee background */
 .active{

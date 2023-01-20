@@ -33,7 +33,7 @@
                 <p class = "text-success" style = "text-align:center; font-weight:bold;"> *New Leave Created Successfuly <p>
             </cfif>
             <a href = "leaves.cfm">
-                <button type = "button" class = "btn btn-outline-dark mb-3">
+                <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
                     Create New Leave
                 </button>
             </a>

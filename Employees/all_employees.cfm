@@ -15,7 +15,7 @@
         </cfquery>
         <div>
             <a href = "employee.cfm" target = "_self">
-                <button type = "button" class = "btn btn-outline-dark create_button mb-3">
+                <button type = "button" class = "btn btn-outline-dark create_button mb-3 custom_button">
                     New Employee
                 </button>
             </a>
