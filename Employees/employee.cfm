@@ -225,22 +225,47 @@
                     insert into current_month_pay (employee_id, pay_status)
                     values ('#get_employee.id#', 'Y')    
                 </cfquery>
-                <cfset document_path = expandPath("employees/documents/#get_employee.id#")>
-                <cfif not directoryExists('#document_path#')>
-                    #directoryCreate('#document_path#')#
+                <!--- upload file process --->
+                <cfquery name = "get_file_names">
+                    select employee_no from file_names where employee_no = "#get_employee.id#"
+                </cfquery>
+                <cfif get_file_names.recordcount eq 0> <!--- if employee not exist already insert employee in table file_names  ---> 
+                    <cfquery name = "insert_file_names">
+                        insert into file_names (employee_no)
+                        values ('#get_employee.id#')
+                    </cfquery>
+                </cfif>
+                <cfset document_path = expandPath("/employees/documents/#get_employee.id#")>
+                <cfif directoryExists('#document_path#') eq false>
+                    <cfset directoryCreate('#document_path#')>
                 </cfif>
                 <cfloop index="file_no" from="1" to="14">
-                    <cfif structKeyExists(form, '#evaluate("file_#file_no#")#')>
-                        <cffile  action="upload"
+                    <cfset currentFile = "file_" & file_no>
+                    <cfif structKeyExists(form, "file_#file_no#") and evaluate("file_#file_no#") neq ''>
+                        <cffile  
+                            action="upload"
                             destination = "#document_path#"
-                            fileField = "#evaluate("file_#file_no#")#"
-                            nameConflict = "MakeUnique"
-                            allowedextensions = ".png, .jpg, .pdf, .doc, .docx"
+                            fileField = "#currentFile#"
+                            nameconflict = "MakeUnique"
+                            result = "uploaded_file"
                         >
+                        <cfset sourcePath = document_path & "\" & uploaded_file.clientFile>
+                        <cfset finded = find(".", uploaded_file.clientFile)>
+                        <cfset count = Len(uploaded_file.clientFile) - finded + 1>
+                        <cfset file_type = right(uploaded_file.clientFile, count)>
+                        <cfset destinationPath = document_path & "\" & currentFile & file_type>
+                        <cffile  action="rename"
+                            source = "#sourcePath#"
+                            destination = "#destinationPath#"
+                            attributes="normal"
+                        >
+                        <cfset file_name = currentFile & file_type>
+                        <cfquery name = "update_file_names">
+                            update file_names set #currentFile# = "#file_name#" where employee_no = "#get_employee.id#"
+                        </cfquery>
                     </cfif>
                 </cfloop>
-              
-            <cflocation  url="all_employees.cfm?created=true">
+                <cflocation  url="all_employees.cfm?created=true">
             </cfif>
         </cfif>
         <!--- \|/_____________________________\|/_Update_\|/__________________________________\|/ --->
@@ -458,6 +483,16 @@
                                     where leave_id = '#evaluate('form.chk_leaves#id#')#' and employee_id = '#form.txt_employee_id#'
                                 </cfquery>
                             </cfif>
+                <cfelse>
+                    <cfquery name = "disable_existing_leaves"> <!--- in case of unchecked checkboxes --->  
+                        update employee_leaves a, (select leave_id from employee_leaves
+                            where leave_id in (
+                                select leave_id
+                                from employee_leaves
+                                where employee_id = '#form.txt_employee_id#' and leave_id = '#id#'
+                            )) as b
+                        set status = "N", disabled_date = now(), disabled_by = '#session.loggedin.username#'
+                        where employee_id  = '#form.txt_employee_id#' and a.leave_id = b.leave_id
                     <cfelse>
                         <cfquery name = "disable_existing_leaves"> <!--- in case of unchecked checkboxes --->  
                             update employee_leaves a, (select leave_id from employee_leaves
@@ -472,6 +507,46 @@
                     </cfif>
                 </cfloop>
             </cfif>
+            <!--- upload files process --->
+            <cfquery name = "get_file_names">
+                select employee_no from file_names where employee_no = "#form.txt_employee_id#"
+            </cfquery>
+            <cfif get_file_names.recordcount eq 0> <!--- if employee not exist already insert employee in table file_names  ---> 
+                <cfquery name = "insert_file_names">
+                    insert into file_names (employee_no)
+                    values ('#form.txt_employee_id#')
+                </cfquery>
+            </cfif>
+            <cfset document_path = expandPath("/employees/documents/#form.txt_employee_id#")>
+                <cfif directoryExists('#document_path#') eq false>
+                    <cfset directoryCreate('#document_path#')>
+                </cfif>
+            <cfloop index="file_no" from="1" to="14">
+                <cfset currentFile = "file_" & file_no>
+                <cfif structKeyExists(form, "file_#file_no#") and evaluate("file_#file_no#") neq ''>
+                    <cffile  
+                        action="upload"
+                        destination = "#document_path#"
+                        fileField = "#currentFile#"
+                        nameconflict = "MakeUnique"
+                        result = "uploaded_file"
+                    >
+                    <cfset sourcePath = document_path & "\" & uploaded_file.clientFile>
+                    <cfset finded = find(".", uploaded_file.clientFile)>
+                    <cfset count = Len(uploaded_file.clientFile) - finded + 1>
+                    <cfset file_type = right(uploaded_file.clientFile, count)>
+                    <cfset destinationPath = document_path & "\" & currentFile & file_type>
+                    <cffile  action="rename"
+                        source = "#sourcePath#"
+                        destination = "#destinationPath#"
+                        attributes="normal"
+                    >
+                    <cfset file_name = currentFile & file_type>
+                    <cfquery name = "update_file_names">
+                        update file_names set #currentFile# = "#file_name#" where employee_no = "#form.txt_employee_id#"
+                    </cfquery>
+                </cfif>
+            </cfloop>
             <cflocation  url="all_employees.cfm?edited=#form.txt_employee_id#">
         </cfif>
         <!--- \|/_____________________________\|/_Front End_\|/__________________________________\|/ --->
@@ -483,11 +558,17 @@
     <button class="nav-link" id="nav-deductions-tab" data-bs-toggle="tab" data-bs-target="##nav-deductions" type="button" role="tab" aria-controls="nav-deductions" aria-selected="false">Deductions</button>
     <button class="nav-link" id="nav-leaves-tab" data-bs-toggle="tab" data-bs-target="##nav-leaves" type="button" role="tab" aria-controls="nav-leaves" aria-selected="false">Leaves</button>
     <button class="nav-link" id="nav-payment-tab" data-bs-toggle="tab" data-bs-target="##nav-payment" type="button" role="tab" aria-controls="nav-payment" aria-selected="false">Payment</button>
-    <button class="nav-link" id="nav-files-tab" data-bs-toggle="tab" data-bs-target="##nav-files" type="button" role="tab" aria-controls="nav-files" aria-selected="false">Files</button>
-    <button class="nav-link" id="nav-action-tab" data-bs-toggle="tab" data-bs-target="##nav-action" type="button" role="tab" aria-controls="nav-action" aria-selected="false">Action</button>
+    <button class="nav-link active" id="nav-personal-tab" data-bs-toggle="tab" data-bs-target="##nav-personal" type="button" role="tab" aria-controls="nav-personal" aria-selected="true" onclick = "validation2();">Personal Details</button>
+    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="##nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="true" onclick = "validation2();">Contact</button>
+    <button class="nav-link" id="nav-allowances-tab" data-bs-toggle="tab" data-bs-target="##nav-allowances" type="button" role="tab" aria-controls="nav-allowances" aria-selected="false" onclick = "validation2();">Allowances</button>
+    <button class="nav-link" id="nav-deductions-tab" data-bs-toggle="tab" data-bs-target="##nav-deductions" type="button" role="tab" aria-controls="nav-deductions" aria-selected="false" onclick = "validation2();">Deductions</button>
+    <button class="nav-link" id="nav-leaves-tab" data-bs-toggle="tab" data-bs-target="##nav-leaves" type="button" role="tab" aria-controls="nav-leaves" aria-selected="false" onclick = "validation2();">Leaves</button>
+    <button class="nav-link" id="nav-payment-tab" data-bs-toggle="tab" data-bs-target="##nav-payment" type="button" role="tab" aria-controls="nav-payment" aria-selected="false" onclick = "validation2();">Payment</button>
+    <button class="nav-link" id="nav-files-tab" data-bs-toggle="tab" data-bs-target="##nav-files" type="button" role="tab" aria-controls="nav-files" aria-selected="false" onclick = "validation2();">Files</button>
+    <button class="nav-link" id="nav-action-tab" data-bs-toggle="tab" data-bs-target="##nav-action" type="button" role="tab" aria-controls="nav-action" aria-selected="false" onclick = "validation1();">Action</button>
   </div>
 </nav>
-<form action = "employee.cfm" method = "post">
+<form action = "employee.cfm" method = "post"  enctype="multipart/form-data">
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-personal" role="tabpanel" aria-labelledby="nav-home-tab">
         <!---   Personal Detail --->
@@ -522,8 +603,12 @@
                                 <input type = "number"  minlength = "13" maxlength = "13" id = "cnic" name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>> </td> 
                             </div>
                             <div class = "col-md-4">
+                                Father/Husband CNIC No.: <input name = "txt_father_cnic" minlength = "13" maxlength = "13" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_name#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
+                                <input type = "number" id = "cnic" name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>> </td> 
+                            </div>
+                            <div class = "col-md-4">
                                 <label for = "txt_father_cnic" class = "form-control-label">Father/Husband CNIC No.: </label> 
-                                <input name = "txt_father_cnic" id = "txt_father_cnic" minlength = "13" maxlength = "13" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_cnic#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
+                                <input name = "txt_father_cnic" id = "txt_father_cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_cnic#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
                             </div>
                         </div>
                         <div class = "row">
@@ -536,8 +621,9 @@
                                 <input type = "text" name = "txt_country" id = "txt_country" class = "form-control" placeholder = "Country Name" required <cfif duplicate eq "true"> value = "#form.txt_country#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.country#" </cfif>> </td>
                             </div>
                             <div class = "col-md-8">
+                                Full Address*: <input type = "text" name = "txt_full_address" class = "form-control" placeholder = "Enter Full Address, Included Street, House etc" maxlength = "200" required <cfif duplicate eq "true"> value = "#form.txt_full_address#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.full_address#" </cfif>> </td>
                                 <label for = "txt_full_address" class = "form-control-label">Full Address*: </label> 
-                                <input type = "text" name = "txt_full_address" id = "txt_full_address" class = "form-control" placeholder = "Enter Full Address, Included Street, House etc" maxlength = "200" required <cfif duplicate eq "true"> value = "#form.txt_full_address#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.full_address#" </cfif>> </td>
+                                <input type = "text" name = "txt_full_address" id = "txt_full_address" class = "form-control" placeholder = "Enter Full Address, Included Street, House etc" required <cfif duplicate eq "true"> value = "#form.txt_full_address#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.full_address#" </cfif>> </td>
                             </div>
                         </div>
                         <div class = "row">
@@ -669,18 +755,31 @@
                         <input type = "email" id = "official_email" name = "official_email" class = "form-control" placeholder = "example@bjs.com" required <cfif duplicate eq "true"> value = "#form.official_email#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.official_email#" </cfif> > </td>
                     </div>
                 </div>
+                <div class = "col-6">
+                    Official Email*: <input type = "email" name = "official_email" class = "form-control" placeholder = "example@bjs.com" required <cfif duplicate eq "true"> value = "#form.official_email#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.official_email#" </cfif> > </td>
+                </div>
+            </div>
+            <div class = "row">
+                <div class = "col-md-4">
+                    Contact No.* <input type = "number" minlength = "11" maxlength = "11" name = "contact" placeholder = "Minimum 11 Digits" class = "form-control" required <cfif duplicate eq "true"> value = "#form.contact#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.contact#" </cfif> >
+                </div>
+                <div class = "col-md-4">
+                    Emergency Contact No.1*: <input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact1" <cfif duplicate eq "true"> value = "#form.emergency_contact1#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact1#" </cfif> >
+                </div>
+                <div class = "col-md-4">
+                    Emergency Contact No.2:<input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact2" <cfif duplicate eq "true"> value = "#form.emergency_contact2#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact2#" </cfif> > </td>
                 <div class = "row">
                     <div class = "col-md-4">
                         <label for = "contact" class = "form-control-label"> Contact No.* </label> 
-                        <input type = "number" minlength = "11" maxlength = "11" name = "contact" id = "contact" placeholder = "Minimum 11 Digits" class = "form-control" required <cfif duplicate eq "true"> value = "#form.contact#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.contact#" </cfif> >
+                        <input type = "number" name = "contact" id = "contact" placeholder = "Minimum 11 Digits" class = "form-control" required <cfif duplicate eq "true"> value = "#form.contact#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.contact#" </cfif> >
                     </div>
                     <div class = "col-md-4">
                         <label for = "emergency_contact1" class = "form-control-label"> Emergency Contact No.1*: </label>
-                        <input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact1" id = "emergency_contact1" <cfif duplicate eq "true"> value = "#form.emergency_contact1#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact1#" </cfif> >
+                        <input type = "number" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact1" id = "emergency_contact1" <cfif duplicate eq "true"> value = "#form.emergency_contact1#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact1#" </cfif> >
                     </div>
                     <div class = "col-md-4">
                         <label for = "emergency_contact2" class = "form-control-label"> Emergency Contact No.2: </label>
-                        <input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact2" <cfif duplicate eq "true"> value = "#form.emergency_contact2#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact2#" </cfif> > </td>
+                        <input type = "number" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact2" <cfif duplicate eq "true"> value = "#form.emergency_contact2#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact2#" </cfif> > </td>
                     </div>
                 </div>
             </div>
@@ -758,162 +857,52 @@
         <!--- Files --->
         <div class="tab-pane fade" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
             <div class = "employee_box">
-                <cfif structKeyExists(url, 'edit')>
-                </cfif>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_1" class = "form-control-label">CV (Only .docx or .PDF)</label>
+                <cfset files_array = arrayNew(1)>
+                <cfset files_array = [   
+                                        "ID Card Front (Only .jpg or .png)", 
+                                        "ID Card Back (Only .jpg or .png)" ,
+                                        "Profile Photo (Only .jpg or .png)",
+                                        "Passport Size Photo (Only .jpg or .png)",
+                                        "Formal Photograph (Only .jpg or .png)",
+                                        "CV (Only .DOCX or .pdf)",
+                                        "Offer Letter (Only .pdf)",
+                                        "Agreement (Only .pdf)",
+                                        "Covid19 Vaccination (Only .jpg or .png or .pdf)",
+                                        "Most Recent Degree (Only .pdf or .jpg or .png)",
+                                        "Experience Letter (Only .docx or .pdf)", 
+                                        "Other Certificate 1 (Only .jpg or .png or .pdf)",
+                                        "Other Certificate 2 (Only .jpg or .png or .pdf)",
+                                        "Other Documents (Only .jpg or .png or .pdf)"
+                                        ]>
+                <cfset i = 0>
+                <cfloop array="#files_array#" index="file_no">
+                    <cfset i = i + 1>
+                    <div class = "row mb-3">
+                        <div class = "col-md-6">
+                            <label for = "file_#i#" class = "form-control-label">#file_no#</label>
+                        </div>
+                        <div class = "col-md-4">
+                            <input type = "file" id = "file_#i#" name = "file_#i#" class = "form-control">
+                        </div>
+                        <cfif structKeyExists(url, 'edit')>
+                            <cfquery name = "get_employee_files">
+                                select * from file_names where employee_no = "#url.edit#"
+                            </cfquery>
+                            <cfif evaluate('get_employee_files.file_#i#') neq ''>
+                                <cfset file_name = evaluate('get_employee_files.file_#i#')>
+                                <cfset file_path = expandpath('/employees/documents/#url.edit#/#file_name#')>
+                                <cfif fileExists(file_path) eq true>
+                                    <div class = "col-md-2">
+                                        <a href = "/employees/documents/#url.edit#/#file_name#" target = "blank" download>
+                                            <input type = "button" id = "file_#i#_btn" name = "file_#i#_btn" value = "Download" class = "form-control">
+                                        </a>
+                                    </div>
+                                </cfif> 
+                            </cfif>
+                        </cfif>
                     </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_1" name = "file_1" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_1_btn" name = "file_1_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_experience_letter" class = "form-control-label">Experience Letter (Only .docx or .PDF) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_experience_letter" name = "file_experience_letter" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_experience_letter_btn" name = "file_experience_letter_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_id_front" class = "form-control-label">ID Card Front (Only .jpg or .png) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_id_front" name = "file_id_front" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_id_front_btn" name = "file_id_front_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_id_back" class = "form-control-label">ID Card Back (Only .jpg or .png) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_id_back" name = "file_id_back" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_id_back_btn" name = "file_id_back_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_Covid19" class = "form-control-label">Covid19 Vaccination (Only .jpg or .png or .pdf) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_Covid19" name = "file_Covid19" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_Covid19_btn" name = "file_Covid19_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_Offer_letter" class = "form-control-label">Offer Letter (Only .pdf) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_Offer_letter" name = "file_Offer_letter" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_Offer_letter_btn" name = "file_Offer_letter_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_agreement" class = "form-control-label">Agreement (Only .pdf) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_agreement" name = "file_agreement" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_agreement_btn" name = "file_agreement_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_recent_degreee" class = "form-control-label">Most Recent Degree (Only .pdf or .jpg or .png) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_recent_degreee" name = "file_recent_degreee" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_recent_degreee_btn" name = "file_recent_degreee_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_photo_profile" class = "form-control-label">Profile Photo (Only .jpg or .png) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_photo_profile" name = "file_photo_profile" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_photo_profile_btn" name = "file_photo_profile_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_photo_passport" class = "form-control-label">Passport Size Photo (Only .jpg or .png) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_photo_passport" name = "file_photo_passport" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_photo_passport_btn" name = "file_photo_passport_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_photo_formal" class = "form-control-label">Formal Photograph (Only .jpg or .png) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_photo_formal" name = "file_photo_formal" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_photo_passport_btn" name = "file_photo_passport_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_certificate1" class = "form-control-label">Other Certificate 1 (Only .jpg or .png or .pdf) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_certificate1" name = "file_certificate1" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_certificate1_btn" name = "file_certificate1_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_certificate2" class = "form-control-label">Other Certificate 2 (Only .jpg or .png or .pdf) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_certificate2" name = "file_certificate2" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_certificate2_btn" name = "file_certificate2_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
-                <div class = "row mb-3">
-                    <div class = "col-md-6">
-                        <label for = "file_documents" class = "form-control-label">Other Documents (Only .jpg or .png or .pdf) </label>
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "file" id = "file_documents" name = "file_documents" class = "form-control">
-                    </div>
-                    <div class = "col-md-3">
-                        <input type = "button" id = "file_documents_btn" name = "file_documents_btn" value = "Download" class = "form-control">
-                    </div>
-                </div>
+                </cfloop>
+                <cfset i = 0>
             </div>
         </div>
         <!--- End Files --->
@@ -936,16 +925,19 @@
                     </div>
                 </div>
                 </cfif>
-                <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif>>
-                    <cfif structKeyExists(url, 'edit')> <input type = "hidden" name = "txt_employee_id" value = "#url.edit#"> </cfif>
-                    <br>
-                    <input type = "submit"  class = "btn btn-outline-dark" value = <cfif structKeyExists(url, 'edit')> "Update Employee" <cfelse> "Create Employee" </cfif>>
+                <ol id = "validation1" class = "text-danger">
+                </ol>
+                    <div style = "text-align:center;">
+                        <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif>>
+                        <cfif structKeyExists(url, 'edit')> <input type = "hidden" name = "txt_employee_id" value = "#url.edit#"> </cfif>
+                        <input type = "submit"  id "submit" class = "btn btn-outline-dark" value = <cfif structKeyExists(url, 'edit')> "Update Employee" <cfelse> "Create Employee" </cfif>>
+                    </div>
                 </form>
             </div>
         </div><!--- Ending Action --->
     </div><!--- Ending Tabs --->
 </cfif>
-</cfoutput>
+</cfoutput> 
         <!--- Javascript functions --->
         <script type="text/javascript">
             // Arrays to store query result (IDs of Allowances and Deductions)
@@ -1007,6 +999,78 @@
                 document.getElementById("account_label").style.visibility = "visible";
                 document.getElementById("bank_name").required = true;
                 document.getElementById("bank_account_no").required = true;
+                }
+            }
+            function validation1(){
+                var error = document.querySelector('#validation1');
+                var validationFlag = 0;
+                error.innerHTML = "";
+                if(document.getElementById('first_name').value == ''){
+                    error.innerHTML += "<li>" + "First name is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('last_name').value == ''){
+                    error.innerHTML += "<li>" + "Last name is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('father_name').value == ''){
+                    error.innerHTML += "<li>" + "Father/Husband name is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('cnic').value == ''){
+                    error.innerHTML += "<li>" + "Employee CNIC is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('txt_city').value == ''){
+                    error.innerHTML += "<li>" + "City Name is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('txt_country').value == ''){
+                    error.innerHTML += "<li>" + "Country Name is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('txt_full_address').value == ''){
+                    error.innerHTML += "<li>" + "Full Address is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('designation').value == ''){
+                    error.innerHTML += "<li>" + "Designation is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('department').value == ''){
+                    error.innerHTML += "<li>" + "Department is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('dob').value == ''){
+                    error.innerHTML += "<li>" + "Date of Birth (DOB) is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('joining_date').value == ''){
+                    error.innerHTML += "<li>" + "Date of Joining is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('workingdays_group').value == ''){
+                    error.innerHTML += "<li>" + "Working Days Group is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('personal_email').value == ''){
+                    error.innerHTML += "<li>" + "Personal Email is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('official_email').value == ''){
+                    error.innerHTML += "<li>" + "Official Email is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('contact').value == ''){
+                    error.innerHTML += "<li>" + "Contact No. is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(document.getElementById('emergency_contact1').value == ''){
+                    error.innerHTML += "<li>" + "Emergency Contact No.1 is required" + "</li>";
+                    validationFlag = validationFlag + 1;
+                }
+                if(validationFlag >= 1 ){
+                    document.getElementById("submit").disabled = true;
                 }
             }
             allowance_deduction('allowance');
