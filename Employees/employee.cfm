@@ -484,16 +484,6 @@
                                 </cfquery>
                             </cfif>
                 <cfelse>
-                    <cfquery name = "disable_existing_leaves"> <!--- in case of unchecked checkboxes --->  
-                        update employee_leaves a, (select leave_id from employee_leaves
-                            where leave_id in (
-                                select leave_id
-                                from employee_leaves
-                                where employee_id = '#form.txt_employee_id#' and leave_id = '#id#'
-                            )) as b
-                        set status = "N", disabled_date = now(), disabled_by = '#session.loggedin.username#'
-                        where employee_id  = '#form.txt_employee_id#' and a.leave_id = b.leave_id
-                    <cfelse>
                         <cfquery name = "disable_existing_leaves"> <!--- in case of unchecked checkboxes --->  
                             update employee_leaves a, (select leave_id from employee_leaves
                                 where leave_id in (
@@ -552,12 +542,6 @@
         <!--- \|/_____________________________\|/_Front End_\|/__________________________________\|/ --->
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <button class="nav-link active" id="nav-personal-tab" data-bs-toggle="tab" data-bs-target="##nav-personal" type="button" role="tab" aria-controls="nav-personal" aria-selected="true">Personal Details</button>
-    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="##nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="true">Contact</button>
-    <button class="nav-link" id="nav-allowances-tab" data-bs-toggle="tab" data-bs-target="##nav-allowances" type="button" role="tab" aria-controls="nav-allowances" aria-selected="false">Allowances</button>
-    <button class="nav-link" id="nav-deductions-tab" data-bs-toggle="tab" data-bs-target="##nav-deductions" type="button" role="tab" aria-controls="nav-deductions" aria-selected="false">Deductions</button>
-    <button class="nav-link" id="nav-leaves-tab" data-bs-toggle="tab" data-bs-target="##nav-leaves" type="button" role="tab" aria-controls="nav-leaves" aria-selected="false">Leaves</button>
-    <button class="nav-link" id="nav-payment-tab" data-bs-toggle="tab" data-bs-target="##nav-payment" type="button" role="tab" aria-controls="nav-payment" aria-selected="false">Payment</button>
     <button class="nav-link active" id="nav-personal-tab" data-bs-toggle="tab" data-bs-target="##nav-personal" type="button" role="tab" aria-controls="nav-personal" aria-selected="true" onclick = "validation2();">Personal Details</button>
     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="##nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="true" onclick = "validation2();">Contact</button>
     <button class="nav-link" id="nav-allowances-tab" data-bs-toggle="tab" data-bs-target="##nav-allowances" type="button" role="tab" aria-controls="nav-allowances" aria-selected="false" onclick = "validation2();">Allowances</button>
@@ -600,30 +584,25 @@
                             </div>
                             <div class = "col-md-4">
                                 <label  class="form-control-label" for = "cnic"> Employee's CNIC No. </label>
-                                <input type = "number"  minlength = "13" maxlength = "13" id = "cnic" name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>> </td> 
-                            </div>
-                            <div class = "col-md-4">
-                                Father/Husband CNIC No.: <input name = "txt_father_cnic" minlength = "13" maxlength = "13" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_name#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
-                                <input type = "number" id = "cnic" name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>> </td> 
+                                <input type = "number" id = "cnic" name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>>
                             </div>
                             <div class = "col-md-4">
                                 <label for = "txt_father_cnic" class = "form-control-label">Father/Husband CNIC No.: </label> 
-                                <input name = "txt_father_cnic" id = "txt_father_cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_first_cnic#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
+                                <input name = "txt_father_cnic" id = "txt_father_cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control" required <cfif duplicate eq "true"> value = "#form.txt_father_cnic#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
                             </div>
                         </div>
                         <div class = "row">
                             <div class = "col-md-2">
                                 <label for = "txt_city" class = "form-control-label">City*:</label> 
-                                <input type = "text" id = "txt_city" name = "txt_city" required class = "form-control" placeholder = "City Name"<cfif duplicate eq "true"> value = "#form.txt_city#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.city#" </cfif>> </td>
+                                <input type = "text" id = "txt_city" name = "txt_city" required class = "form-control" placeholder = "City Name"<cfif duplicate eq "true"> value = "#form.txt_city#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.city#" </cfif>>
                             </div>
                             <div class = "col-md-2">
                                 <label for = "txt_country" class = "form-control-label"> Country*: </label> 
-                                <input type = "text" name = "txt_country" id = "txt_country" class = "form-control" placeholder = "Country Name" required <cfif duplicate eq "true"> value = "#form.txt_country#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.country#" </cfif>> </td>
+                                <input type = "text" name = "txt_country" id = "txt_country" class = "form-control" placeholder = "Country Name" required <cfif duplicate eq "true"> value = "#form.txt_country#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.country#" </cfif>>
                             </div>
                             <div class = "col-md-8">
-                                Full Address*: <input type = "text" name = "txt_full_address" class = "form-control" placeholder = "Enter Full Address, Included Street, House etc" maxlength = "200" required <cfif duplicate eq "true"> value = "#form.txt_full_address#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.full_address#" </cfif>> </td>
                                 <label for = "txt_full_address" class = "form-control-label">Full Address*: </label> 
-                                <input type = "text" name = "txt_full_address" id = "txt_full_address" class = "form-control" placeholder = "Enter Full Address, Included Street, House etc" required <cfif duplicate eq "true"> value = "#form.txt_full_address#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.full_address#" </cfif>> </td>
+                                <input type = "text" name = "txt_full_address" id = "txt_full_address" class = "form-control" placeholder = "Enter Full Address, Included Street, House etc" required <cfif duplicate eq "true"> value = "#form.txt_full_address#"</cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.full_address#" </cfif>>
                             </div>
                         </div>
                         <div class = "row">
@@ -755,19 +734,6 @@
                         <input type = "email" id = "official_email" name = "official_email" class = "form-control" placeholder = "example@bjs.com" required <cfif duplicate eq "true"> value = "#form.official_email#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.official_email#" </cfif> > </td>
                     </div>
                 </div>
-                <div class = "col-6">
-                    Official Email*: <input type = "email" name = "official_email" class = "form-control" placeholder = "example@bjs.com" required <cfif duplicate eq "true"> value = "#form.official_email#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.official_email#" </cfif> > </td>
-                </div>
-            </div>
-            <div class = "row">
-                <div class = "col-md-4">
-                    Contact No.* <input type = "number" minlength = "11" maxlength = "11" name = "contact" placeholder = "Minimum 11 Digits" class = "form-control" required <cfif duplicate eq "true"> value = "#form.contact#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.contact#" </cfif> >
-                </div>
-                <div class = "col-md-4">
-                    Emergency Contact No.1*: <input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact1" <cfif duplicate eq "true"> value = "#form.emergency_contact1#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact1#" </cfif> >
-                </div>
-                <div class = "col-md-4">
-                    Emergency Contact No.2:<input type = "number" minlength = "11" maxlength = "11" placeholder = "Minimum 11 Digits" required class = "form-control" name = "emergency_contact2" <cfif duplicate eq "true"> value = "#form.emergency_contact2#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact2#" </cfif> > </td>
                 <div class = "row">
                     <div class = "col-md-4">
                         <label for = "contact" class = "form-control-label"> Contact No.* </label> 
