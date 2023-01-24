@@ -4,6 +4,11 @@
         <cfquery name = "all_workingdays">
             select * from working_days
         </cfquery>
+            <a href = "workingdays.cfm">
+                <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
+                    Create New Group
+                </button>
+            </a>
         <table class = "table custom_table">
             <tr>
                 <th> No.</th>
