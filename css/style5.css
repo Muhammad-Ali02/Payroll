@@ -314,6 +314,13 @@ select:hover{
     box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55);
     color: white !important;
   }
+
+select:focus{
+    background-color: black !important;
+    border-color: rgba(245, 4, 4, 0.55) !important;
+    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55);
+    color: white !important;
+}
 .custom_button{
     background-color: rgba(0, 0, 0, 0.55) !important;
     color: #74747b !important;
