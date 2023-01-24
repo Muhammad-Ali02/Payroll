@@ -560,7 +560,7 @@
                         <div class = "row">
                             <div class = "col-md-2">
                                 <label  class="form-control-label" for = "employee_no"> Employee Number: </label> 
-                                <input type = "text" name = "txt_employee_number" id = "employee_no" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" <cfelse> value = "#employee_number#" </cfif> readonly>
+                                <input type = "text" name = "txt_employee_number" id = "employee_no" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" readonly<cfelse> value = "#employee_number#" </cfif>>
                             </div>
                         </div>
                         <div class = "row">
