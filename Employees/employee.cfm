@@ -104,7 +104,9 @@
                     bank_account_no, 
                     created_date,
                     basic_salary)
-                    values(concat('#get_designation.short_word#','#form.txt_employee_number#'),
+                    values(
+                    <!--- concat('#get_designation.short_word#','#form.txt_employee_number#'), --->
+                    '#form.txt_employee_number#',
                     '#form.txt_first_name#',
                     '#form.txt_middle_name#',
                     '#form.txt_last_name#',
@@ -153,7 +155,7 @@
                 <cfquery name = "get_employee"> <!--- this query will return id of a recently created Employee --->
                     select employee_id as id
                     from employee
-                    order by employee_id desc
+                    order by created_date desc
                     limit 1
                 </cfquery>
                 <cfloop query = "get_allowance">
@@ -560,7 +562,7 @@
                         <div class = "row">
                             <div class = "col-md-2">
                                 <label  class="form-control-label" for = "employee_no"> Employee Number: </label> 
-                                <input type = "text" name = "txt_employee_number" id = "employee_no" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" <cfelse> value = "#employee_number#" </cfif> readonly>
+                                <input type = "text" name = "txt_employee_number" id = "employee_no" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" <cfelse> value = "#employee_number#" </cfif>>
                             </div>
                         </div>
                         <div class = "row">
