@@ -17,7 +17,9 @@
                 where user_name = '#form.user_name#'
             </cfquery>
             <cfif check.name eq form.user_name>
-                <center> <strong> <p class = "text-danger"> *User Name already Exists </p> </strong> </center>
+                <script>
+                    alert("User Name Already Exists!");
+                </script>
                 <cfset merror = 1>
             <cfelse>
                 <!--- Insert query  --->
@@ -25,7 +27,7 @@
                     insert into users (user_name, password, level)
                     values ('#form.user_name#', '#form.user_password#', '#form.user_level#')
                 </cfquery>
-                <center> <strong> <p class = "text-success"> User createed successfully </p> </strong> </center>
+                <cflocation  url="all_users.cfm?created=true">
             </cfif>
         <cfelseif structKeyExists(form, 'update')>
             <cfquery name = "update_user">
@@ -33,37 +35,82 @@
                 set password = "#form.user_password#"
                 where user_name = "#form.user_name#"
             </cfquery>
-            <p class = "text-success" style = "text-align:center; font-weight:bold;"> *User Data Updated Successfuly <p>
+            <cflocation  url="all_users.cfm?updated=true">
         </cfif>
         <!--- |________________________________\|/_Front End _\|/________________________________|--->
-        <center>
-        <table>
-            <tr> 
-                <td>   
-                    <form Action = "create_user.cfm" Method = "post">
-                        <br>
-                        <select class = "form-select" name = "user_name" required="true"> 
-                            <option disabled> Select Employee </option> 
-                                <cfloop query="get_employees">
-                                    <option value = "#employee_id#" <cfif #merror# eq 1 > <cfif structKeyExists(form, 'user_name')> <cfif form.user_name eq employee_id> selected = "true" style = "border-color : red; color : red;"</cfif> </cfif> <cfelseif structKeyExists(url, 'edit')> <cfif "#get_data.user_name#" eq employee_id> selected = "true" <cfelse> Disabled = "true" </cfif> </cfif>> #name# </option>
-                                </cfloop>
-                        </select>
-                        <hr>
-                        <input type = "password" name = "user_password" placeholder = "Create Password" class = "form-control" required<cfif #merror# eq 1 > value = "#form.user_password#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.password#"</cfif>>
-                        <hr>
-                        <select class = "form-select" name = "user_level" required="true"> 
-                            <option disabled> Select Level </option>
-                            <option> Admin </option>
-                            <option <cfif #merror# eq 1 ><cfif form.user_level eq 'Employee'> selected = "true"</cfif> </cfif> > Employee </option>
-                        </select>                        
-                        <br>
-                        <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif> > <!--- name "update" will update existing data, name "create" will insert new data --->
-                        <input type = "submit" class = "btn btn-info" <cfif structKeyExists(url, 'edit')> value = "Update User Data" <cfelse> value = "Create User" </cfif> >
-                    </form>
-                <td>
-            </tr>
-        </table>
-        </center>
+        <cfif not structKeyExists(url, 'employee_as_admin') and not structKeyExists(url, 'new_user') >
+            <div class = "employee_box">
+                <div class = "row">
+                    <div class = "col-md-6">
+                        <div style = "text-align:center">
+                            <p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+                                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+                                    <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                                </svg>
+                            </p>
+                            <a href = "create_user.cfm?new_user=true">
+                                <button class = "btn btn-outline-dark custom_button">Create New User</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class = "col-md-6">
+                        <div style = "text-align:center">
+                            <p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" fill="currentColor" class="bi bi-person-up" viewBox="0 0 16 16">
+                                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+                                    <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
+                                </svg>
+                            </p>
+                            <a href = "create_user.cfm?employee_as_admin=true">
+                                <button class = "btn btn-outline-dark custom_button">Update Employee as Admin</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </cfif>
+        <cfif structKeyExists(url, 'employee_as_admin') or structKeyExists(url, 'new_user')>
+            <center>
+                <div class = "employee_box">
+                    <div class = container>
+                        <div class = "row"> 
+                            <div class = "col-md-2">
+                            </div>
+                            <div class = "col-md-8" >
+                                <cfif structKeyExists(url, 'employee_as_admin')>
+                                    <form Action = "create_user.cfm?employee_as_admin=true" Method = "post">
+                                        <br>
+                                        <select class = "form-select" name = "user_name" required="true"> 
+                                            <option disabled> Select Employee </option> 
+                                                <cfloop query="get_employees">
+                                                    <option value = "#employee_id#" <cfif #merror# eq 1 > <cfif structKeyExists(form, 'user_name')> <cfif form.user_name eq employee_id> selected = "true" style = "border-color : red; color : red;"</cfif> </cfif> <cfelseif structKeyExists(url, 'edit')> <cfif "#get_data.user_name#" eq employee_id> selected = "true" <cfelse> Disabled = "true" </cfif> </cfif>> #name# </option>
+                                                </cfloop>
+                                        </select>
+                                <cfelseif structKeyExists(url, 'new_user')>
+                                    <form Action = "create_user.cfm?new_user=true" Method = "post">
+                                        <input type = "text" name = "user_name" required = "true" class = "form-control" placeholder = "User Name" <cfif merror eq 1 > <cfif structKeyExists(form, 'user_name')> value = "#form.user_name#" style = "border-color : red; color : red;"</cfif> <cfelseif structKeyExists(url, 'edit')> value = "#get_data.user_name#" </cfif>>
+                                </cfif>
+                                        <hr>
+                                        <input type = "password" name = "user_password" placeholder = "Create Password" class = "form-control" required<cfif #merror# eq 1 > value = "#form.user_password#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.password#"</cfif>>
+                                        <hr>
+                                        <select class = "form-select" name = "user_level" required="true"> 
+                                            <option disabled> Select Level </option>
+                                            <option> Admin </option>
+                                            <option <cfif #merror# eq 1 ><cfif form.user_level eq 'Employee'> selected = "true"</cfif> </cfif> > Employee </option>
+                                        </select>                        
+                                        <br>
+                                        <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif> > <!--- name "update" will update existing data, name "create" will insert new data --->
+                                        <input type = "submit" class = "btn btn-info" <cfif structKeyExists(url, 'edit')> value = "Update User Data" <cfelse> value = "Create User" </cfif> >
+                                    </form>
+                            </div>
+                            <div class = "col-md-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </center>
+        </cfif>
     </cfif>
 </cfoutput>
 <cfinclude  template="..\includes\foot.cfm">
