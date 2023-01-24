@@ -44,7 +44,7 @@
             <p style = "color: green; font-weight:bold;"> Employee Id: <u> #get_employee.employee_id# </u> </p>
             <p style = "color: green; font-weight:bold;"> Employee Name: <u> #get_employee.name# </u> </p>
             <p style = "color: green; font-weight:bold;"> CNIC: <u> #get_employee.cnic# </u> </p>
-            <table class = "table table-striped table-hover table-secondary">
+            <table class = "table custom_table">
                 <tr>
                     <th> Date </th>
                     <th> Time In </th>

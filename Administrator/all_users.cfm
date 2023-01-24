@@ -11,7 +11,7 @@
                 </button>
             </a>
         </div>
-        <table class = "table table-secondary table-striped table-hover">
+        <table class = "table custom_table">
             <tr>
                 <th> ID </th>
                 <th> User Name </th>

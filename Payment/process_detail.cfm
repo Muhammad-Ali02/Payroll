@@ -308,7 +308,7 @@
                 from employee emp, designation des
                 where emp.designation = des.designation_id
             </cfquery>
-            <table class = "table table-secondary table-striped table-hover">
+            <table class = "table custom_table">
                 <tr>
                     <th> Employee ID </th>
                     <th> Employee Name </th>
