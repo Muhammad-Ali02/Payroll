@@ -13,7 +13,7 @@
                 Request Leave
             </button>
         </a>
-        <table class = "table mt-4 table-bordered">
+        <table class = "table mt-4 custom_table">
             <thead class = "thead-dark">
                 <th> Leave Title </th>
                 <th> Total Allowed</th>

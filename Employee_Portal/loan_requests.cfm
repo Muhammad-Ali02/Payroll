@@ -24,8 +24,8 @@
     </cfquery>
     <cfif get_requests.recordcount neq 0>
         <cfset No = 0>
-        <table class = 'table table-bordered'>
-            <thead class = "thead-dark">
+        <table class = 'table custom_table'>
+            <thead>
                 <th>No</th>
                 <th>Loan ID</th>
                 <th>Applied Amount</th>

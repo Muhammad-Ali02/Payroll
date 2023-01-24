@@ -22,8 +22,8 @@
             </button>
         </a>
         <cfif leave_requests.recordcount neq 0>
-            <table class = "table table-hover table-bordered">
-                <thead class = "thead-dark">
+            <table class = "table custom_table">
+                <thead>
                     <th>No.</th>
                     <th>Request ID</th>
                     <th>Employee ID</th>

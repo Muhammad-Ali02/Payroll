@@ -246,6 +246,33 @@ a.article, a.article:hover {
     padding: 30px;
     margin: 30px;
 }
+.delete_button{
+    margin-left: 3px;
+}
+.delete_button:hover{
+    color: red !important;
+}
+.custom_table{
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    
+    border: #c4c4cf !important;
+    color: #5f5f6d !important;
+    vertical-align: middle !important;
+    /* margin-top: 150px; */
+    /* border-radius: 15px !important; */
+    /* height: 400px; */
+    /* margin-top: 100px !important; */
+    /* padding: 30px; */
+    /* margin: 30px; */
+}
+.custom_table th{
+    color: rgb(255, 255, 255);
+}
+.custom_table tr:hover{
+    box-shadow: 1px 1px 5px 1px rgba(245, 4, 4, 0.55) !important;
+    background-color: rgba(0, 0, 0, 0.2 ) !important;
+    color: #ffffff !important;
+}
  input{
     background-color: rgba(0, 0, 0, 0.55) !important;
     color: #74747b !important;
