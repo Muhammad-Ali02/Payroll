@@ -103,7 +103,6 @@
             <!--- Calculate Basic Rate Per Day using Basic Salary of Employee --->
             <cfset basic_rate = get_employee.basic_salary / working_days>
         <!---________________________________________________________Create/Update Front End _________________________________________________________--->
-            <h4> Details: </h4>
             <div class = "container mb-3">    
                 <div class="row">
                     <div class = "col-8">
@@ -122,23 +121,28 @@
                 <div class = "container mb-3">
                     <div class = "row container">
                         <div class = "col-2">
-                            Working Days: <input type = "number" name = "working_days" readonly = "true" value = "#working_days#" class = "form-control">
+                            <label for = "working_days" class = "form-control-label"> Working Days: </label>
+                            <input type = "number" name = "working_days" id = "working_days" readonly = "true" value = "#working_days#" class = "form-control">
                         </div>
                         <div class = "col-2">
-                            Basic Rate/Day: <input name = "basic_rate" type = "number" readonly = "true" value = "#numberFormat(basic_rate, '.__')#" step=".01" class = "form-control">  <!--- #DecimalFormat(basic_rate * sqr(2))# NOT Working--->
+                            <label for = "basic_rate" class = "form-control-label"> Rate/Day: </label> 
+                            <input name = "basic_rate" id = "basic_rate" type = "number" readonly = "true" value = "#numberFormat(basic_rate, '.__')#" step=".01" class = "form-control">  <!--- #DecimalFormat(basic_rate * sqr(2))# NOT Working--->
                         </div>
                         <div class = "col-2">
-                            Days Worked: <input name = "days_worked" type = "number" readonly = "true" value = "#day_count.worked_days#" class = "form-control">
+                            <label for = "days_worked" class = "form-control-label"> Days Worked: </label>
+                            <input name = "days_worked" id = "days_worked" type = "number" readonly = "true" value = "#day_count.worked_days#" class = "form-control">
                         </div>
                         <div class = "col-2">
-                            Deduct Days: <input name = "deduct_days" type = "number" min = "0" required = "true" value = "0" class = "form-control">
+                            <label for = "deduct_days" class = "form-control-label"> Deduct Days: </label> 
+                            <input name = "deduct_days" id = "deduct_days" type = "number" min = "0" required = "true" value = "0" class = "form-control">
                         </div>
                         <div class = "col-2">
-                            Add Days: <input name = "add_days" type = "number" min = "0" required = "true" value = "0" class = "form-control">
+                            <label for = "add_days" class = "form-control-label"> Add Days: </label> 
+                            <input name = "add_days" id = "add_days" type = "number" min = "0" required = "true" value = "0" class = "form-control">
                         </div>
                         <div class = "col-2">
-                            Pay Status: 
-                            <select name = "pay_status" class = "form-select">
+                            <label for = "pay_satus" class = "form-select-label"> Pay Status: </label> 
+                            <select name = "pay_status" id = "pay_satus" class = "form-select">
                                 <option value = "Y"> Active </option>
                                 <option value = "N" <cfif get_pay_status.pay_status neq "Y"> selected </cfif>> Non-Active </option>
                             </select>
@@ -146,37 +150,51 @@
                     </div>
                 </div>
                 <!---  Allowed Allowances --->
-                <div class = "row">
-                    <div class = "col-4 bg-light">
-                        <h4>Allowances:</h4>
-                            <cfloop query="get_allowance">
-                                #name#:
-                                <input type = "hidden" name = "allowance_id#id#" value = "#id#">
-                                <input type = "number"  min = "0" name = "allowance_amount#id#" id = "allowance_amount#id#" value = "#amount#" class = "form-control"> <br>
-                            </cfloop>
-                    </div>
-                    <!--- Deductions --->
-                    <div class = "col-4 bg-light">
-                        <h4> Deductions: </h4>
-                            <cfloop query="get_deduction">
-                                #name#:
-                                <input type = "hidden" name = "deduction_id#id#" value = "#id#">
-                                <input type = "number"  min = "0" id = "deduction_amount#id#" name = "deduction_amount#id#" value = "#amount#" class = "form-control"> <br>
-                            </cfloop>
-                    </div>
-                    <!--- Leaves --->
-                    <div class = "col-4 bg-light">
-                        <h4> Leaves: </h4>
-                            <cfset total_leaves = 0> <!--- variable used in loop to get total leaves --->
-                            <cfloop query="leave_count"> <!--- Loop Will Print all leaves availed by employee --->
-                                #title#:
-                                <input type = "number"  min = "0" id = "leave_days#id#" name = "leave_days#id#" value = "#leave_days#" readonly = "true" class = "form-control"> <br>
-                                <cfset total_leaves = total_leaves + leave_days>
-                            </cfloop>
-                            Total Leaves: <input type = "number" class = "form-control" name = "total_leaves" value = "#total_leaves#" readonly = "true"><br>
-                            Paid Leaves: <input type = "number" class = "form-control" min = "0" name = "paid_leaves" value = "#paid_leave_count.leave_days#" readonly = "true"> <br>
-                            Half Pay Leaves: <input type = "number" class = "form-control" min = "0" name = "half_paid_leaves" value = "#half_paid_leave_count.leave_days#" readonly = "true"> <br>
-                            Leaves Without Pay: <input type = "number"  class = "form-control" min = "0" name = "non_paid_leaves" value = "#Non_paid_leave_count.leave_days#" readonly = "true">
+                <div class = "employee_box">
+                    <div class = "row">
+                        <div class = "col-4">
+                            <h4 class = "text-light">Allowances:</h4>
+                                <cfloop query="get_allowance">
+                                    <label for = "allowance_amount#id#" class = "form-control-label"> #name#: </label>
+                                    <input type = "hidden" name = "allowance_id#id#" value = "#id#">
+                                    <input type = "number"  min = "0" name = "allowance_amount#id#" id = "allowance_amount#id#" value = "#amount#" class = "form-control"> <br>
+                                </cfloop>
+                        </div>
+                        <!--- Deductions --->
+                        <div class = "col-4">
+                            <h4 class = "text-light"> Deductions: </h4>
+                                <cfloop query="get_deduction">
+                                    <label for = "deduction_amount#id#" class = "form-control-label"> #name#: </label>
+                                    <input type = "hidden" name = "deduction_id#id#" value = "#id#">
+                                    <input type = "number"  min = "0" id = "deduction_amount#id#" name = "deduction_amount#id#" value = "#amount#" class = "form-control"> <br>
+                                </cfloop>
+                        </div>
+                        <!--- Leaves --->
+                        <div class = "col-4">
+                            <h4 class = "text-light"> Leaves: </h4>
+                                <cfset total_leaves = 0> <!--- variable used in loop to get total leaves --->
+                                <cfloop query="leave_count"> <!--- Loop Will Print all leaves availed by employee --->
+                                    <label for = "leave_days#id#" class = "form-control-label"> #title#: </label>
+                                    <input type = "number"  min = "0" id = "leave_days#id#" name = "leave_days#id#" value = "#leave_days#" readonly = "true" class = "form-control"> <br>
+                                    <cfset total_leaves = total_leaves + leave_days>
+                                </cfloop>
+                                <label for = "total_leaves" class = "form-control-label">
+                                    Total Leaves: 
+                                </label>
+                                <input type = "number" class = "form-control" id = "total_leaves" name = "total_leaves" value = "#total_leaves#" readonly = "true"><br>
+                                <label for = "paid_leaves" class = "form-control-label">
+                                    Paid Leaves: 
+                                </label>
+                                    <input type = "number" class = "form-control" min = "0" name = "paid_leaves" id = "paid_leaves" value = "#paid_leave_count.leave_days#" readonly = "true"> <br>
+                                <label for = "half_paid_leaves" class = "form-control-label">
+                                    Half Pay Leaves: 
+                                </label>
+                                    <input type = "number" class = "form-control" min = "0" name = "half_paid_leaves" id = "half_paid_leaves" value = "#half_paid_leave_count.leave_days#" readonly = "true"> <br>
+                                <label for = "non_paid_leaves" class = "form-control-label">
+                                    Leaves Without Pay: 
+                                </label>
+                                    <input type = "number"  class = "form-control" min = "0" name = "non_paid_leaves" id = "non_paid_leaves" value = "#Non_paid_leave_count.leave_days#" readonly = "true">
+                        </div>
                     </div>
                 </div>
                 <input name = "employee_id" value = "#get_employee.employee_id#" type = "hidden">
