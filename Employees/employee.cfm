@@ -104,7 +104,9 @@
                     bank_account_no, 
                     created_date,
                     basic_salary)
-                    values(concat('#get_designation.short_word#','#form.txt_employee_number#'),
+                    values(
+                    <!--- concat('#get_designation.short_word#','#form.txt_employee_number#'), --->
+                    '#form.txt_employee_number#',
                     '#form.txt_first_name#',
                     '#form.txt_middle_name#',
                     '#form.txt_last_name#',
