@@ -14,7 +14,7 @@
             </cfquery>
         </cfif>
 <!--- |________________________________\|/_Front End _\|/________________________________|--->
-        <h1 style = "text-align: center; color: blue;"> ATTENDANCE SHEET </h1>
+        <h1 style = "text-align: center; color: white;"> ATTENDANCE SHEET </h1>
         <form action = "attendance.cfm" method = "post">
             <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') > 
             <div class = "row mb-4">
