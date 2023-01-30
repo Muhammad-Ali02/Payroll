@@ -391,3 +391,21 @@ textarea:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 0px rgb(255, 255, 255) inset;
   transition: background-color 5000s ease-in-out 0s;
 }
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: rgba(225, 11, 11) !important;
+    filter: invert(60%);
+    opacity: 1;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-width: thin;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+    color: rgba(225, 11, 11) !important;
+    filter: invert(60%);
+    opacity: 1;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-width: thin;
+}

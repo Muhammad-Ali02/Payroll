@@ -56,7 +56,7 @@
     </form>
     <cfif isDefined('update_time')> 
         <form action = "add_attendance.cfm" method = "post"> 
-            <p style = "display:inline; color:red; font-weight:bold;" > *Only Selected Employees will be updated</p>
+            <p style = "display:inline; color:white; font-weight:bold;" > *Only Selected Employees will be updated</p>
             <table class = "table custom_table mt-3">
                 <tr>
                     <thead class="table-dark">
