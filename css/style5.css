@@ -343,12 +343,12 @@ select:focus{
   }
   body{
     background-color: #4c4858 !important; 
-    background-image: url('../img/logo.png');
+    background-image: url('/img/logo_background.png');
     background-repeat: no-repeat;
-    height: 50%;
-    /* background-position: center; */
-    background-size: cover;
-    background-attachment: fixed;
+    height: 10%;
+    background-position: center;
+    /* background-size: cover; */
+    /* background-attachment: fixed; */
   }
   .nav-link{
     color: rgb(155, 152, 152) !important;

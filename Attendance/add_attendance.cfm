@@ -36,47 +36,29 @@
     </cfif>
 <!--- __________________________________ Front End ________________________________________ --->
 
-    <form action = "add_attendance.cfm" method = "post">
-        <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') >
-            <div class = "row mb-3">
-                <div class = "col-md-3">  
-                    Date:      
-                    <input type = "date" value = "#current_date#" name = "attendance_date" required class = "form-control" <cfif isDefined('update_time')> value = "#form.attendance_date#" </cfif> > 
-                </div>
-                <div class = "col-md-3">
-                    Time In: <input type = "time" value = "09:00" name = "time_in" class = "form-control">
-                </div>
-                <div class = "col-md-3">
-                    Time Out: <input type = "time" value = "18:00" name = "time_out" class = "form-control">
-                </div>
-                <div class = "col-md-3 mt-4">
-                    <input type = "submit" class = "btn btn-outline-dark" name = "update_time" value = "Submit">
-                </div>
-            </div>
-    </form>
     <cfif isDefined('update_time')> 
         <form action = "add_attendance.cfm" method = "post"> 
             <p style = "display:inline; color:white; font-weight:bold;" > *Only Selected Employees will be updated</p>
             <table class = "table custom_table mt-3">
                 <tr>
-                    <thead class="table-dark">
+                    <thead class="table custom_table">
                         <th> Employee ID </th>
                         <th> Employee Name </th>
                         <th> Time In </th>
                         <th> Time Out </th>
                         <th style = "text-align:center">
-                                <button type = "button" class = "btn btn-success" onclick = "javascript:selectAll();" > 
+                                <span onclick = "javascript:selectAll();" > 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
                                         <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z"/>
                                         <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
                                     </svg>
-                                </button> 
-                                <button type = "button" class = "btn btn-secondary" onclick = "javascript:deSelectAll();"> 
+                                </span> 
+                                <span onclick = "javascript:deSelectAll();"> 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-slash-square" viewBox="0 0 16 16">
                                         <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                                         <path d="M11.354 4.646a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708l6-6a.5.5 0 0 1 .708 0z"/>
                                     </svg> 
-                                </button> 
+                                </span> 
                         </th>
                     </thead>
                     <input  type = "date" name = "attendance_date" value = "#form.attendance_date#" required hidden = "true">
@@ -108,6 +90,25 @@
                 </cfloop>
             </table>
                 <input type = "submit" class = "btn btn-outline-dark" name = "multiple_employees" value = "Submit">
+        </form>
+    <cfelse>
+        <form action = "add_attendance.cfm" method = "post">
+            <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') >
+            <div class = "row mb-3">
+                <div class = "col-md-3">  
+                    Date:      
+                    <input type = "date" value = "#current_date#" name = "attendance_date" required class = "form-control" <cfif isDefined('update_time')> value = "#form.attendance_date#" </cfif> > 
+                </div>
+                <div class = "col-md-3">
+                    Time In: <input type = "time" value = "09:00" name = "time_in" class = "form-control">
+                </div>
+                <div class = "col-md-3">
+                    Time Out: <input type = "time" value = "18:00" name = "time_out" class = "form-control">
+                </div>
+                <div class = "col-md-3 mt-4">
+                    <input type = "submit" class = "btn btn-outline-dark" name = "update_time" value = "Submit">
+                </div>
+            </div>
         </form>
     </cfif>
 
