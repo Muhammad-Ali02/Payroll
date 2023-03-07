@@ -1,9 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\bootstrap.cfm">
-        <cfif structKeyExists(URL, 'logout')>
-            <cfset createObject("component", '\components.user_authentication').user_logout() />
-            <cflocation  url="user_login.cfm">
-        </cfif>
+    <cfinclude  template="\includes\bootstrap.cfm">
         <cfif not structKeyExists(session, 'loggedIn')>
             <cfif isDefined('form.txt_user_name') and isDefined('form.user_password')>
                 <!--- code for admin user --->
@@ -24,15 +20,37 @@
                 </cfif>
                 <cfif form.user_password eq showError.password or form.user_password eq get_employee.password> 
                     <cfif structKeyExists(form, 'login')>
-                        <cfset user_authentication = createObject("component", '\components.user_authentication')>
-                        <!--- login processing --->
-                        <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, form.user_password, user_level )>
-                        <cfif structKeyExists(session, 'loggedIn')>
-                            <cflocation  url="..\index.cfm">
+                        <cfif user_level eq 'employee'>
+                            <cfif structKeyExists(get_employee, 'user_name') and ((get_employee.ip_address eq current_ipAddress) or (get_employee.last_login eq ''))>
+                                <cfset user_authentication = createObject("component", '\components.user_authentication')>
+                                <!--- login processing --->
+                                <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, form.user_password, user_level, current_ipAddress )>
+                                <cfif structKeyExists(session, 'loggedIn')>
+                                    <cflocation  url="\index.cfm">
+                                </cfif>
+                            <cfelse>
+                                <!--- get current ip addres and store in database in case of failure to login--->
+                                <cfquery name = 'insert_ip_address'>
+                                    insert into ip_address_audit (user_name, password, last_login, level, attempt_time, current_ip_address)
+                                    values ('#form.txt_user_name#','#form.user_password#', '#get_employee.last_login#', '#user_level#', now(), '#current_ipAddress#')
+                                </cfquery>
+                                <script>
+                                    alert('You are not allowed to Login, Please Contact HR');
+                                </script>
+                            </cfif>
+                        <cfelse> <!--- if user is admin then the else part will be executed --->
+                            <cfset user_authentication = createObject("component", '\components.user_authentication')>
+                                <!--- login processing --->
+                                <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, form.user_password, user_level )>
+                                <cfif structKeyExists(session, 'loggedIn')>
+                                    <cflocation  url="\index.cfm">
+                                </cfif>
                         </cfif>
                     </cfif>
                 <cfelse>
-                    <p class = "text-light bg-danger" style = "text-align:center; font-weight:bold;"> Incorrect User name or Password </p>
+                    <script>
+                        alert('Incorrect User name or Password');
+                    </script>
                 </cfif>
             </cfif>
             <div id = "backgroundPic" class = "backgroundPic"> 
@@ -59,6 +77,6 @@
                 </div>
             </div>
         <cfelse>
-            <cflocation  url="..\index.cfm">
+            <cflocation  url="\index.cfm">
         </cfif>
 </cfoutput>

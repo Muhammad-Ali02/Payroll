@@ -20,6 +20,7 @@
         <cfargument  name="user_name" type = "string" required = "true" />
         <cfargument  name="user_password" type = "string" required = "true" />
         <cfargument  name="user_level" type = "string" required = "true" />
+        <cfargument  name="current_ipAddress" type = "string" required = "false" />
             <!--- creating variable to insure user is logged in or not --->
             <cfset var isUserLogin = false />
             <!--- getting user's data from the database --->
@@ -51,12 +52,14 @@
                     and password = '#getData.password#'
                 </cfquery>
             <cfelse>
-                <cfquery name = "insert_time">
-                    update emp_users
-                    set last_login = now()
-                    where user_name = '#getData.user_name#'
-                    and password = '#getData.password#'
-                </cfquery>
+                <cfif getData.ip_address eq arguments.current_ipAddress or getData.ipaddress eq ''>
+                    <cfquery name = "insert_time">
+                        update emp_users
+                        set last_login = now(), ip_address = '#arguments.current_ipAddress#'
+                        where user_name = '#getData.user_name#'
+                        and password = '#getData.password#'
+                    </cfquery>
+                </cfif>
             </cfif>
                 <!--- saving user's information session scope --->
                 <cfset session.loggedIn = {'userName' = getDAta.user_name , 'role' = getData.level }>

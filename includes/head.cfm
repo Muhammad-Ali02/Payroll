@@ -24,9 +24,6 @@
 
 </head>
 <body>
-<cfif not structKeyExists(session, 'loggedIn')>
-    <cflocation  url="..\login\user_login.cfm">
-</cfif>
 <cfoutput>
     <div class="wrapper">
         <!-- Sidebar Holder -->
@@ -203,7 +200,7 @@
 
             <nav class="navbar navbar-expand-lg nav_head">
                 <div class="container-fluid " >
-                    <button type="button" id="sidebarCollapse" class="navbar-btn" style = "background-color:transparent;">
+                    <button type="button" id="sidebarCollapse" class="navbar-btn" style = "background-color:transparent; color:white;">
                         <i class="fa-solid fa-angle-left fs-12"></i>
                         <!--- <span></span>
                         <span></span>

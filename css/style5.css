@@ -245,6 +245,7 @@ a.article, a.article:hover {
     /* margin-top: 100px !important; */
     padding: 30px;
     margin: 30px;
+    backdrop-filter: blur(5px);
 }
 .delete_button{
     margin-left: 3px;
@@ -256,8 +257,9 @@ a.article, a.article:hover {
     background-color: rgba(0, 0, 0, 0.55) !important;
     
     border: #c4c4cf !important;
-    color: #5f5f6d !important;
+    color: #7e7e91 !important;
     vertical-align: middle !important;
+    backdrop-filter: blur(5px) !important;
     /* margin-top: 150px; */
     /* border-radius: 15px !important; */
     /* height: 400px; */
@@ -345,10 +347,10 @@ select:focus{
     background-color: #4c4858 !important; 
     background-image: url('/img/logo_background.png');
     background-repeat: no-repeat;
-    height: 10%;
-    background-position: center;
-    /* background-size: cover; */
-    /* background-attachment: fixed; */
+    height: 50%;
+    /* background-position: center; */
+    background-size: cover;
+    background-attachment: fixed;
   }
   .nav-link{
     color: rgb(155, 152, 152) !important;
