@@ -39,9 +39,9 @@
     <cfif not structKeyExists(session, 'loggedIn') and CGI.SCRIPT_NAME neq '/login/user_login.cfm'>
             <cflocation  url="\login\user_login.cfm">
     </cfif>
-    <cftransaction>     
+<!---     <cftransaction>      --->
         <cfinclude template="#CGI.SCRIPT_NAME#">
-    </cftransaction>
+<!---     </cftransaction> --->
   </cffunction>
 
   <!--- Post-request processing --->

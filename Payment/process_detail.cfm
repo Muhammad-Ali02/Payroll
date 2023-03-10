@@ -103,7 +103,8 @@
             <!--- Calculate Basic Rate Per Day using Basic Salary of Employee --->
             <cfset basic_rate = get_employee.basic_salary / working_days>
         <!---________________________________________________________Create/Update Front End _________________________________________________________--->
-            <div class = "container mb-3">    
+            <div class="employee_box"> 
+                <div></div>   
                 <div class="row">
                     <div class = "col-8">
                         <p> Employee ID: #get_employee.employee_id# </p> 
@@ -118,7 +119,7 @@
                 </div>
             </div>
             <form action = "process_detail.cfm?updated" method = "post">
-                <div class = "container mb-3">
+                <div class = "employee_box mb-3">
                     <div class = "row container">
                         <div class = "col-2">
                             <label for = "working_days" class = "form-control-label"> Working Days: </label>
@@ -204,7 +205,9 @@
                 <input name = "transaction_mode" value = "#get_bank_details.mode#" type = "hidden">
                 <input name = "txt_bank_name" value = "#get_bank_details.name#" type = "hidden">
                 <input name = "bank_account_no" value = "#get_bank_details.account#" type = "hidden">
-                <input type = "submit" value = "Save" class = "btn btn-outline-dark">
+                <div class="text-right mr-4">
+                    <input type = "submit" value = "Save" class = "btn btn-outline-dark">
+                </div>
             </form>
         <cfelseif structKeyExists(url, 'updated')>
         <!--- _________________________________________ Back End _________________________________________________ --->

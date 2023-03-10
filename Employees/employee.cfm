@@ -229,11 +229,11 @@
                 </cfquery>
                 <!--- upload file process --->
                 <cfquery name = "get_file_names">
-                    select employee_no from file_names where employee_no = "#get_employee.id#"
+                    select employee_id from file_names where employee_id = "#get_employee.id#"
                 </cfquery>
                 <cfif get_file_names.recordcount eq 0> <!--- if employee not exist already insert employee in table file_names  ---> 
                     <cfquery name = "insert_file_names">
-                        insert into file_names (employee_no)
+                        insert into file_names (employee_id)
                         values ('#get_employee.id#')
                     </cfquery>
                 </cfif>
@@ -263,7 +263,7 @@
                         >
                         <cfset file_name = currentFile & file_type>
                         <cfquery name = "update_file_names">
-                            update file_names set #currentFile# = "#file_name#" where employee_no = "#get_employee.id#"
+                            update file_names set #currentFile# = "#file_name#" where employee_id = "#get_employee.id#"
                         </cfquery>
                     </cfif>
                 </cfloop>
@@ -501,11 +501,11 @@
             </cfif>
             <!--- upload files process --->
             <cfquery name = "get_file_names">
-                select employee_no from file_names where employee_no = "#form.txt_employee_id#"
+                select employee_id from file_names where employee_id = "#form.txt_employee_id#"
             </cfquery>
             <cfif get_file_names.recordcount eq 0> <!--- if employee not exist already insert employee in table file_names  ---> 
                 <cfquery name = "insert_file_names">
-                    insert into file_names (employee_no)
+                    insert into file_names (employee_id)
                     values ('#form.txt_employee_id#')
                 </cfquery>
             </cfif>
@@ -535,7 +535,7 @@
                     >
                     <cfset file_name = currentFile & file_type>
                     <cfquery name = "update_file_names">
-                        update file_names set #currentFile# = "#file_name#" where employee_no = "#form.txt_employee_id#"
+                        update file_names set #currentFile# = "#file_name#" where employee_id = "#form.txt_employee_id#"
                     </cfquery>
                 </cfif>
             </cfloop>
@@ -561,9 +561,9 @@
                 <div class = "employee_box">
                         <div class = "row">
                             <div class = "col-md-2">
-                                <label  class="form-control-label" for = "employee_no"> Employee Number: </label> 
+                                <label  class="form-control-label" for = "employee_id"> Employee Number: </label> 
 
-                                <input type = "text" name = "txt_employee_number" id = "employee_no" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" readonly<cfelse> value = "#employee_number#" </cfif>>
+                                <input type = "text" name = "txt_employee_number" id = "employee_id" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" readonly<cfelse> value = "#employee_number#" </cfif>>
 
                             </div>
                         </div>
@@ -856,7 +856,7 @@
                         </div>
                         <cfif structKeyExists(url, 'edit')>
                             <cfquery name = "get_employee_files">
-                                select * from file_names where employee_no = "#url.edit#"
+                                select * from file_names where employee_id = "#url.edit#"
                             </cfquery>
                             <cfif evaluate('get_employee_files.file_#i#') neq ''>
                                 <cfset file_name = evaluate('get_employee_files.file_#i#')>
