@@ -80,6 +80,9 @@
                             <li>
                                 <a href="..\administrator\leave_approval.cfm">Leave Approval</a>
                             </li>
+                            <li>
+                                <a href="..\administrator\change_employee_No.cfm">Change Employee No.</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -197,7 +200,29 @@
 
         <!-- Page Content Holder -->
         <div id="content">
-
+            <cfif session.loggedIn.role eq 'employee'>
+                <cfquery datasource="payroll" name="checks">
+                    select * from attendance
+                    where employee_id="#session.loggedIn.username#" And date= "#DateFormat(Now(), "yyyy,mm,dd")#"
+                </cfquery>
+                <cfif isDefined('url.action') And "#url.action#" eq "checkin">
+                    <cfif checks.RecordCount gte "1" >
+                        <script>
+                            alert("You have already checked In.");
+                            window.location.assign("\index.cfm");
+                        </script>
+                    <cfelse>
+                        <cfquery datasource="payroll" name="checkin">
+                            insert into attendance (employee_id, date, time_in)
+                            values (<cfqueryparam value="#session.loggedIn.username#">, <cfqueryparam value="#DateFormat(Now(), "yyyy,mm,dd")#">, <cfqueryparam value="#TimeFormat(Now(), "HH:mm:ss.llll")#">)
+                        </cfquery>
+                        <cfquery datasource="payroll" name="checks">
+                            select * from attendance
+                            where employee_id="#session.loggedIn.username#" And date= "#DateFormat(Now(), "yyyy,mm,dd")#"
+                        </cfquery>
+                    </cfif>
+                </cfif>
+            </cfif>
             <nav class="navbar navbar-expand-lg nav_head">
                 <div class="container-fluid " >
                     <button type="button" id="sidebarCollapse" class="navbar-btn" style = "background-color:transparent; color:white;">
@@ -211,26 +236,94 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
+                            <cfif session.loggedIn.role eq 'employee'>
+                                <cfif checks.RecordCount eq "1" And checks.time_out eq "">
+                                    <cfwindow title="CheckOut" name="CheckOut" bodystyle="background-color: ##4c4858;" center="true" closable="true" height="250" width="350" modal="true" initshow="false">
+                                        <div class="text-center m-3 ">
+                                            <h5 class="Medium fs-14 text-justify" style="color: rgb(247, 245, 245, 0.7); font-family: Arial, Helvetica, sans-serif;">
+                                                Please make sure to checkout by pressing the 'Check-Out' button before proceeding with any activity.
+                                            </h5>
+                                        </div>
+                                        <div class="text-center m-2">
+                                            <a href="/employee_portal/checkout.cfm?action=checkout" id="out" onclick="ColdFusion.Window.hide('CheckOut')" class="btn custom_button fs-8 text-light bg-dark">
+                                                check-out
+                                            </a>
+                                        </div>
+                                    </cfwindow>
+                                    <li class="nav-item">
+                                    </li>
+                                </cfif>
+                                <cfif checks.RecordCount eq "0">
+                                    <cfwindow title="CheckIn" name="checkIn" bodystyle="background-color: ##4c4858;" center="true" closable="false" height="250" width="350" modal="true" initshow="true">
+                                        <div class="text-center m-3 ">
+                                            <h5 class="Medium fs-14 text-justify" style="color: rgb(247, 245, 245, 0.7); font-family: Arial, Helvetica, sans-serif;">
+                                                Please make sure to check in by pressing the 'Check-In' button before proceeding with any activity.
+                                            </h5>
+                                        </div>
+                                        <div class="text-center m-2">
+                                            <a href="?action=checkin"  id="in" onclick="ColdFusion.Window.hide('checkIn')" class="btn custom_button fs-8 text-light bg-dark">
+                                                check-in
+                                            </a>
+                                        </div>
+                                    </cfwindow>
+                                    <li class="nav-item">
+                                    </li>
+                                </cfif>
+                            </cfif>
                             <li class="nav-item active">
-                                <a class="nav-link" href="..\index.cfm">
+                                <a class="nav-link" href="\index.cfm">
                                     <!--- Home Icon --->
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-house navebar_icon" viewBox="0 0 16 16">
                                         <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
                                     </svg>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <cfif session.loggedIn.role eq 'employee'>
+                                <li class="nav-item">
+                                    <!--- logout icon --->
+                                    <cfif checks.RecordCount eq "1" And checks.time_out eq "">
+                                        <a class="nav-link" onclick="ColdFusion.Window.show('CheckOut')" href="##">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right navebar_icon" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                            </svg>
+                                        </a>
+                                    <cfelse>
+                                        <a class="nav-link" href="\login\user_login.cfm?logout=true">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right navebar_icon" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                            </svg>
+                                        </a>
+                                    </cfif>
+                                </li>
+                            <cfelse>
+                                <li class="nav-item">
                                 <!--- logout icon --->
-                                <a class="nav-link" href="..\login\user_login.cfm?logout=true">
+                                <a class="nav-link" href="\login\user_login.cfm?logout=true">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-box-arrow-right navebar_icon" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
                                         <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
                                     </svg>
                                 </a>
                             </li>
+                            </cfif>
                         </ul>
                     </div>
                 </div>
             </nav>
             <!-- <iframe src = "https://bjssoftsolutions.com" width='100%' height='100%' title="Wellcome to BJS Soft Solution"> </iframe> -->
 </cfoutput>
+<script>
+    function buttonStatus(){
+        debugger;
+        const myButton = document.getElementById('in');
+        myButton.style.display = 'none';
+        // const myButton1 = document.getElementById('out');
+        // myButton1.style.display = 'inline-block';
+    }
+    function buttonStatus2(){
+        const myButton = document.getElementById('out');
+        myButton.style.display = 'none';
+    }
+</script>

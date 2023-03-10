@@ -19,13 +19,16 @@
                     set current_month = '#form.current_month#', current_year = '#form.current_year#'
                 </cfquery>
             </cfif>
-            <h1 class = "text-success"> Setting Updated </h1>
+            <script>
+                alert(" Setting Updated Successfully! ");
+            </script>
         </cfif>
         <cfquery name = "existing_data">
             select * from setup
             where current_month > 0
         </cfquery>
         <form action = "setting.cfm" method = "post">
+            <div class="employee_box">
                 <div class = "row">  
                     <div class = "col-md-6">          
                             Current Month: 
@@ -47,6 +50,7 @@
                             <input type = "submit" value = "Save" class = "btn btn-outline-dark">
                     </div>
                 </div>
+            </div>
         </form>
         <!--- <script>
         // function monthList(){

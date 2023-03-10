@@ -39,6 +39,7 @@
                     and password = '#user_password#'
                 </cfquery>
             </cfif>
+<!---             <cfdump  var="#getdata#"> <cfabort> --->
             <!--- query to validate only one user --->
             <cfif getData.RecordCount eq 1>
                 <cflogin applicationtoken = "payroll">
@@ -51,8 +52,9 @@
                     where user_name = '#getData.user_name#'
                     and password = '#getData.password#'
                 </cfquery>
-            <cfelse>
-                <cfif getData.ip_address eq arguments.current_ipAddress or getData.ipaddress eq ''>
+            <cfelse> 
+                <cfset ipaddress = getData.IP_ADDRESS>
+                <cfif getData.IP_ADDRESS eq arguments.current_ipAddress or getData.ip_address eq ''>
                     <cfquery name = "insert_time">
                         update emp_users
                         set last_login = now(), ip_address = '#arguments.current_ipAddress#'
