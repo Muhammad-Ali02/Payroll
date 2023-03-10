@@ -137,20 +137,22 @@
             <cfcontent type = "application/octet-stream" file = "#expandPath('.')#\pay_slip#url.generate#.pdf" deletefile = "yes">
         <cfelse>
             <form action = "pay_slip.cfm" method = "get">
-                <div class = "row">   
-                    <div class = "col-md-6">     
+            <div class="employee_box">
+                <div class = "row m-4">   
+                    <div class = "col-md-8">     
                             <select class = "form-select" name = "generate" required="true"> 
-                                <option disabled> Select Employee </option> 
+                                <option value=""> -- Select Employee -- </option> 
                                     <cfloop query="get_employees">
                                         <option value = "#employee_id#"> #name# </option>
                                     </cfloop>
                                 </select>
                     </div>
-                    <div class = "col-md-6">
+                    <div class = "col-md-4">
                             <input type = "submit" class = "btn btn-outline-dark" value = "Generate Pay Slip">
                         </form>
                     </div>
                 </div>
+            </div>
         </cfif>
     </cfif>
 </cfoutput>

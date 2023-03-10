@@ -3,7 +3,7 @@
         <cfargument  name="employee_id" type = "string" required = "true">
         <cfquery name = "getDataDb">
             select * from employee
-            where employee_no = '#argument.employee_id#'
+            where employee_id = '#argument.employee_id#'
         </cfquery>
     </cffunction>
 </cfcomponent>

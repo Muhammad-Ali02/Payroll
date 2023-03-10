@@ -79,27 +79,32 @@
                             </cfif> 
                     </cfquery>
                 </cfloop>
-                <h1> Pay Process Run Successfully </h1>
+                <script>
+                    alert(" Pay Process Run Successfully! ");
+                    window.location.assign('pay.cfm');
+                </script>
             <cfelse>
-                <h1> No Employees Selected </h1>
+                <h1 class="text-center"> No Employees Selected </h1>
             </cfif>
         </cfif>
         <!--- ___________________________________________________ Front End _________________________________________________ --->
         <form action = "pay_process.cfm?run_pay_process=true" method = 'post'>
-            <div class = "row">
-                <div class = "col-md-6">    
+        <div class="employee_box">
+            <div class = "row m-4">
+                <div class = "col-md-8">    
                     <select name = "employee_id" required class = "form-select"> 
-                        <option disabled>Select Employee</option>
+                        <option value=""> -- Select Employee -- </option>
                         <option value = "All"> All </option>
                             <cfloop query="get_employee_list">
                                 <option value = "#ID#"> #name# </option>
                             </cfloop>
                     </select>
                 </div>
-                <div class = "col-md-6">
+                <div class = "col-md-4">
                     <input type = "submit" name = "run_process" value = "Run Pay Process" class = "btn btn-outline-dark">
                 </div>
             </div>
+        </div>
         </form>
     </cfif>
 </cfoutput>
