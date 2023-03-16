@@ -8,7 +8,9 @@
     <title>BJS Soft Solution</title>
     <cfinclude  template="bootstrap.cfm">
     <!-- Bootstrap CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/assets/bootstrap/css/bootstrap.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="/assets/bootstrap/js/bootstrap.js" /> -->
+    <!--- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">  --->
     <!-- Custom CSS For Sidebar -->
     <link rel="stylesheet" href="..\css\style5.css">
 
@@ -21,7 +23,29 @@
     />    
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-
+    <style type="text/css">
+        .hover-popup {
+            position: relative;
+        }
+    
+        .content {
+            display: none;
+            width: 200px;
+            border-radius: 16px;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px) !important;
+            padding: 10px;
+            box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+        }
+    
+        .trigger:hover+.content {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 <cfoutput>
@@ -185,6 +209,23 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="##salarySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
+                                <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                                <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
+                            </svg>
+                            Advance Salary
+                        </a>
+                        <ul class="collapse list-unstyled" id="salarySubmenu">
+                            <li>
+                                <a href="..\employee_portal\AdvanceSalary_request.cfm">Advance Salary Request</a>
+                            </li>
+                            <li>
+                                <a href="..\employee_portal\AdvanceSalary.cfm">Apply for Salary Advance</a>
+                            </li>
+                        </ul>
+                    </li>
                 </cfif>
             </ul>
 
@@ -241,7 +282,7 @@
                                     <cfwindow title="CheckOut" name="CheckOut" bodystyle="background-color: ##4c4858;" center="true" closable="true" height="250" width="350" modal="true" initshow="false">
                                         <div class="text-center m-3 ">
                                             <h5 class="Medium fs-14 text-justify" style="color: rgb(247, 245, 245, 0.7); font-family: Arial, Helvetica, sans-serif;">
-                                                Please make sure to checkout by pressing the 'Check-Out' button before proceeding with any activity.
+                                                Please make sure to checkout by pressing the 'Check-Out' button before proceeding logout.
                                             </h5>
                                         </div>
                                         <div class="text-center m-2">

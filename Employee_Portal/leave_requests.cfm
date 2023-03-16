@@ -45,17 +45,33 @@
                             <td>#dateFormat(from_date,'DD-MMM-YYYY')#</td>
                             <td>#dateFormat(to_date,'DD-MMM-YYYY')#</td>
                             <td>#leave_days#</td>
-                            <td <cfif action eq 'rejected'> class = "text-danger table-danger" <cfelseif action eq 'approved'> class = "text-success table-success"</cfif>>
-                                #action#
+                            <td <cfif action eq 'rejected'> class = "text-danger" <cfelseif action eq 'approved'> class = "text-success"</cfif>>
+                                <cfif action eq 'rejected'>
+                                    <div class="hover-popup">
+                                        <span class="trigger">
+                                            #action#
+                                        </span>
+                                        <div class="content ">
+                                            <!-- <div style="text-align: center; text-decoration: underline; color: rgb(255, 255, 255, 0.8);">
+                                                <h6>Rejected Remarks</h6>
+                                            </div> -->
+                                            <div class="mt-1" style="color: rgb(255, 255, 255); font-size: 12px;">
+                                               <p style="text-align: justify; text-justify: inter-word;">#action_remarks#</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <cfelse>
+                                    #action#
+                                </cfif>
                             </td>
                             <td>#action_by#</td>
                         <tr>
-                        <cfif action eq 'rejected'>
+                        <!-- <cfif action eq 'rejected'>
                             <tr class = "table-danger">
                                 <td><strong>Rejected Remarks</strong></td>
                                 <td colspan = "8" class = "text-danger">#action_remarks#</td>
                             </tr>
-                        </cfif>
+                        </cfif> -->
                     </cfloop>
             </table>
         <cfelse>
