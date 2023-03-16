@@ -24,9 +24,6 @@
     <cfquery name = "query3">
         ALTER TABLE `payroll`.`emp_users` 
         ADD COLUMN `ip_address` VARCHAR(45) NULL AFTER `level`;
-        ALTER TABLE `payroll`.`ip_address_audit` 
-        DROP PRIMARY KEY,
-        ADD PRIMARY KEY (`user_name`, `attempt_time`, `current_ip_address`)
     </cfquery>
 <cfcatch type="any">
     query3:<cfdump  var="#cfcatch.cause.message#"> <br>
@@ -90,5 +87,18 @@
     query7:<cfdump  var="#cfcatch.cause.message#">  <br>
 </cfcatch>
 </cftry>
+
+<cftry>
+    <cfquery name = "query8">
+            ALTER TABLE `payroll`.`ip_address_audit` 
+            DROP PRIMARY KEY,
+            ADD PRIMARY KEY (`user_name`, `attempt_time`, `current_ip_address`)
+    </cfquery>
+<cfcatch type="any">
+    query8:<cfdump  var="#cfcatch.cause.message#">  <br>
+</cfcatch>
+</cftry>
+
+
 </cfoutput>
 <cfinclude  template="/includes/foot.cfm">
