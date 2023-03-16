@@ -71,43 +71,47 @@
             <cfset firstDay = createDate(#setting_info.current_year#, #setting_info.current_month#, 1)>
             <cfset lastDay = createDate(#setting_info.current_year#, #setting_info.current_month#, daysInMonth(firstDay))> 
             <cfif leave_list.recordcount neq 0>
-                <form action = "request_leave.cfm" method = "post">
-                    <div class = "row">
-                        <div class = "col-md-3">
-                            <label for = "fromDate"> From Date: </label> 
-                            <input type = "date" name = "from_date" value = "#dateFormat(now(),'yyyy-mm-dd')#" id = "fromDate" required class = "form-control" onBlur = "getDates();">
+                <div class="employee_box">
+                    <form name="leaveRequest" onsubmit="return formValidate();" action = "request_leave.cfm" method = "post">
+                        <div class = "row">
+                            <div class = "col-md-3">
+                                <label for = "fromDate"> From Date: </label> 
+                                <input type = "date" name = "from_date" value = "#dateFormat(now(),'yyyy-mm-dd')#" id = "fromDate" required class = "form-control" onBlur = "getDates();">
+                            </div>
+                            <div class = "col-md-3">
+                                <label for = "toDate" > To Date: </label> 
+                                <input type = "date" class = "form-control" value = "#dateFormat(now(),'yyyy-mm-dd')#"  name = "to_date" id = "toDate" required onblur="getDates();" >
+                            </div>
+                            <div class = "col-md-3">
+                                <label for = "leave_days"> Days:</label>
+                                <input type = "number" name = "leave_days" value = "0" readonly id = "leave_days" class = "form-control"> 
+                            </div>
+                            <div class = "col-md-3">
+                                <label for = "leave_title"> Leave Title: </label>
+                                <select name = "Leave_id" class = "form-select" required="true">
+                                    <option value=""> -- Available Leaves -- </option>
+                                    <cfloop query = "Leave_list"> <!--- printing dynamic list --->
+                                        <option value = "#leave_id#"> #leave_title# </option>
+                                    </cfloop>
+                                </select>
+                            </div>
                         </div>
-                        <div class = "col-md-3">
-                            <label for = "toDate" > To Date: </label> 
-                            <input type = "date" class = "form-control" value = "#dateFormat(now(),'yyyy-mm-dd')#"  name = "to_date" id = "toDate" required onblur="getDates();" >
+                        <p id = "errorMsg" class = "text-danger" style = "display:none; font-weight:bold">
+                            *"From Date" is Greater Than "To Date" or Selected Dates are Off Days
+                        </p>
+                        <div class = "row">
+                            <div class="col-md-12">
+                                <label for = "reason" class = "mt-3">Reason? </label>
+                                <textarea name = "txt_reason" class = "form-control" id = "txt_reason" placeholder = "Please Enter a Valid Reason For Leave" required></textarea>
+                            </div>
                         </div>
-                        <div class = "col-md-3">
-                            <label for = "leave_days"> Days:</label>
-                            <input type = "number" name = "leave_days" value = "0" readonly id = "leave_days" class = "form-control"> 
+                        <div class = "row">
+                            <div class = "col-md-3 mt-3">
+                                <input type = "submit" id = "submit_leave" value = "Submit Leave" name = "submit_leave" class = "btn btn-outline-dark">
+                            </div>
                         </div>
-                        <div class = "col-md-3">
-                            <label for = "leave_title"> Leave Title: </label>
-                            <select name = "Leave_id" class = "form-select">
-                                <option disabled> Available Leaves </option>
-                                <cfloop query = "Leave_list"> <!--- printing dynamic list --->
-                                    <option value = "#leave_id#"> #leave_title# </option>
-                                </cfloop>
-                            </select>
-                        </div>
-                    </div>
-                    <p id = "errorMsg" class = "text-danger" style = "display:none; font-weight">
-                        "From Date" is Greater Than "To Date" or Selected Dates are Off Days
-                    </p>
-                    <div class = "row">
-                        <label for = "reason" class = "mt-3">Reason? </label>
-                        <textarea name = "txt_reason" class = "form-control" id = "txt_reason" placeholder = "Please Enter a Valid Reason For Leave" required></textarea>
-                    </div>
-                    <div class = "row">
-                        <div class = "col-md-3 mt-3">
-                            <input type = "submit" id = "submit_leave" value = "Submit Leave" name = "submit_leave" class = "btn btn-outline-dark">
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             <cfelse>
         <!--- query result used to show a message if employee not allowed any leave ---> 
             <cfquery name = "get_employee">
@@ -130,6 +134,18 @@
                 //To Focus from date in case of wrong dates selected
                 function foucusDate(){
                     
+                }
+                // function for form validations from cant be submitted if any field is empty
+                function formValidate(){
+                    let a = document.forms["leaveRequest"]["from_date"].value;
+                    let b = document.forms["leaveRequest"]["to_date"].value;
+                    let c = document.forms["leaveRequest"]["leave_days"].value;
+                    let d = document.forms["leaveRequest"]["Leave_id"].value;
+                    let e = document.forms["leaveRequest"]["txt_reason"].value;
+                    if( (a == "") || (b = "")||(c == "")||(d == "")||(e == "")){
+                        alert("All field must be filled out!");
+                        return false;
+                    }
                 }
                 // Returns an array of dates between the two dates
                 function getDates(){

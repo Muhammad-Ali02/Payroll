@@ -24,7 +24,7 @@
         </cfquery>
         <!--- update leave as approved or rejected --->
         <cfif structKeyExists(form, 'Approve') or structKeyExists(form, 'Reject')>
-            <cfquery name = "update_all_leaves">
+            <cfquery name = "update_all_leaves" result="update_leave_result">
                 update all_leaves
                 set 
                     <cfif isDefined('form.Approve')>
@@ -37,6 +37,18 @@
                     action_remarks = '#form.txt_remarks#'
                     where id = '#url.id#'
             </cfquery>
+<!---             <cfif "#update_leave_result#" eq "1"> 
+                <cfquery name = "update_employee_leave">
+                update employee_leave
+                set availed_leave
+                    action_by = "#session.loggedIn.username#",
+                    action_date = now(),
+                    action_remarks = '#form.txt_remarks#'
+                    where id = '#url.id#'
+            </cfquery>
+            </cfif>--->
+<!---             <cfdump  var="#update_leave_result#"> --->
+<!---             <cfabort> --->
             <cfif isDefined('form.Approve')>
                 <cflocation  url="leave_approval.cfm?action=Approved">
             <cfelse>
@@ -45,7 +57,7 @@
         </cfif>
         <cfif structKeyExists(url, 'action')>
             <p class = "text-success">
-                Leave Request<strong> #url.action# </strong> Successfuly.
+                Leave Request<strong> #url.action# </strong> Successfully.
             </p>
         </cfif>
         <cfif structKeyExists(url, 'request_id')><!--- Front end when admin user want to approve or reject a leave--->
@@ -53,6 +65,10 @@
                 select * from all_leaves where id = "#url.request_id#"
             </cfquery>
         <!--- ___________________________________________ Front End _________________________________________________--->
+            <div class="employee_box">
+                <div class="text-center mb-4">
+                    <h3>Leave Approval</h3>
+                </div>
                 <div class = "row">
                     <div class = "col-md-3">
                         From Date: 
@@ -77,21 +93,24 @@
                 </div>
                 <form action = "leave_approval.cfm?id=#url.request_id#" method = "post">
                     <div class = "row">
-                        <label for = "txt_remarks">Remarks:</label>
-                        <textarea class = "form-control" id = "txt_remarks" name = "txt_remarks" placeholder = "Please Write Some Remarks According to Your Action (Approve or Reject)" required></textarea>
+                        <div class="col-md-12">
+                            <label for = "txt_remarks">Remarks:</label>
+                            <textarea class = "form-control" id = "txt_remarks" name = "txt_remarks" placeholder = "Please Write Some Remarks According to Your Action (Approve or Reject)" required></textarea>
+                        </div>
                     </div>
-                    <div class = "row">
-                        <div class = "col-md-3 mt-3">
+                    <div class = "row mt-3">
+                        <div class="d-flex justify-content-end" style="gap: 8px;">
                             <input type = "submit" id = "Approve_leave" value = "Approve Leave" name = "Approve" class = "btn btn-outline-success">
                             <input type = "submit" id = "Reject_leave" value = "Reject Leave" name = "Reject" class = "btn btn-outline-danger">
                         </div>
                     </div>
                 </form>
+            </div>
         <cfelse>
             <cfif leave_requests.recordcount neq 0>
                 <p class = "text-primary">Pending Requests:</p>
                 <table class = "table table-bordered">
-                    <thead class = "table-primary">
+                    <thead class = "table-light">
                         <th>No.</th>
                         <th>Request ID</th>
                         <th>Employee ID</th>
@@ -129,7 +148,7 @@
                         </cfloop>
                 </table>
             <cfelse>
-                <p> No Pending Requests! </p>
+                <p class="text-light"> No Pending Requests! </p>
             </cfif>
             <cfif get_approved_requests.recordcount neq 0>
                 <p class = "text-success">Approved Requests:</p>
@@ -172,7 +191,7 @@
                         </cfloop>
                 </table>
             <cfelse>
-                <p> No Approved Requests! </p>
+                <p class="text-success"> No Approved Requests! </p>
             </cfif>
             <cfif get_rejected_requests.recordcount neq 0>
                 <p class = "text-danger">Rejected Requests:</p>
@@ -215,7 +234,7 @@
                         </cfloop>
                 </table>
             <cfelse>
-                <p> No Rejected Requests! </p>
+                <p class="text-danger"> No Rejected Requests! </p>
             </cfif>
         </cfif>
     </cfoutput>

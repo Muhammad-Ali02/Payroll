@@ -276,13 +276,29 @@ a.article, a.article:hover {
     background-color: rgba(0, 0, 0, 0.2 ) !important;
     color: #ffffff !important;
 }
- input{
+ .form-control{
     background-color: rgba(0, 0, 0, 0.55) !important;
     color: #74747b !important;
     /* font-weight: bold !important; */
     border-color: #575758 !important;
     border-radius: 8px !important;
   }
+  .form-check-input{
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    color: #74747b !important;
+    /* font-weight: bold !important; */
+    border-color: #575758 !important;
+    /* border-radius: 8px !important; */
+  }
+  .btn{
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    color: #74747b !important;
+    /* font-weight: bold !important; */
+    border-color: #575758 !important;
+    border-radius: 8px !important;
+  }
+  
+  
   textarea{
     background-color: rgba(0, 0, 0, 0.55) !important;
     color: #74747b !important;
