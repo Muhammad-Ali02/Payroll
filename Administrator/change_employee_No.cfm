@@ -2,17 +2,25 @@
     <cfinclude  template="\includes\head.cfm">
         <cfif isDefined('form.new_emp_No')>
             <cfquery name="get_table">
-                SELECT table_name
+                SELECT table_name, COLUMN_NAME
                 FROM information_schema.columns
-                WHERE column_name = 'employee_id' and table_schema = 'payroll';
+                WHERE column_name = 'employee_id' or COLUMN_NAME = 'user_name' and table_schema = 'payroll';
             </cfquery>
 <!---              <cfdump  var="#get_table#">  <cfabort> --->
             <cfloop query="get_table">
-                <cfquery name="update_emp_id" result="updateId">
-                    Update #table_name#
-                    set employee_id = <cfqueryparam value="#form.new_emp_No#">
-                    where employee_id = <cfqueryparam value="#form.old_Id#">
-                </cfquery>
+                <cfif "#get_table.COLUMN_NAME#" eq "user_name">
+                    <cfquery name="update_emp_id" result="updateId">
+                        Update #table_name#
+                        set user_name = <cfqueryparam value="#form.new_emp_No#">
+                        where user_name = <cfqueryparam value="#form.old_Id#">
+                    </cfquery>
+                <cfelse>
+                    <cfquery name="update_emp_id" result="updateId">
+                        Update #table_name#
+                        set employee_id = <cfqueryparam value="#form.new_emp_No#">
+                        where employee_id = <cfqueryparam value="#form.old_Id#">
+                    </cfquery>
+                </cfif>
             </cfloop>
 <!---             <cfdump  var="#updateId#"> --->
 <!---             <cfabort> --->
