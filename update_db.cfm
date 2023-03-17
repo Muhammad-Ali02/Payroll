@@ -108,7 +108,7 @@
 
     <cfset i = 0>
 
-    <try>
+    <cftry>
         <cfloop query="get_table">
             <cfquery name="updateSchema" datasource="payroll">
                 ALTER TABLE #table_name#
