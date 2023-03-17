@@ -99,6 +99,31 @@
 </cfcatch>
 </cftry>
 
+<cftry>
+    <cfquery name="get_table">
+        SELECT table_name, COLUMN_NAME
+        FROM information_schema.columns
+        WHERE column_name = 'employee_id' or COLUMN_NAME = 'user_name' and table_schema = 'payroll';
+    </cfquery>
+
+    <cfset i = 0>
+
+    <try>
+        <cfloop query="get_table">
+            <cfquery name="updateSchema" datasource="payroll">
+                ALTER TABLE #table_name#
+                CHANGE COLUMN #COLUMN_NAME# #COLUMN_NAME# VARCHAR(45) NULL DEFAULT NULL
+            </cfquery>
+        </cfloop>
+        <cfset i += 1>
+    <cfcatch type="any">
+        query10.#i#:<cfdump  var="#cfcatch.cause.message#">  <br>
+    </cfcatch>
+    </cftry>
+<cfcatch type="any">
+    query9:<cfdump  var="#cfcatch.cause.message#">  <br>
+</cfcatch>
+</cftry>
 
 </cfoutput>
 <cfinclude  template="/includes/foot.cfm">
