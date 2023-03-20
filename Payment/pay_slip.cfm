@@ -138,8 +138,12 @@
         <cfelse>
             <form action = "pay_slip.cfm" method = "get">
             <div class="employee_box">
-                <div class = "row m-4">   
-                    <div class = "col-md-8">     
+                <div class="mb-5 text-center">
+                    <h3 class="box_heading">Generate Pay Slip<h3>
+                </div>
+                <div class = "row">  
+                    <div class="col-md-2"></div> 
+                    <div class = "col-md-5 mb-2">     
                             <select class = "form-select" name = "generate" required="true"> 
                                 <option value=""> -- Select Employee -- </option> 
                                     <cfloop query="get_employees">
@@ -147,12 +151,13 @@
                                     </cfloop>
                                 </select>
                     </div>
-                    <div class = "col-md-4">
+                    <div class = "col-md-3">
                             <input type = "submit" class = "btn btn-outline-dark" value = "Generate Pay Slip">
-                        </form>
                     </div>
+                    <div class="col-md-2"></div>
                 </div>
             </div>
+            </form>
         </cfif>
     </cfif>
 </cfoutput>

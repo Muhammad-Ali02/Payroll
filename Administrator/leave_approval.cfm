@@ -37,7 +37,7 @@
                     action_remarks = '#form.txt_remarks#'
                     where id = '#url.id#'
             </cfquery>
-<!---             <cfif "#update_leave_result#" eq "1"> 
+<!---           <cfif "#update_leave_result#" eq "1"> 
                 <cfquery name = "update_employee_leave">
                 update employee_leave
                 set availed_leave
@@ -66,8 +66,8 @@
             </cfquery>
         <!--- ___________________________________________ Front End _________________________________________________--->
             <div class="employee_box">
-                <div class="text-center mb-4">
-                    <h3>Leave Approval</h3>
+                <div class="text-center mb-5">
+                    <h3 class="box_heading">Leave Approval</h3>
                 </div>
                 <div class = "row">
                     <div class = "col-md-3">

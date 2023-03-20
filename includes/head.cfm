@@ -23,29 +23,6 @@
     />    
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-    <style type="text/css">
-        .hover-popup {
-            position: relative;
-        }
-    
-        .content {
-            display: none;
-            width: 200px;
-            border-radius: 16px;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px) !important;
-            padding: 10px;
-            box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
-        }
-    
-        .trigger:hover+.content {
-            display: block;
-        }
-    </style>
 </head>
 <body>
 <cfoutput>

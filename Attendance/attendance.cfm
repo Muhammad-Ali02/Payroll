@@ -15,7 +15,7 @@
         </cfif>
 <!--- |________________________________\|/_Front End _\|/________________________________|--->
         <div class="employee_box">
-            <h1 style = "text-align: center;" class="mb-3"> ATTENDANCE SHEET </h1>
+            <h3 class="mb-5 box_heading text-center"> ATTENDANCE SHEET </h3>
             <form action = "attendance.cfm" method = "post">
                 <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') > 
                 <div class = "row m-4">

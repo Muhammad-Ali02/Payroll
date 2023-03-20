@@ -26,15 +26,15 @@
         </cfquery>
         <cfquery name = "get_allowance"> <!--- get all saved allowance / result used to print dynamic list with check boxes --->
             select allowance_name as name, allowance_amount as amount, allowance_id as id
-            from allowance
+            from allowance where is_deleted is null or is_deleted = 'N'
         </cfquery>
         <cfquery name = "get_deduction"> <!--- get all saved Deductions / result used to print dynamic list with check boxes --->
             select deduction_name as name, deduction_amount as amount, deduction_id as id
-            from deduction
+            from deduction where is_deleted is null or is_deleted = 'N'
         </cfquery>
         <cfquery name = "get_leaves"> <!--- get all saved leaves / result used to print dynamic list with check boxes --->
             select leave_id as id, leave_title as title, allowed_per_year as balance
-            from leaves 
+            from leaves where is_deleted is null or is_deleted = 'N'
         </cfquery>
         <!--- \|/_____________________________\|/_Back End_\|/__________________________________\|/ --->
         <cfparam  name="duplicate" default = "false">
@@ -217,10 +217,12 @@
                         <cfset balance_per_month = get_leave_balance.leave_balance / 12 >
                         <cfset remaining_months = 12 - month(#form.joining_date#) + 1> <!--- +1 for current month --->
                         <cfset net_balance = balance_per_month * remaining_months>
+                        <!---  change by M Usama add leave_balance column into insert query --->
                         <cfquery name = "insert_leaves"> 
-                            insert into employee_leaves (employee_id, leave_id, leaves_allowed, status)
-                            values ('#get_employee.id#', '#evaluate('form.chk_leaves#id#')#', '#net_balance#' , 'Y')
+                            insert into employee_leaves (employee_id, leave_id, leaves_allowed, leaves_balance, status)
+                            values ('#get_employee.id#', '#evaluate('form.chk_leaves#id#')#', '#net_balance#' , '#net_balance#' ,'Y')
                         </cfquery>
+                        <!---  change by M Usama add leave_balance column into insert query --->
                     </cfif>
                 </cfloop>
                 <cfquery name = "pay_employee"> <!--- Query will insert just employee_id as primary key and other coloums as null into current_month_pay table, data will be updated from another page --->
@@ -790,6 +792,7 @@
         <!---   Leaves --->
             <div class = "employee_box">
                 <cfloop query="get_leaves"> <!--- Dynamic List of Leaves --->
+
                     <div class = "row align-items-center">
                             <input name = "chk_leaves#id#" class = "form-check-input ml-3"  id="chk_leaves#id#" value = "#id#" type = "checkbox" <cfif structKeyExists(url, 'edit')> <cfloop query = "get_employee_leaves"> <cfif leave_id eq get_leaves.id and get_employee_leaves.status eq "Y" > checked </cfif> </cfloop> </cfif> >
                             <label for = "chk_leaves#id#" class = "form-check-label ml-5" > #title# </label>

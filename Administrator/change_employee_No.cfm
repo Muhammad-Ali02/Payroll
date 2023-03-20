@@ -35,12 +35,13 @@
     <div class="w-100">
         <div class="employee_box">
             <div class="d-flex justify-content-center">
-                <h2 class="Medium fs-20 mb-3 d-inline-block" style="color: rgb(255, 255, 255,0.7);"> Change Employee No </h2>
+                <h3 class="mb-4 box_heading"> Change Employee No </h3>
             </div>
             <div class="d-flex">
                 <form action="" method="post" name="Change_Employee_Name">
-                    <div class="row m-4" style="color: rgb(255, 255, 255,0.7);">
-                        <div class="col-md-6">
+                    <div class="row" style="color: rgb(255, 255, 255,0.7);">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5 mb-1">
                             <span class="ml-1"> Select Employee </span>
                             <select class="form-select" name="old_Id" id="select_employee" >
                                 <option value=""> -- Select Employee -- </option> 
@@ -49,11 +50,11 @@
                                 </cfloop>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3 mb-1">
                             <span class="ml-1"> Employee No </span> 
                             <input type="text" name="new_emp_No" id="emp_No" class="form-control">
                         </div>
-                        <div class="col-md-2 mt-4">
+                        <div class="col-md-3 mt-4">
                             <input type="submit" value="Change" class="btn custom_button" onclick="return formvalidate();">
                         </div>
                     </div>

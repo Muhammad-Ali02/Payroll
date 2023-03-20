@@ -42,6 +42,9 @@
     </cfloop>
     <form action = "workingdays.cfm" method = "post">
         <div class = "employee_box">
+            <div class="mb-5 text-center">
+            <h3 class="box_heading">Create New Working Group</h3>
+            </div>
             <div class = "row mt-3">
                 <div class = "col-md-6">
                     <label for = "txt_group_name" class = "form-control-label"> Group Name: </td> 
@@ -104,10 +107,12 @@
                     <input name = "Friday_time_out" id = "friday_time_out" type = "time" value = "18:30" class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.time_out , "hh:mm")#" <cfelse> value = "18:30" </cfif>>
                 </div>
             </div>
-            <cfif structKeyExists(url, 'edit')> 
-                <input type = "hidden" name = "group_id" value = "#url.edit#"> 
-            </cfif>
-            <input type = "submit" onclick = "javascript:validateRequired();" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> name = "update" value = "Update" <cfelse> value = "Submit" name = "submit" </cfif>>
+            <div class="text-right mt-3">
+                <cfif structKeyExists(url, 'edit')> 
+                    <input type = "hidden" name = "group_id" value = "#url.edit#"> 
+                </cfif>
+                <input type = "submit" onclick = "javascript:validateRequired();" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> name = "update" value = "Update" <cfelse> value = "Submit" name = "submit" </cfif>>
+            </div>
         </div>
     </form>
 </cfif> 
