@@ -29,6 +29,9 @@
         </cfquery>
         <form action = "setting.cfm" method = "post">
             <div class="employee_box">
+                <div class="mb-5 text-center">
+                    <h3 class="box_heading">System Setting</h3>
+                </div>
                 <div class = "row">  
                     <div class = "col-md-6">          
                             Current Month: 

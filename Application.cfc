@@ -10,6 +10,8 @@
     <cfelse>
         <cfset this.ipAddress = CGI.REMOTE_ADDR>
     </cfif>
+    <cfset obj = createObject("java","java.net.InetAddress")>
+    <cfset machine_name = obj.getLocalHost().getHostName()>
     <!--- Initialize application --->
   <cffunction name="onApplicationStart" returnType="boolean" output="false">
     <cfset Application.startTime = Now()>

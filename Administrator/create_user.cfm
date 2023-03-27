@@ -72,6 +72,13 @@
         </cfif>
         <cfif structKeyExists(url, 'employee_as_admin') or structKeyExists(url, 'new_user')>
             <div class = "employee_box">
+                <div class="text-center">
+                    <cfif structKeyExists(url, 'employee_as_admin')>
+                        <h3 class="mb-5 box_heading">Update Employee as Admin</h3>
+                    <cfelseif structKeyExists(url, 'new_user')>
+                        <h3 class="mb-5 box_heading">Create New User</h3>
+                    </cfif>
+                </div>
                 <div class = container>
                     <div class = "row"> 
                         <div class = "col-md-2">
@@ -115,10 +122,10 @@
 </cfoutput>
 <script>
     function formvalidate(){
-        let x = document.forms["createUser"]["user_name"].value;
-        let y = document.forms["createUser"]["user_password"].value;
-        let z = document.forms["createUser"]["user_level"].value;
-        if( (x == "") || (y == "")||(z == "")){
+        let user_name = document.forms["createUser"]["user_name"].value;
+        let user_password = document.forms["createUser"]["user_password"].value;
+        let user_level = document.forms["createUser"]["user_level"].value;
+        if( (user_name == "") || (user_password == "")||(user_level == "")){
             alert("All field must be filled out!");
             return false;
         }

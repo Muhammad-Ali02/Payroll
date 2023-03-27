@@ -21,18 +21,19 @@
                 <cfif form.user_password eq showError.password or form.user_password eq get_employee.password> 
                     <cfif structKeyExists(form, 'login')>
                         <cfif user_level eq 'employee'>
-                            <cfif structKeyExists(get_employee, 'user_name') and ((get_employee.ip_address eq current_ipAddress) or (get_employee.last_login eq ''))>
+                            <cfif structKeyExists(get_employee, 'user_name') and ((get_employee.ip_address eq current_ipAddress) or (get_employee.last_login eq '')) and ((get_employee.machine_name eq machine_name) or (get_employee.machine_name eq ''))>
                                 <cfset user_authentication = createObject("component", '\components.user_authentication')>
                                 <!--- login processing --->
-                                <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, form.user_password, user_level, current_ipAddress )>
+
+                                <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, form.user_password, user_level, current_ipAddress, machine_name )>
                                 <cfif structKeyExists(session, 'loggedIn')>
                                     <cflocation  url="\index.cfm">
                                 </cfif>
                             <cfelse>
                                 <!--- get current ip addres and store in database in case of failure to login--->
                                 <cfquery name = 'insert_ip_address'>
-                                    insert into ip_address_audit (user_name, password, last_login, level, attempt_time, current_ip_address)
-                                    values ('#form.txt_user_name#','#form.user_password#', '#get_employee.last_login#', '#user_level#', now(), '#current_ipAddress#')
+                                    insert into ip_address_audit (user_name, password, last_login, level, attempt_time, current_ip_address, current_machine_name)
+                                    values ('#form.txt_user_name#','#form.user_password#', '#get_employee.last_login#', '#user_level#', now(), '#current_ipAddress#', '#machine_name#')
                                 </cfquery>
                                 <script>
                                     alert('You are not allowed to Login, Please Contact HR');
