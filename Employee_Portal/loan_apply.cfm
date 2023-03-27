@@ -3,11 +3,11 @@
         <cfquery name = "get_loans">
             select action, status
             from loan
-            where employee_id = "#session.loggedin.username#"
+            where employee_id = "#session.loggedin.username#" order by loan_id desc limit 1
         </cfquery>
         <cfif get_loans.action eq 'pending'>
             <cflocation  url="loan_requests.cfm?request_generated=false">
-        <cfelseif get_loans.action eq 'approved' and get_loans.status eq 'Y'>
+        <cfelseif (get_loans.action eq 'approved' or get_loans.action eq 'Partial approved') and get_loans.status eq 'Y'>
             <cflocation  url="loan_requests.cfm?already_taken=true">
         </cfif>
         <cfif '#form.Terms1#' eq '1'>

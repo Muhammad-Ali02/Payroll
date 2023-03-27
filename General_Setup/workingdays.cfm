@@ -43,7 +43,11 @@
     <form action = "workingdays.cfm" method = "post">
         <div class = "employee_box">
             <div class="mb-5 text-center">
-            <h3 class="box_heading">Create New Working Group</h3>
+                <cfif structKeyExists(url, 'edit')>
+                    <h3 class="box_heading">Update Working Group</h3> 
+                <cfelse>
+                    <h3 class="box_heading">Create New Working Group</h3>
+                </cfif>
             </div>
             <div class = "row mt-3">
                 <div class = "col-md-6">

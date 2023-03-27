@@ -5,11 +5,11 @@
             select concat(employee_id,' | ',first_name,' ', middle_name, ' ', last_name) as name , employee_id
             from employee
         </cfquery>
-        <cfif structKeyExists(form, "date")>
+        <cfif structKeyExists(form, "month")>
             <cfquery name = "attendance_sheet">
                 select * 
-                from attendance 
-                where attendance.date >= "#form.date#" 
+                from attendance
+                where month(date) = "#form.month#" 
                 and employee_id = "#form.employee_id#"
             </cfquery>
         </cfif>
@@ -20,7 +20,13 @@
                 <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') > 
                 <div class = "row m-4">
                     <div class = "col-md-3">
-                        From Date: <input type = "date"  class = "form-control" name = "date" value = "#current_date#">
+                        Select Month :
+                        <select name = "month" class = "form-select">
+                            <cfloop from = "1" to="12" index="i">
+                                <option value = "#i#"> #monthAsString(i)# </option>
+                            </cfloop>
+                        </select>
+<!---                         From Date: <input type = "date"  class = "form-control" name = "date" value = "#current_date#"> --->
                     </div>
                     <div class = "col-md-6">
                         Select Employee:
@@ -47,7 +53,7 @@
                 <p style = "font-weight:bold;"> Employee Id: <u> #get_employee.employee_id# </u> </p>
                 <p style = "font-weight:bold;"> Employee Name: <u> #get_employee.name# </u> </p>
                 <p style = "font-weight:bold;"> CNIC: <u> #get_employee.cnic# </u> </p>
-                <div style="white-space: nowrap; overflow-x: scroll;">
+                <div style="overflow-x: auto;">
                     <table class = "table custom_table">
                         <tr>
                             <th> Date </th>

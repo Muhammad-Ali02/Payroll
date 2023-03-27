@@ -98,7 +98,7 @@
     <cfelse>
         <div class="employee_box">
             <div class="text-center">
-                <h3 class="mb-5 box_heading"> Add Attendance Manualy</h3>
+                <h3 class="mb-5 box_heading"> Add Attendance Manually</h3>
             </div>
             <form action = "add_attendance.cfm" method = "post">
                 <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') >

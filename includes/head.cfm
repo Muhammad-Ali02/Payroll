@@ -82,6 +82,12 @@
                                 <a href="..\administrator\leave_approval.cfm">Leave Approval</a>
                             </li>
                             <li>
+                                <a href="/administrator/loan_approval.cfm">Loan Approval</a>
+                            </li>
+                            <li>
+                                <a href="/administrator/advance_salary_approval.cfm">Advance Salary Approval</a>
+                            </li>
+                            <li>
                                 <a href="..\administrator\change_employee_No.cfm">Change Employee No.</a>
                             </li>
                         </ul>
