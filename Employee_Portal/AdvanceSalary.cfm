@@ -3,11 +3,11 @@
         <cfquery name = "get_Advance">
             select action, status
             from advance_salary
-            where employee_id = "#session.loggedin.username#"
+            where employee_id = "#session.loggedin.username#" order by Advance_id desc limit 1
         </cfquery>
         <cfif get_Advance.action eq 'pending'>
             <cflocation  url="AdvanceSalary_request.cfm?request_generated=false">
-        <cfelseif get_Advance.action eq 'approved' and get_Advance.status eq 'Y'>
+        <cfelseif (get_Advance.action eq 'approved' or get_Advance.action eq 'partial approved') and get_Advance.status eq 'Y'>
             <cflocation  url="AdvanceSalary_request.cfm?already_taken=true">
         </cfif>
         <cfif '#form.Terms1#' eq '1'>

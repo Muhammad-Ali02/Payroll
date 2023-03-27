@@ -35,21 +35,39 @@
         <center>
         <table>
             <tr> 
-                <td>   
-                    <form Action = "allowance.cfm" Method = "post">
-                        <input type = "text" name = "txt_allowance_name" placeholder = "Allowance Name" class = "form-control" required = "true" <cfif #merror# eq 1 > value = "#form.txt_allowance_name#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.allowance_name#"</cfif>>
-                        <hr>
-                        <input type = "number"  min = "0"name = "allowance_amount" placeholder = "Allowance amount" class = "form-control" required<cfif #merror# eq 1 > value = "#form.allowance_amount#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.allowance_amount#"</cfif>>
-                        <hr>
-                        <textarea rows = "5" cols = "30" name = "txt_description" placeholder = "Write Description Maximum words 200" required = "true" ><cfif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
-                        <br>
-                        <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "Update" <cfelse> "Add" </cfif> > <!--- name "update" will update existing data, name "add" will insert new data --->
-                        <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> value = "Update allowance" <cfelse> value = "Add allowance" </cfif> >
-                    </form>
+                <td>
+                    <div class="employee_box">
+                        <div class="mb-5 text-center">
+                            <cfif structKeyExists(url, 'edit')>
+                                <h3 class="box_heading">Upadate Allowance</h3>
+                            <cfelse>
+                                <h3 class="box_heading">Create New Allowance</h3>
+                            </cfif>
+                        </div>
+                        <form name="allowance_form" onsubmit="return formValidate();" Action = "allowance.cfm" Method = "post">
+                            <input type = "text" name = "txt_allowance_name" placeholder = "Allowance Name" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.txt_allowance_name#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.allowance_name#"</cfif>>
+                            <input type = "number"  min = "0" name = "allowance_amount" placeholder = "Allowance amount" class = "form-control mb-3" required<cfif #merror# eq 1 > value = "#form.allowance_amount#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.allowance_amount#"</cfif>>
+                            <textarea class="form-control mb-3" rows = "5" cols = "30" name = "txt_description" placeholder = "Write Description Maximum words 200" required = "true" ><cfif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
+                            <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "Update" <cfelse> "Add" </cfif> > <!--- name "update" will update existing data, name "add" will insert new data --->
+                            <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> value = "Update allowance" <cfelse> value = "Add allowance" </cfif> >
+                        </form>
+                    </div>   
                 <td>
             </tr>
         </table>
         </center>
     </cfif>
 </cfoutput>
-    <cfinclude  template="..\includes\foot.cfm">
+<script>
+    function formValidate(){
+        let txt_allowance_name = document.forms["allowance_form"]["txt_allowance_name"].value;
+        let allowance_amount = document.forms["allowance_form"]["allowance_amount"].value;
+        let txt_description = document.forms["allowance_form"]["txt_description"].value;
+        if((txt_allowance_name == "") || (allowance_amount == "") || (txt_description == "")){
+            alert("All field must be filled out!");
+            return false;
+        }
+
+    }
+</script>
+<cfinclude  template="..\includes\foot.cfm">

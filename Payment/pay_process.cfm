@@ -90,8 +90,12 @@
         <!--- ___________________________________________________ Front End _________________________________________________ --->
         <form action = "pay_process.cfm?run_pay_process=true" method = 'post'>
         <div class="employee_box">
-            <div class = "row m-4">
-                <div class = "col-md-8">    
+            <div class="mb-5 text-center">
+                <h3 class="box_heading">Run Pay Process</h3>
+            </div>
+            <div class = "row">
+                <div class="col-md-2"></div>
+                <div class = "col-md-5 mb-2">    
                     <select name = "employee_id" required class = "form-select"> 
                         <option value=""> -- Select Employee -- </option>
                         <option value = "All"> All </option>
@@ -100,9 +104,10 @@
                             </cfloop>
                     </select>
                 </div>
-                <div class = "col-md-4">
+                <div class = "col-md-3">
                     <input type = "submit" name = "run_process" value = "Run Pay Process" class = "btn btn-outline-dark">
                 </div>
+                <div class="col-md-2"></div>
             </div>
         </div>
         </form>

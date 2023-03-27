@@ -4,6 +4,11 @@
             <!--- Back End to Insert Leaves --->
             <!--- Insert Leaves in All leaves Table --->
             <cfif structKeyExists(form, 'leave_id')>
+                <cfquery name="leave_checker">
+                    select leaves_balance
+                    from employee_leaves
+                    where employee_id = '#session.loggedin.username#' And leave_id = '#form.Leave_id#'
+                </cfquery>
                 <!--- query to check if leave request already exist in the table then no insert new request --->
                 <cfquery name = "check_existing">
                     select * 
@@ -14,44 +19,50 @@
                     <!--- Just for Later use if want to alow leave request again if rejected ---> 
                     <!--- and action != 'rejected' ---> 
                 </cfquery>
-                <cfif check_existing.recordcount eq 0>
-                    <!--- insert leave requests --->
-                    <cfquery name = "insert_leave_request">
-                        insert into all_leaves
-                        (
-                            employee_id, 
-                            leave_id, 
-                            from_date, 
-                            to_date, 
-                            leave_days,
-                            reason, 
-                            request_date, 
-                            action,
-                            action_by
-                        )
-                        values
-                        (
-                            '#session.loggedin.username#', 
-                            '#form.leave_id#', 
-                            '#form.from_date#', 
-                            '#form.to_date#', 
-                            '#form.leave_days#',
-                            '#form.txt_reason#', 
-                            now(), 
-                            'Pending',
-                            'None'
-                        )
-                    </cfquery>
-                    <cflocation  url="leave_requests.cfm?request_submitted=true">
+                <cfif "#leave_checker.leaves_balance#" gte "#form.leave_days#">
+                    <cfif check_existing.recordcount eq 0>
+                        <!--- insert leave requests --->
+                        <cfquery name = "insert_leave_request">
+                            insert into all_leaves
+                            (
+                                employee_id, 
+                                leave_id, 
+                                from_date, 
+                                to_date, 
+                                leave_days,
+                                reason, 
+                                request_date, 
+                                action,
+                                action_by
+                            )
+                            values
+                            (
+                                '#session.loggedin.username#', 
+                                '#form.leave_id#', 
+                                '#form.from_date#', 
+                                '#form.to_date#', 
+                                '#form.leave_days#',
+                                '#form.txt_reason#', 
+                                now(), 
+                                'Pending',
+                                'None'
+                            )
+                        </cfquery>
+                        <cflocation  url="leave_requests.cfm?request_submitted=true">
+                    <cfelse>
+                        <cflocation  url="leave_requests.cfm?request_submitted=false">
+                    </cfif>
                 <cfelse>
-                    <cflocation  url="leave_requests.cfm?request_submitted=false">
+                    <script>
+                        alert("Sorry! Your Applied leave less then your available leaves.");
+                    </script>
                 </cfif>
             </cfif>
             <cfquery name = "Leave_list"> <!---With the help of Result, generate a dynamic list of Available Leaves --->
                 select L.leave_title, L.leave_id, E.leaves_allowed, E.leaves_availed, E.leaves_balance
                 from leaves L
                 inner join employee_leaves E on L.leave_id = E.leave_id
-                where E.employee_id = '#session.loggedin.username#' and E.status = 'Y'
+                where E.employee_id = '#session.loggedin.username#' and E.status = 'Y' and E.leaves_balance <> 0
             </cfquery>
             <cfquery name = "get_requested_leaves">
                 select count(leave_id) as requested
@@ -84,14 +95,14 @@
                             </div>
                             <div class = "col-md-3">
                                 <label for = "leave_days"> Days:</label>
-                                <input type = "number" name = "leave_days" value = "0" readonly id = "leave_days" class = "form-control"> 
+                                <input type = "number" onval="leavechecker();" name = "leave_days" value = "0" readonly id = "leave_days" class = "form-control"> 
                             </div>
                             <div class = "col-md-3">
                                 <label for = "leave_title"> Leave Title: </label>
-                                <select name = "Leave_id" class = "form-select" required="true">
+                                <select onchange="leavechecker();" name = "Leave_id" id="Leave_id" class = "form-select" required="true">
                                     <option value=""> -- Available Leaves -- </option>
                                     <cfloop query = "Leave_list"> <!--- printing dynamic list --->
-                                        <option value = "#leave_id#"> #leave_title# </option>
+                                        <option value = "#leave_id#" leave_balance= "#leaves_balance#"> #leave_title# (Balance : #leaves_balance#) </option>
                                     </cfloop>
                                 </select>
                             </div>
@@ -135,16 +146,28 @@
                 function foucusDate(){
                     
                 }
+                function leavechecker(){
+                    var leave_balance=$("##Leave_id").find('option:selected').attr('leave_balance');
+                    var applied_leave = $('##leave_days').val();
+                    if(leave_balance < applied_leave){
+                        alert("Sorry! Your Applied leave less then your available leaves.");
+                        $("##Leave_id").val("").change();
+                        return false;
+                    }
+                }
                 // function for form validations from cant be submitted if any field is empty
                 function formValidate(){
-                    let a = document.forms["leaveRequest"]["from_date"].value;
-                    let b = document.forms["leaveRequest"]["to_date"].value;
-                    let c = document.forms["leaveRequest"]["leave_days"].value;
-                    let d = document.forms["leaveRequest"]["Leave_id"].value;
-                    let e = document.forms["leaveRequest"]["txt_reason"].value;
-                    if( (a == "") || (b = "")||(c == "")||(d == "")||(e == "")){
+                    let from_date = document.forms["leaveRequest"]["from_date"].value;
+                    let to_date = document.forms["leaveRequest"]["to_date"].value;
+                    let leave_days = document.forms["leaveRequest"]["leave_days"].value;
+                    let Leave_id = document.forms["leaveRequest"]["Leave_id"].value;
+                    let txt_reason = document.forms["leaveRequest"]["txt_reason"].value;
+                    if( (from_date == "") || (to_date = "")||(leave_days == "")||(Leave_id == "")||(txt_reason == "")){
                         alert("All field must be filled out!");
                         return false;
+                    }else{
+                        var a= leavechecker();
+                        return a;
                     }
                 }
                 // Returns an array of dates between the two dates
@@ -163,13 +186,13 @@
                         for(let i = 0; i <= jsOffDays.length; i++){   
                             if(currentDate.getDay() == jsOffDays[i]){
                                 flag++
-                                console.log('for loop')
-                            console.log(currentDate)
+                                // console.log('for loop')
+                            // console.log(currentDate)
                             }
                         }
                         if(flag == 0){
                             dates.push(currentDate);
-                            console.log(jsOffDays.length);
+                            // console.log(jsOffDays.length);
                         }
                         currentDate = addDays.call(currentDate, 1);
                     }
