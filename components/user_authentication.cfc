@@ -21,6 +21,8 @@
         <cfargument  name="user_password" type = "string" required = "true" />
         <cfargument  name="user_level" type = "string" required = "true" />
         <cfargument  name="current_ipAddress" type = "string" required = "false" />
+        <cfargument  name="machine_name" type= "string" required = "false">
+
             <!--- creating variable to insure user is logged in or not --->
             <cfset var isUserLogin = false />
             <!--- getting user's data from the database --->
@@ -54,10 +56,10 @@
                 </cfquery>
             <cfelse> 
                 <cfset ipaddress = getData.IP_ADDRESS>
-                <cfif getData.IP_ADDRESS eq arguments.current_ipAddress or getData.ip_address eq ''>
+                <cfif (getData.IP_ADDRESS eq arguments.current_ipAddress or getData.ip_address eq '') And (getData.machine_name eq arguments.machine_name or getData.machine_name eq '')>
                     <cfquery name = "insert_time">
                         update emp_users
-                        set last_login = now(), ip_address = '#arguments.current_ipAddress#'
+                        set last_login = now(), ip_address = '#arguments.current_ipAddress#', machine_name = '#arguments.machine_name#'
                         where user_name = '#getData.user_name#'
                         and password = '#getData.password#'
                     </cfquery>

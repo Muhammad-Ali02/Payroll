@@ -4,6 +4,9 @@
         <cfquery name = "leave_requests">
             select a.*, l.leave_title from all_leaves a , leaves l where a.employee_id = "#session.loggedin.username#" and a.leave_id = l.leave_id
         </cfquery>
+        <cfif leave_requests.action eq 'partial approved'>
+            
+        </cfif>
         <!--- _________________________________________ Front End ______________________________________--->
         <cfif structKeyExists(url, 'request_submitted')>
             <cfif url.request_submitted eq 'true'>
@@ -45,7 +48,7 @@
                             <td>#dateFormat(from_date,'DD-MMM-YYYY')#</td>
                             <td>#dateFormat(to_date,'DD-MMM-YYYY')#</td>
                             <td>#leave_days#</td>
-                            <td <cfif action eq 'rejected'> class = "text-danger" <cfelseif action eq 'approved'> class = "text-success"</cfif>>
+                            <td <cfif action eq 'rejected'> class = "text-danger" <cfelseif action eq 'approved'> class = "text-success" <cfelseif action eq 'partial approved'> style="color: rgb(242, 162, 24);"</cfif>>
                                 <cfif action eq 'rejected'>
                                     <div class="hover-popup">
                                         <span class="trigger">
@@ -60,18 +63,50 @@
                                             </div>
                                         </div>
                                     </div>
+                                <cfelseif action eq 'partial approved'>
+                                    <cfquery name="partial_approved">
+                                        select * from leaves_approval
+                                        where leave_id = <cfqueryparam value="#leave_requests.id#">
+                                    </cfquery>
+                                    <div class="hover-popup">
+                                        <span class="trigger">
+                                            #action#
+                                        </span>
+                                        <div class="content">
+                                            <!-- <div style="text-align: center; text-decoration: underline; color: rgb(255, 255, 255, 0.8);">
+                                                <h6>Rejected Remarks</h6>
+                                            </div> -->
+                                            <div class="mt-1" style="color: rgb(255, 255, 255); font-size: 12px;">
+                                                <p style="text-align: justify; text-justify: inter-word; font-weight: bolder; margin-left: 5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Action</p>
+                                                <cfloop query="partial_approved">
+                                                    <p style="text-align: justify; text-justify: inter-word;">
+                                                        #dateFormat('#leave_date#','yyyy-mm-dd')# <strong> : </strong> 
+                                                        <cfif approved_as eq '1'>
+                                                           Approve As Full Pay Leave
+                                                        <cfelseif approved_as eq '0.5'>
+                                                           Approve As Half Pay Leave 
+                                                        <cfelse>
+                                                            Rejected
+                                                        </cfif>
+                                                    </p>
+                                                </cfloop>
+                                                <p style="text-align: justify; text-justify: inter-word; font-weight: bolder; text-align: center;">Remarks</p>
+                                                <p style="text-align: justify; text-justify: inter-word;">#action_remarks#</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 <cfelse>
                                     #action#
                                 </cfif>
                             </td>
                             <td>#action_by#</td>
                         <tr>
-                        <!-- <cfif action eq 'rejected'>
+                        <!--- <cfif action eq 'rejected'>
                             <tr class = "table-danger">
                                 <td><strong>Rejected Remarks</strong></td>
                                 <td colspan = "8" class = "text-danger">#action_remarks#</td>
                             </tr>
-                        </cfif> -->
+                        </cfif> --->
                     </cfloop>
             </table>
         <cfelse>

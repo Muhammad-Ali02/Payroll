@@ -45,16 +45,22 @@
             <center>
                 <table>
                     <tr> 
-                        <td>   
-                            <form Action = "department.cfm" Method = "post">
-                                <input type = "text" name = "txt_department_name" placeholder = "Department Name" class = "form-control" required = "true" <cfif #merror# eq 1 > value = "#form.txt_department_name#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.department_name#" </cfif>>
-                                <hr>
-                                <textarea name = "txt_department_description" maxlength = "200" cols = "30" rows = "5" Placeholder = "Write Description Maximum Charactors 200 ..." required = "true"><cfif #merror# eq 1 >#form.txt_department_description#<cfelseif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
-                                <br>
-                                <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif> > <!--- name "update" will update existing data, name "create" will insert new data --->
-                                <hr>
-                                <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> value = "Update Department" <cfelse> value = "Create Department" </cfif> >
-                            </form>
+                        <td>
+                            <div class="employee_box">
+                                <div class="mb-5 text-center">
+                                    <cfif structKeyExists(url, 'edit')>
+                                        <h3 class="box_heading">Update Department</h3>
+                                    <cfelse>
+                                        <h3 class="box_heading">Create New Department</h3>
+                                    </cfif>
+                                </div>   
+                                <form name="create_department" onsubmit="return formValidate();" Action = "department.cfm" Method = "post">
+                                    <input type = "text" name = "txt_department_name" placeholder = "Department Name" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.txt_department_name#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.department_name#" </cfif>>
+                                    <textarea class="form-control mb-3" name = "txt_department_description" maxlength = "200" cols = "30" rows = "5" Placeholder = "Write Description Maximum Charactors 200 ..." required = "true"><cfif #merror# eq 1 >#form.txt_department_description#<cfelseif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
+                                    <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif> > <!--- name "update" will update existing data, name "create" will insert new data --->
+                                    <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> value = "Update Department" <cfelse> value = "Create Department" </cfif> >
+                                </form>
+                            </div>
                         <td>
                     </tr>
                 </table>
@@ -62,4 +68,14 @@
         </cfif>
     </cfif>
 </cfoutput>
+<script>
+    function formValidate(){
+        let txt_department_name = document.forms["create_department"]["txt_department_name"].value;
+        let txt_department_description = document.forms["create_department"]["txt_department_description"].value;
+        if((txt_department_name == "") || (txt_department_description == "")){
+            alert("All field must be filled out!");
+            return false;
+        }
+    }
+</script>
 <cfinclude  template="..\includes\foot.cfm">

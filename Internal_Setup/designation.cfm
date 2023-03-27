@@ -38,23 +38,40 @@
         <center>
         <table>
             <tr> 
-                <td>   
-                    <form Action = "designation.cfm" Method = "post">
-                        <input type = "text" name = "txt_designation_title" placeholder = "Designation Title" class = "form-control" <cfif #merror# eq 1 > value = "#form.txt_designation_title#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.designation_title#"</cfif>>
-                        <hr>
-                        <input type = "number" min = "0" name = "basic_salary" placeholder = "Basic Salary" class = "form-control" required = "true" <cfif #merror# eq 1 > value = "#form.basic_salary#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.basic_salary#"</cfif>>
-                        <hr>
-                        <input type = "Text" name = "txt_short_word" minlength = "2" maxlength = "2" placeholder = "Short Word like 'SE'" class = "form-control" required = "true" <cfif #merror# eq 1 > value = "#form.txt_short_word#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.short_word#"</cfif>>
-                        <hr>
-                        <textarea name = "txt_description" rows = "5" cols = "30" maxlength = "200" placeholder = "Write Description. Maximum Words 200 ..."  required = "true"><cfif #merror# eq 1 >#form.txt_description#<cfelseif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
-                        <br>
-                        <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "add" </cfif> > <!--- name "update" will update existing data, name "add" will insert new data --->
-                        <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> value = "Update Designation" <cfelse> value = "Add Designation" </cfif> >
-                    </form>
+                <td>
+                    <div class="employee_box">
+                        <div class="mb-5 text-center">
+                            <cfif structKeyExists(url, 'edit')>
+                                <h3 class="box_heading">Update Designation</h3>
+                            <cfelse>
+                                <h3 class="box_heading">Create New Designation</h3>
+                            </cfif>
+                        </div>
+                        <form name="designation_form" Action = "designation.cfm" onsubmit="return formValidate();" Method = "post">
+                            <input type = "text" name = "txt_designation_title" placeholder = "Designation Title" class = "form-control mb-3" <cfif #merror# eq 1 > value = "#form.txt_designation_title#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.designation_title#"</cfif>>
+                            <input type = "number" min = "0" name = "basic_salary" placeholder = "Basic Salary" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.basic_salary#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.basic_salary#"</cfif>>
+                            <input type = "Text" name = "txt_short_word" minlength = "2" maxlength = "2" placeholder = "Short Word like 'SE'" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.txt_short_word#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.short_word#"</cfif>>
+                            <textarea class="form-control mb-3" name = "txt_description" rows = "5" cols = "30" maxlength = "200" placeholder = "Write Description. Maximum Words 200 ..."  required = "true"><cfif #merror# eq 1 >#form.txt_description#<cfelseif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
+                            <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "add" </cfif> > <!--- name "update" will update existing data, name "add" will insert new data --->
+                            <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> value = "Update Designation" <cfelse> value = "Add Designation" </cfif> >
+                        </form>
+                    </div>   
                 <td>
             </tr>
         </table>
         </center>
     </cfif>
 </cfoutput>
+<script>
+    function formValidate(){
+            let txt_designation_title = document.forms["designation_form"]["txt_designation_title"].value;
+            let basic_salary = document.forms["designation_form"]["basic_salary"].value;
+            let txt_short_word = document.forms["designation_form"]["txt_short_word"].value;
+            let txt_description = document.forms["designation_form"]["txt_description"].value;
+            if( (txt_designation_title == "") || (basic_salary == "") || (txt_short_word =="") || (txt_description =="")){
+                alert("All field must be filled out!");
+                return false;
+            }
+        }
+</script>
 <cfinclude  template="..\includes\foot.cfm">
