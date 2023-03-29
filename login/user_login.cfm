@@ -18,14 +18,27 @@
                     </cfquery>
                     <cfset user_level = get_employee.level>
                 </cfif>
-                <cfif form.user_password eq showError.password or form.user_password eq get_employee.password> 
+                <!---   encrypt the user password that coming to the form    --->
+                <cfquery name="get_uuid">
+                    select * from uuid_table
+                    where user_name = "#form.txt_user_name#"
+                </cfquery>
+                <cfif get_uuid.recordcount gt 0>
+                    <cfset salt = "#get_uuid.uuid#">
+                    <cfset password = "#form.user_password#">
+                    <cfset hashed_Password = hash(password & salt, "SHA-256")>
+<!---                     <cfdump  var="#get_employee.password#"> <br> --->
+<!---                     <cfdump  var="#hashed_Password#"><cfabort> --->
+                </cfif>
+
+                <cfif (hashed_Password eq showError.password) or (hashed_Password eq get_employee.password)> 
                     <cfif structKeyExists(form, 'login')>
                         <cfif user_level eq 'employee'>
                             <cfif structKeyExists(get_employee, 'user_name') and ((get_employee.ip_address eq current_ipAddress) or (get_employee.last_login eq '')) and ((get_employee.machine_name eq machine_name) or (get_employee.machine_name eq ''))>
                                 <cfset user_authentication = createObject("component", '\components.user_authentication')>
                                 <!--- login processing --->
 
-                                <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, form.user_password, user_level, current_ipAddress, machine_name )>
+                                <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, hashed_Password, user_level, current_ipAddress, machine_name )>
                                 <cfif structKeyExists(session, 'loggedIn')>
                                     <cflocation  url="\index.cfm">
                                 </cfif>
@@ -42,7 +55,7 @@
                         <cfelse> <!--- if user is admin then the else part will be executed --->
                             <cfset user_authentication = createObject("component", '\components.user_authentication')>
                                 <!--- login processing --->
-                                <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, form.user_password, user_level )>
+                                <cfset isUserlogin = user_authentication.user_login(form.txt_user_name, hashed_Password, user_level )>
                                 <cfif structKeyExists(session, 'loggedIn')>
                                     <cflocation  url="\index.cfm">
                                 </cfif>

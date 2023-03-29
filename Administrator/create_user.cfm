@@ -22,17 +22,41 @@
                 </script>
                 <cfset merror = 1>
             <cfelse>
+            <!--- Generate hashed password --->
+            <!---    Insert uuid in uuid table accross the user name     --->
+                <cfquery name="insert_uuid">
+                    insert into uuid_table (uuid , user_name)
+                    values (<cfqueryparam value="#CreateUUID()#">, <cfqueryparam value="#form.user_name#">)
+                </cfquery>
+            <!---      Get uuid of newly created user from uuid table and then hash the password and insert into user table  --->
+                <cfquery name="get_uuid">
+                    select * from uuid_table
+                    where user_name = "#form.user_name#"
+                </cfquery>
+                <cfset salt = "#get_uuid.uuid#">
+                <cfset password = "#form.user_password#">
+                <cfset hashed_Password = hash(password & salt, "SHA-256")>
                 <!--- Insert query  --->
                 <cfquery name = "insert_user">
                     insert into users (user_name, password, level)
-                    values ('#form.user_name#', '#form.user_password#', '#form.user_level#')
+                    values ('#form.user_name#', '#hashed_Password#', '#form.user_level#')
                 </cfquery>
                 <cflocation  url="all_users.cfm?created=true">
             </cfif>
         <cfelseif structKeyExists(form, 'update')>
+
+            <!--- Generate hashed password --->
+                <cfquery name="get_uuid">
+                    select * from uuid_table
+                    where user_name = "#form.user_name#"
+                </cfquery>
+                <cfset salt = "#get_uuid.uuid#">
+                <cfset password = "#form.user_password#">
+                <cfset hashed_Password = hash(password & salt, "SHA-256")>
+                
             <cfquery name = "update_user">
                 update users 
-                set password = "#form.user_password#"
+                set password = "#hashed_Password#"
                 where user_name = "#form.user_name#"
             </cfquery>
             <cflocation  url="all_users.cfm?updated=true">

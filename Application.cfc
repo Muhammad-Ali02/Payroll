@@ -31,6 +31,9 @@
         <cfif session.loggedin.role eq "employee" and findNoCase(searchString, stringurl) eq 0>
             <cflocation  url="/employee_portal/index.cfm">
         </cfif>
+        <cfif session.loggedin.role neq "employee" and findNoCase(searchString, stringurl) gt 0>
+            <cflocation  url="/index.cfm?">
+        </cfif>
     </cfif>
   </cffunction>
 
