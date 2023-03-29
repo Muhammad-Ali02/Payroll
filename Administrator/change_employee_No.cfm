@@ -4,9 +4,9 @@
             <cfquery name="get_table">
                 SELECT table_name, COLUMN_NAME
                 FROM information_schema.columns
-                WHERE column_name = 'employee_id' or COLUMN_NAME = 'user_name' and table_schema = 'payroll';
+                WHERE (column_name = 'employee_id' or COLUMN_NAME = 'user_name') and table_schema = 'payroll' and table_name not like '%_audit';
             </cfquery>
-<!---              <cfdump  var="#get_table#">  <cfabort> --->
+            
             <cfloop query="get_table">
                 <cfif "#get_table.COLUMN_NAME#" eq "user_name">
                     <cfquery name="update_emp_id" result="updateId">
