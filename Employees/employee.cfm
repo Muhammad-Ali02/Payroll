@@ -8,12 +8,12 @@
                 limit 1
             </cfquery>
             <cfset employee_number = right('#last_employee.employee_id#', 4) >
-            <cfif employee_number eq ''>
+<!---             <cfif employee_number eq ''> 
                 <cfset employee_number = "0001">
             <cfelse>
                 <cfset employee_number = int(employee_number) + 1>
                 <cfset employee_number = numberFormat(#int('#employee_number#')#, '0000')>
-            </cfif>
+            </cfif>--->
         <h3 style="color:red; text-align:center; display:none;" id = "error_massage1" > *CNIC already Exists </h3>
         <cfquery name = "department_list"> <!---With the help of Result, generate a dynamic list of Departments --->
             select department_name as name, department_id as id
@@ -141,14 +141,31 @@
                     '#get_designation.basic_salary#'
                     )
                 </cfquery>
+                <!---    Password encryption     --->
+
+                <!--- Generate hashed password --->
+            <!---    Insert uuid in uuid table accross the user name     --->
+                <cfquery name="insert_uuid">
+                    insert into uuid_table (uuid , user_name)
+                    values (<cfqueryparam value="#CreateUUID()#">, <cfqueryparam value="#form.txt_employee_number#">)
+                </cfquery>
+            <!---      Get uuid of newly created user from uuid table and then hash the password and insert into user table  --->
+                <cfquery name="get_uuid">
+                    select * from uuid_table
+                    where user_name = "#form.txt_employee_number#"
+                </cfquery>
+                <cfset salt = "#get_uuid.uuid#">
+                <cfset password = "#form.cnic#">
+                <cfset hashed_Password = hash(password & salt, "SHA-256")>
+
                 <cfquery name = "insert_emp_user">
                     insert into emp_users
                     (
                         user_name, password, level
                     )
                     values
-                    (   concat('#get_designation.short_word#','#form.txt_employee_number#'),
-                        '#form.cnic#',
+                    (   '#form.txt_employee_number#',
+                        '#hashed_Password#',
                         'employee'
                     )
                 </cfquery>

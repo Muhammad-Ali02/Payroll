@@ -1,7 +1,7 @@
 <cfinclude  template="../includes/head.cfm">
 <cfoutput>
     <cfquery name = "Leave_list"> <!---With the help of Result, generate a dynamic list of Available Leaves --->
-        select L.leave_title, L.leave_id, E.leaves_allowed, E.leaves_availed, E.leaves_balance
+        select L.leave_title, L.leave_id, E.leaves_allowed, ifNull(E.leaves_availed, 0) as leaves_availed, E.leaves_balance
         from leaves L
         inner join employee_leaves E on L.leave_id = E.leave_id
         where E.employee_id = '#session.loggedin.username#' and E.status = 'Y'
@@ -24,7 +24,7 @@
                 <tr>
                     <td> #leave_title# </td>
                     <td> #leaves_allowed# </td>
-                    <td> #leaves_allowed# </td>
+                    <td> #leaves_availed# </td>
                     <td> #leaves_balance# </td>
                 </tr>
             </cfloop>

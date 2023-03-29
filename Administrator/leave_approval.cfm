@@ -32,7 +32,7 @@
                     <cfelseif isDefined('form.Reject')>
                         action = "Rejected",
                     <cfelseif isDefined('form.Partial_leave')>
-                        action = "Partial Approve",
+                        action = "Partial Approved",
                     </cfif>
                     action_by = "#session.loggedIn.username#",
                     action_date = now(),
@@ -66,14 +66,7 @@
                     <cfelseif isdefined("form.Reject")>
                         <cfquery name="Approved_leaves">
                             Insert into leaves_approval (leave_id, leave_Date, action, approved_as)
-                            values ('#url.id#', '#dateFormat('#index#','yyyy-mm-dd')#', 'Reject', '0')
-                        </cfquery>
-                        <cfquery name="update_leave_balance">
-                            Update employee_leaves
-                            Set 
-                                leaves_balance = leaves_balance - 1,
-                                leaves_availed = IFNULL(leaves_availed, 0) + 1
-                            where leave_id = "#form.leave_type#" And employee_id = "#form.employee_id#"
+                            values ('#url.id#', '#dateFormat('#index#','yyyy-mm-dd')#', 'Rejected', '0')
                         </cfquery>
                     <cfelseif isDefined("form.Partial_leave")>
                         <cfif evaluate('form.date#counter1#') eq 1>
@@ -133,15 +126,26 @@
             <cfquery name = "get_leave_detail">
                 select * from all_leaves where id = "#url.request_id#"
             </cfquery>
+            <cfquery name="employee_detail">
+                select concat(emp.first_name,' ',emp.middle_name,' ',emp.last_name) as name
+                from employee emp
+                where emp.employee_id = <cfqueryparam value="#get_leave_detail.employee_id#">
+            </cfquery>
             <cfquery name = "get_working_days">
                 select b.* , a.workingdays_group from employee a, working_days b where a.employee_id = '#get_leave_detail.employee_id#' and b.group_id = a.workingdays_group
             </cfquery>
-<!---             <cfdump  var="#get_working_days#"> <cfabort> --->
+<!---            <cfdump  var="#employee_detail#"> <cfabort> --->
 
         <!--- ___________________________________________ Front End _________________________________________________--->
             <div class="employee_box">
                 <div class="text-center mb-5">
                     <h3 class="box_heading">Leave Approval</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        Employee Name:
+                        <p>#employee_detail.name#</p>
+                    </div>
                 </div>
                 <div class = "row">
                     <div class = "col-md-3">
@@ -191,7 +195,7 @@
                                         <select class="form-select" name="date#counter#" id="Payment_type" >
                                             <option value="1">Full Paid</option>
                                             <option value="0.5">Half Paid</option>
-                                            <option value="0">No Paid</option>
+                                            <option value="0">Reject</option>
                                         </select>
                                     </div>
                                 </cfif>
@@ -208,7 +212,7 @@
                         </div>
                     </div>
                     <div class = "row mt-3">
-                        <div class="d-flex justify-content-end" style="gap: 8px;">
+                        <div class="d-flex justify-content-end flex-wrap" style="gap: 8px;">
                             <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#">
                             <input type="hidden" name="employee_id" value="#leave_requests.employee_id#">
                             <button id = "" onclick="document.getElementById('leaveSelection').style.display='inline'; this.disabled=true" name = "Partial" class = "btn btn-outline-danger">Approve Partial Leave</button>
@@ -217,8 +221,6 @@
                         </div>
                     </div>
                 </form>
-                <div class="text-rigth">
-                </div>
             </div>
         <cfelse>
             <cfif leave_requests.recordcount neq 0>
@@ -293,7 +295,7 @@
                                 <td>#leave_days#</td>
                                 <td>#action#</td>
                                 <td>
-                                    <a href = "leave_approval.cfm?request_id=#id#">
+                                    <a title="You can no longer edit it.">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journal-medical" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v.634l.549-.317a.5.5 0 1 1 .5.866L9 6l.549.317a.5.5 0 1 1-.5.866L8.5 6.866V7.5a.5.5 0 0 1-1 0v-.634l-.549.317a.5.5 0 1 1-.5-.866L7 6l-.549-.317a.5.5 0 0 1 .5-.866l.549.317V4.5A.5.5 0 0 1 8 4zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
                                             <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
@@ -336,7 +338,7 @@
                                 <td>#leave_days#</td>
                                 <td>#action#</td>
                                 <td>
-                                    <a href = "leave_approval.cfm?request_id=#id#">
+                                    <a title="You can no longer edit it.">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journal-medical" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v.634l.549-.317a.5.5 0 1 1 .5.866L9 6l.549.317a.5.5 0 1 1-.5.866L8.5 6.866V7.5a.5.5 0 0 1-1 0v-.634l-.549.317a.5.5 0 1 1-.5-.866L7 6l-.549-.317a.5.5 0 0 1 .5-.866l.549.317V4.5A.5.5 0 0 1 8 4zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
                                             <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>

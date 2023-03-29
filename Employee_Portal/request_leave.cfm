@@ -147,9 +147,10 @@
                     
                 }
                 function leavechecker(){
+                    debugger;
                     var leave_balance=$("##Leave_id").find('option:selected').attr('leave_balance');
                     var applied_leave = $('##leave_days').val();
-                    if(leave_balance < applied_leave){
+                    if(parseInt(leave_balance) < parseInt(applied_leave)){
                         alert("Sorry! Your Applied leave less then your available leaves.");
                         $("##Leave_id").val("").change();
                         return false;

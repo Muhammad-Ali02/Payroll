@@ -24,7 +24,7 @@
                 <tr>
                     <th> ID </th>
                     <th> User Name </th>
-                    <th> Password </th>
+<!---                     <th> Password </th> --->
                     <th> Level </th>
                     <th> Action </th>
                 </tr>
@@ -32,7 +32,7 @@
                 <tr>
                     <td> #id# </td>
                     <td> #user_name# </td>
-                    <td> #password# </td>
+<!---                     <td> #password# </td> --->
                     <td> #level# </td>
                     <td> 
                         <cfquery name = "get_employee_user">

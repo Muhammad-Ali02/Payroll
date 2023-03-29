@@ -390,5 +390,61 @@
     query28:<cfdump  var="#cfcatch.cause.message#"><br>
 </cfcatch>
 </cftry>
+
+<cftry>
+    <cfquery name="query29">
+        ALTER TABLE `payroll`.`emp_users` 
+        CHANGE COLUMN `password` `password` VARCHAR(90) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="exception">
+    query29:<cfdump  var="#cfcatch.cause.message#"><br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query30">
+        ALTER TABLE `payroll`.`emp_users_audit` 
+        CHANGE COLUMN `user_name` `user_name` VARCHAR(45) NULL DEFAULT '' ,
+        CHANGE COLUMN `password` `password` VARCHAR(255) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="exception">
+    query30:<cfdump  var="#cfcatch.cause.message#"><br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query31">
+        ALTER TABLE `payroll`.`users` 
+        CHANGE COLUMN `password` `password` VARCHAR(90) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="exception">
+    query31:<cfdump  var="#cfcatch.cause.message#"><br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query32">
+        ALTER TABLE `payroll`.`users_audit` 
+        CHANGE COLUMN `password` `password` VARCHAR(90) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="exception">
+    query32:<cfdump  var="#cfcatch.cause.message#"><br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query33">
+        CREATE TABLE `payroll`.`uuid_table` (
+        `id` INT(11) NOT NULL AUTO_INCREMENT,
+        `uuid` VARCHAR(90) NULL,
+        `user_name` VARCHAR(45) NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+    </cfquery>
+<cfcatch type="exception">
+    query33:<cfdump  var="#cfcatch.cause.message#"><br>
+</cfcatch>
+</cftry>
+
 </cfoutput>
 <cfinclude  template="/includes/foot.cfm">
