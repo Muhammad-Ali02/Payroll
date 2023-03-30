@@ -77,7 +77,6 @@
     </cfoutput>
     <script>
         function formValidate(){
-                    debugger;
                     var Applied_amount = document.forms["AdvanceSalaryForm"]["Applied_amount"].value;
                     var apply_description = document.forms["AdvanceSalaryForm"]["apply_description"].value;
                     var Terms1 = document.forms["AdvanceSalaryForm"]["Terms1"].value;

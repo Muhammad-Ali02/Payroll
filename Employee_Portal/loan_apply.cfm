@@ -77,7 +77,6 @@
     </cfoutput>
     <script>
         function formValidate(){
-            debugger;
             var Applied_amount = $('#Applied_amount').val();
             var Apply_description = $('#apply_description').val();
             var Terms2 =$("input[name=Terms1]:checked").val();
