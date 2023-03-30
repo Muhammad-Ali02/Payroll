@@ -28,7 +28,7 @@
 <cfoutput>
     <div class="wrapper">
         <!-- Sidebar Holder -->
-        <nav id="sidebar">
+        <nav id="sidebar" class="sidebar">
             <div class="sidebar-header">
         <!--- <h3>BJS Soft Solution</h3> --->
                 <div class = "container">
@@ -362,4 +362,23 @@
         const myButton = document.getElementById('out');
         myButton.style.display = 'none';
     }
+    window.onload = () =>{
+    var anchors = $('.sidebar a')
+    var defUrl = window.location.href;
+    let width = window.innerWidth;
+    var selected;
+    $(anchors).each(function(index){
+        var href = anchors[index].href;
+        if(defUrl.includes(href)){
+            selected = $(anchors[index]);
+            $(selected).addClass('nav-active')
+            // $(selected).parents('.collapse').siblings('.collapsed').addClass('nav-active');
+            $(selected).parents('.collapse').addClass('active');
+        }
+        if(width>880){
+                $(selected).parents('.collapse').addClass('show');
+            }
+    })
+};
+
 </script>
