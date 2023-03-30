@@ -31,7 +31,7 @@
 <!---                     <cfdump  var="#hashed_Password#"><cfabort> --->
                 </cfif>
 
-                <cfif (hashed_Password eq showError.password) or (hashed_Password eq get_employee.password)> 
+                <cfif (hashed_Password eq showError.password) or (isDefined("get_employee.password")  and (hashed_Password eq get_employee.password))> 
                     <cfif structKeyExists(form, 'login')>
                         <cfif user_level eq 'employee'>
                             <cfif structKeyExists(get_employee, 'user_name') and ((get_employee.ip_address eq current_ipAddress) or (get_employee.last_login eq '')) and ((get_employee.machine_name eq machine_name) or (get_employee.machine_name eq ''))>
