@@ -79,7 +79,10 @@ a, a:hover, a:focus {
     padding: 20px;
     background: #080118;
 }
-
+.nav-active{
+	background: #5e6475;
+	color: #c4c4cf !important;
+}
 #sidebar ul.components {
     padding: 20px 0;
     border-bottom: 1px solid #2c2e3e;
