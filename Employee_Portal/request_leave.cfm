@@ -147,7 +147,6 @@
                     
                 }
                 function leavechecker(){
-                    debugger;
                     var leave_balance=$("##Leave_id").find('option:selected').attr('leave_balance');
                     var applied_leave = $('##leave_days').val();
                     if(parseInt(leave_balance) < parseInt(applied_leave)){
