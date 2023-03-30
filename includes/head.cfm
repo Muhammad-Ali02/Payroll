@@ -245,7 +245,7 @@
                 <cfif isDefined('url.action') And "#url.action#" eq "checkin">
                     <cfif checks.RecordCount gte "1" >
                         <script>
-                            alert("You have already checked In.");
+                            // alert("You have already checked In.");
                             window.location.assign("\index.cfm");
                         </script>
                     <cfelse>

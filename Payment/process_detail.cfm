@@ -94,11 +94,15 @@
                 <cfloop from = "#day(firstDay)#" to = "#day(lastday)#" index = "i"> 
                     <cfset date = createDate(#setting_info.current_year#, #setting_info.current_month#, #i#)>
                     <cfset day_of_week = dayOfWeek(#date#)>
+                    
+                    <cfset working_days = i>
+                        <!---
                         <cfif  evaluate("workingdays.#dayOfWeekAsString('#day_of_week#')#") eq 1.0 >
                             <cfset working_days = working_days + 1>
                         <cfelseif evaluate("workingdays.#dayOfWeekAsString('#day_of_week#')#") eq 0.5>
                             <cfset working_days = working_days + 0.5>
                         </cfif>
+                        --->
                 </cfloop>
             <!--- Calculate Basic Rate Per Day using Basic Salary of Employee --->
             <cfset basic_rate = get_employee.basic_salary / working_days>
