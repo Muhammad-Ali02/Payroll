@@ -16,10 +16,10 @@
                 where a.employee_id = "#url.generate#" and a.status = "Y"
             </cfquery>
             <cfquery name = "deductions"> <!--- Get Saved Deductions edited before process --->
-                select a.*, b.deduction_name as name 
+                select a.*, b.deduction_name as name , b.is_percent as percent
                 from pay_deduction a
                 inner join deduction b on a.deduction_id = b.deduction_id
-                where employee_id = "#url.generate#" and a.status = "Y"
+                where employee_id = "#url.generate#" and a.status = "Y" and b.is_deleted = 'N'
             </cfquery>
             <cfquery name = "pay_info"> <!--- get all required  information about pay slip ---> 
                 select a.*, concat(b.first_name,' ', b.middle_name, ' ', b.last_name) as employee_name, (
@@ -73,13 +73,15 @@
                                 <p> Designation:<strong><u> #pay_info.designation#</u></strong></p>
                             </div>
                             <div class = "col-6" style = "position:absolute; top:150px;right:30px; font-size:15px;">
-                                <p> Month: <u><strong>#monthAsString(pay_info.month)# </strong></u></p>
-                                <p> Year: <u><strong> #pay_info.year# </strong></u></p>
+                                <p> Month: <u><strong>#monthAsString(pay_info.month)# </strong> <strong> #pay_info.year# </strong></u></p>
+<!---                                 <p> Year: <u></u></p> --->
+                                <p> Days Worked : <strong>#pay_info.days_worked#</strong></p>
+                                <p> Working Days : <strong>#pay_info.working_days#</strong></p>
                                 <p> Print Date: <u><strong> #dateFormat(now(),"dd-mmm-yyyy")# </strong></u></p>
                             </div>
                         </div>
                         <div class = "row">
-                            <div class = "col-6" style = "position:absolute; top:230px;left:100px; font-size:25px;">
+                            <div class = "col-6" style = "position:absolute; top:250px;left:100px; font-size:25px;">
                                 <h5 style = "text-align:center;" > Earnings </h5>
                                 <table class = "table" style = "border:2px solid; padding: 4px;">
                                     <cfloop query = "allowances">
@@ -99,7 +101,7 @@
                                     </tr>
                                     <tr style = "border:1px solid;border-collapse: collapse;">
                                         <td><strong>Total Allowances</strong></td>
-                                        <td><strong>#pay_info.gross_allowances#</strong></td>
+                                        <td><strong>#evaluate("numberFormat(#pay_info.gross_allowances#,'0.00')")#</strong></td>
                                     </tr>
                                     <tr style = "border:1px solid;border-collapse: collapse;">
                                         <td><strong>Gross Salary</strong></td>
@@ -107,7 +109,7 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class = "col-6" style = "position:absolute; top:230px;right:100px; font-size:25px;">
+                            <div class = "col-6" style = "position:absolute; top:250px;right:100px; font-size:25px;">
                                 <h5 style = "text-align:center;"> Deductions </h5>
                                 <table class = "table" style = "border:2px solid; padding: 4px;">
                                     <tr>
@@ -120,13 +122,19 @@
                                     
                                     <cfloop query = "deductions">
                                         <tr>
-                                            <td>#name#</td>
-                                            <td>#deduction_amount#</td>
+                                            <cfif percent eq 'Y'>
+                                                <cfset amount_of_percentage_tax = (#pay_info.gross_salary#/100) * deduction_amount >
+                                                <td>#name#</td>
+                                                <td>#evaluate("numberFormat(#amount_of_percentage_tax#,'0.00')")#</td>
+                                            <cfelse>
+                                                <td>#name#</td>
+                                                <td>#deduction_amount#</td>
+                                            </cfif>
                                         </tr>
                                     </cfloop>
                                     <tr style = "border:1px solid;border-collapse: collapse;">
                                         <td><strong>Total Deductions</strong></td>
-                                        <td><strong>#pay_info.gross_deductions#</strong></td>
+                                        <td><strong>#evaluate("numberFormat(#pay_info.gross_deductions#,'0.00')")#</strong></td>
                                     </tr>
                                     <tr style = "border:2px solid;border-collapse: collapse;">
                                         <td><strong>Net Salary</strong></td>
