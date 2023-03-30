@@ -353,7 +353,6 @@
 </cfoutput>
 <script>
     function buttonStatus(){
-        debugger;
         const myButton = document.getElementById('in');
         myButton.style.display = 'none';
         // const myButton1 = document.getElementById('out');
