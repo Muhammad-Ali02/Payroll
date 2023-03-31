@@ -28,6 +28,9 @@
             set group_name = '#form.txt_group_name#' , monday = '#form.monday#', tuesday = '#form.tuesday#', wednesday = '#form.wednesday#', thursday = '#form.thursday#', friday = '#form.friday#', saturday = '#form.saturday#' , sunday = '#form.sunday#', time_in = '#form.time_in#', time_out = '#form.time_out#', break_time = '#form.break_time#', friday_time_in = '#form.friday_time_in#', friday_time_out = '#form.friday_time_out#'
             where group_id = '#form.group_id#'
         </cfquery>
+        <script>
+            alert('Working Day Group Update Successfully');
+        </script>
     <cfelseif structKeyExists(url, 'edit')>
         <cfquery name = "get_workingdays"> <!--- Result of this query used when user want to update workingdays table. --->
             select * 
@@ -40,7 +43,7 @@
         <cfset day = dayOfWeekAsString(i)>
         <cfset arrayAppend = arrayAppend(week_days, '#day#')>
     </cfloop>
-    <form action = "workingdays.cfm" method = "post">
+    <form name="working_days_form" action = "workingdays.cfm" onsubmit="return formValidate();" method = "post">
         <div class = "employee_box">
             <div class="mb-5 text-center">
                 <cfif structKeyExists(url, 'edit')>
@@ -115,23 +118,31 @@
                 <cfif structKeyExists(url, 'edit')> 
                     <input type = "hidden" name = "group_id" value = "#url.edit#"> 
                 </cfif>
-                <input type = "submit" onclick = "javascript:validateRequired();" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> name = "update" value = "Update" <cfelse> value = "Submit" name = "submit" </cfif>>
+                <input type = "submit" class = "btn btn-outline-dark" <cfif structKeyExists(url, 'edit')> name = "update" value = "Update" <cfelse> value = "Submit" name = "submit" </cfif>>
             </div>
         </div>
     </form>
 </cfif> 
+</cfoutput>
 <script>
-    function validateRequired(){
+    function formValidate(){
+        debugger;
         var group_name = document.getElementById('txt_group_name').value;
         var break_time = document.getElementById('break_time').value;
+        var time_out = $('#time_out').val();
+        var time_in = $('#time_in').val();
         if(group_name == ''){
             alert("Group Name is Must Required!");
             return false;
-        }
-        if(break_time == ''){
+        }else if(break_time == ''){
             alert("Break Time Must Required!")
+            return false;
+        }else if(time_in >= time_out){
+            alert('Time out value must be greater than Time in.');
+            return false;
+        }else{
+            return true
         }
     }
 </script>
-</cfoutput>
 <cfinclude  template="\includes\foot.cfm">
