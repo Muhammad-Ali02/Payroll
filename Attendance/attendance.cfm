@@ -5,6 +5,9 @@
             select concat(employee_id,' | ',first_name,' ', middle_name, ' ', last_name) as name , employee_id
             from employee
         </cfquery>
+        <cfquery name = "get_setting">
+            select * from setup
+        </cfquery>
         <cfif structKeyExists(form, "month")>
             <cfquery name = "attendance_sheet">
                 select * 
@@ -21,20 +24,21 @@
 <!--- |________________________________\|/_Front End _\|/________________________________|--->
         <div class="employee_box">
             <h3 class="mb-5 box_heading text-center"> ATTENDANCE SHEET </h3>
+        <cfif not structKeyExists(form, "employee_id")>
             <form name="attendance_sheet_form" action = "" onsubmit="return formValidate();" method = "post">
                 <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') > 
                 <div class = "row m-4">
                     <div class = "col-md-3">
-                        Select Month :
+                        <label for = "month" class = "form-select-label"> Select Month : </label>
                         <select name = "month" id="month" class = "form-select">
                             <cfloop from = "1" to="12" index="i">
-                                <option value = "#i#"> #monthAsString(i)# </option>
+                                <option value = "#i#" <cfif i eq get_setting.current_month>selected</cfif> > #monthAsString(i)# </option>
                             </cfloop>
                         </select>
 <!---                         From Date: <input type = "date"  class = "form-control" name = "date" value = "#current_date#"> --->
                     </div>
                     <div class = "col-md-6">
-                        Select Employee:
+                        <label for = "Employee_id" class = "form-select-label"> Select Employee: </label>
                             <select class = "form-select" name = "Employee_id" id="Employee_id" required="true"> 
                                 <option value = ''> -- Select Employee -- </option> 
                                 <cfloop query="get_employees">
@@ -42,25 +46,25 @@
                                 </cfloop>
                             </select>
                     </div>
-                    <div class = "col-md-3">
-                        <input type = "submit" class = "btn btn-outline-dark mt-4" value = "Search">
-                    </div>
                 </div>    
+                <div class = "row">
+                    <input type = "submit" class = "btn btn-outline-dark mt-4" value = "Search">
+                </div>
             </form>
-        </div>
-        <cfif structKeyExists(form, "employee_id")>
+<!---         </div> --->
+        <cfelse>
             <cfquery name = "get_employee">
                 select *, concat(first_name,' ', middle_name, ' ', last_name) as name 
                 from employee
                 where employee_id = "#form.employee_id#"
             </cfquery>
-            <div class="employee_box">
+<!---             <div class="employee_box"> --->
                 <div style="display: flex; justify-content: space-between;">
-                    <p style = "font-weight:bold;"> Employee Id: <u> #get_employee.employee_id# </u> </p>
-                    <p style = "font-weight:bold;"> Attendance Month: <u>#monthAsString(form.month)#</u> </p>
+                    <p> Employee Id: <u> #get_employee.employee_id# </u> </p>
+                    <p> Attendance Month: <u>#monthAsString(form.month)#</u> </p>
                 </div>
-                <p style = "font-weight:bold;"> Employee Name: <u> #get_employee.name# </u> </p>
-                <p style = "font-weight:bold;"> CNIC: <u> #get_employee.cnic# </u> </p>
+                <p> Employee Name: <u> #get_employee.name# </u> </p>
+                <p> CNIC: <u> #get_employee.cnic# </u> </p>
                 <div style="overflow-x: auto;">
                     <table class = "table custom_table">
                         <tr>
