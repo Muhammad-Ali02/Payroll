@@ -42,7 +42,9 @@
             <cfquery name = "day_count">
                 select count(employee_id) as worked_days
                 from attendance
-                where employee_id = "#url.edit_process_detail#"
+                where employee_id = "#url.edit_process_detail#" 
+                and month(date) = "#setting_info.current_month#" 
+                and year(date) = "#setting_info.current_year#"
             </cfquery>
             <!--- Query used to get all Leave Days of an Employee --->
             <cfquery name = "leave_count">
@@ -123,7 +125,7 @@
                     <p> Transaction Mode: #get_bank_details.mode#
                 </div>
             </div>
-            <form action = "process_detail.cfm?updated" method = "post">
+            <form action = "process_detail.cfm?updated=true" method = "post">
                 <div class = "row container mb-3">
                     <div class = "col-md-4 mb-2">
                         <label for = "working_days" class = "form-control-label"> Working Days: </label>
@@ -317,7 +319,7 @@
                 </cfloop>
             </cfif>
         <!--- _________________________________________ Front End _________________________________________________ --->
-
+            <!---
             <h3 id = "message" class = "text-success" style = "text-align:center;"> Information Saved </h3>
             <!--- javascript used to set information updated message timeout = 3.5 seconds --->
             <script>
@@ -325,6 +327,11 @@
                 setTimeout(function(){
                     message.style.display = "none";
                 }, 3500);
+            </script>
+            --->
+            <script>
+                alert('Salary Information Saved successfully!');
+                window.location.href = "process_detail.cfm";
             </script>
         <cfelse>
         <!--- below part will show employee list on front end --->

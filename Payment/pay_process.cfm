@@ -11,17 +11,15 @@
             and b.processed is not null
         </cfquery>
         <cfif structKeyExists(url, 'run_pay_process') and structKeyExists(form, 'run_process')>
-                <cfquery name = "get_pay_data">
-                    select * 
-                    from current_month_pay
-                    where
-                        <cfif form.employee_id neq "All">
-                            employee_id = "#form.employee_id#"
-                        <cfelse>
-                            processed is not null or processed != ''
-                        </cfif>
-
-                </cfquery>
+            <cfquery name = "get_pay_data">
+                select * 
+                from current_month_pay
+                where
+                    <cfif form.employee_id neq "All">
+                        employee_id = "#form.employee_id#" and
+                    </cfif>
+                    processed is not null or processed <> ''
+            </cfquery>
             <cfif get_pay_data.recordcount neq 0>
                 <cfloop query="get_pay_data">
                     <!--- Query used to get all allowances of an employee --->
@@ -120,7 +118,7 @@
                     </cfquery>
                 </cfloop>
                 <script>
-                    alert(" Pay Process Run Successfully! ");
+                    alert("Pay Process Run Successfully!");
                     window.location.assign('pay.cfm');
                 </script>
             <cfelse>
