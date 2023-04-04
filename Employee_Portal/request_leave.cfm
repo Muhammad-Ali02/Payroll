@@ -102,7 +102,7 @@
                                 <select onchange="leavechecker();" name = "Leave_id" id="Leave_id" class = "form-select" required="true">
                                     <option value=""> -- Available Leaves -- </option>
                                     <cfloop query = "Leave_list"> <!--- printing dynamic list --->
-                                        <option value = "#leave_id#" leave_balance= "#leaves_balance#"> #leave_title# (Balance : #leaves_balance#) </option>
+                                        <option value = "#leave_id#" data-leave_balance= "#leaves_balance#"> #leave_title# (Balance : #leaves_balance#) </option>
                                     </cfloop>
                                 </select>
                             </div>
@@ -147,7 +147,7 @@
                     
                 }
                 function leavechecker(){
-                    var leave_balance=$("##Leave_id").find('option:selected').attr('leave_balance');
+                    var leave_balance=$("##Leave_id").find('option:selected').attr('data-leave_balance');
                     var applied_leave = $('##leave_days').val();
                     if(parseInt(leave_balance) < parseInt(applied_leave)){
                         alert("Sorry! Your Applied leave less then your available leaves.");

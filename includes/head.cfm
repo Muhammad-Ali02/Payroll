@@ -110,6 +110,22 @@
                         </ul>
                     </li>
                     <li>
+                        <a href="##ServeySubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16">
+                                <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708l-2 2zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708l-2 2zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                            Survey
+                        </a>
+                        <ul class="collapse list-unstyled" id="ServeySubmenu">
+                            <li>
+                                <a href="..\survey\view_survey.cfm">View Survey</a>
+                            </li>
+                            <li>
+                                <a href="..\survey\create_survey.cfm">Create Survey</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
                         <a href="##employeeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                                 <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
@@ -306,6 +322,31 @@
                                     <li class="nav-item">
                                     </li>
                                 </cfif>
+                            </cfif>
+                            <cfif session.loggedIn.role eq 'employee'>
+                                <cfquery name='get_survey'>
+                                    select status from survey
+                                    where status = 'open'
+                                </cfquery>
+                                <cfquery name='check_survey'>
+                                    select a.status, b.is_submitted 
+                                    from survey a, emp_survey_review b
+                                    where a.id = b.survey_id
+                                    And a.status = <cfqueryparam value="open">
+                                    And b.is_submitted = <cfqueryparam value="Y">
+                                    And b.employee_id =<cfqueryparam value="#session.loggedin.username#">
+                                </cfquery>
+                                <li class="nav-item active">
+                                    <!---    Bell icon    --->
+                                    <div class="notification-bell">
+                                        <a class="nav-link" href="\employee_portal\all_survey.cfm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" <cfif check_survey.RecordCount neq get_survey.RecordCount>fill="red"<cfelse>fill="green"</cfif> class="bi bi-bell-fill navebar_icon" viewBox="0 0 16 16">
+                                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+                                            </svg>
+                                        </a>
+                                        <span class="notification-count">#get_survey.recordcount#</span>
+                                    </div>
+                                </li>
                             </cfif>
                             <li class="nav-item active">
                                 <a class="nav-link" href="\index.cfm">
