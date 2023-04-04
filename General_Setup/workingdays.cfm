@@ -126,7 +126,6 @@
 </cfoutput>
 <script>
     function formValidate(){
-        debugger;
         var group_name = document.getElementById('txt_group_name').value;
         var break_time = document.getElementById('break_time').value;
         var time_out = $('#time_out').val();
