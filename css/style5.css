@@ -194,11 +194,32 @@ a.article, a.article:hover {
     opacity: 1;
     margin: 5px auto;
 }
-
+.notification-bell {
+    position: relative;
+}
+  
+.notification-count {
+position: absolute;
+top: -7px;
+right: -7px;
+background-color: rgba(255, 145, 0, 0.987);
+color: white;
+font-size: 12px;
+width: 20px;
+height: 20px;
+border-radius: 50%;
+text-align: center;
+line-height: 20px;
+}
 
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
+@media (max-width:990px){
+    .notification-count {
+        display: none;
+    }
+}
 @media (max-width: 900px) {
     #sidebar {
         margin-left: -250px;
@@ -227,7 +248,9 @@ a.article, a.article:hover {
     #sidebarCollapse.active span:last-of-type {
         transform: rotate(-45deg) translate(1px, -1px);
     }
-
+    .notification-count {
+        display: none;
+    }
 }
 /* side bar toggle button */
 .left{

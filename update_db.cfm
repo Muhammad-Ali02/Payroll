@@ -396,7 +396,7 @@
         ALTER TABLE `payroll`.`emp_users` 
         CHANGE COLUMN `password` `password` VARCHAR(90) NULL DEFAULT NULL ;
     </cfquery>
-<cfcatch type="exception">
+<cfcatch type="any">
     query29:<cfdump  var="#cfcatch.cause.message#"><br>
 </cfcatch>
 </cftry>
@@ -407,7 +407,7 @@
         CHANGE COLUMN `user_name` `user_name` VARCHAR(45) NULL DEFAULT '' ,
         CHANGE COLUMN `password` `password` VARCHAR(255) NULL DEFAULT NULL ;
     </cfquery>
-<cfcatch type="exception">
+<cfcatch type="any">
     query30:<cfdump  var="#cfcatch.cause.message#"><br>
 </cfcatch>
 </cftry>
@@ -417,7 +417,7 @@
         ALTER TABLE `payroll`.`users` 
         CHANGE COLUMN `password` `password` VARCHAR(90) NULL DEFAULT NULL ;
     </cfquery>
-<cfcatch type="exception">
+<cfcatch type="any">
     query31:<cfdump  var="#cfcatch.cause.message#"><br>
 </cfcatch>
 </cftry>
@@ -427,7 +427,7 @@
         ALTER TABLE `payroll`.`users_audit` 
         CHANGE COLUMN `password` `password` VARCHAR(90) NULL DEFAULT NULL ;
     </cfquery>
-<cfcatch type="exception">
+<cfcatch type="any">
     query32:<cfdump  var="#cfcatch.cause.message#"><br>
 </cfcatch>
 </cftry>
@@ -441,10 +441,85 @@
         PRIMARY KEY (`id`),
         UNIQUE INDEX `id_UNIQUE` (`id` ASC));
     </cfquery>
-<cfcatch type="exception">
+<cfcatch type="any">
     query33:<cfdump  var="#cfcatch.cause.message#"><br>
 </cfcatch>
 </cftry>
 
+<cftry>
+    <cfquery name="query34">
+        CREATE TABLE `payroll`.`survey` (
+        `id` INT(11) NOT NULL AUTO_INCREMENT,
+        `title` VARCHAR(255) NULL,
+        `description` VARCHAR(955) NULL,
+        `question1` VARCHAR(355) NULL DEFAULT NULL,
+        `question2` VARCHAR(355) NULL DEFAULT NULL,
+        `question3` VARCHAR(355) NULL DEFAULT NULL,
+        `question4` VARCHAR(355) NULL DEFAULT NULL,
+        `question5` VARCHAR(355) NULL DEFAULT NULL,
+        `question6` VARCHAR(355) NULL DEFAULT NULL,
+        `question7` VARCHAR(355) NULL DEFAULT NULL,
+        `question8` VARCHAR(355) NULL DEFAULT NULL,
+        `question9` VARCHAR(355) NULL DEFAULT NULL,
+        `question10` VARCHAR(355) NULL DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+    </cfquery>
+<cfcatch type="any">
+    query34:<cfdump  var="#cfcatch.cause.message#"><br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name='query35'>
+        ALTER TABLE `payroll`.`survey` 
+        ADD COLUMN `status` VARCHAR(7) NULL DEFAULT 'open' AFTER `question10`;
+    </cfquery>
+<cfcatch type="any">
+    query35:<cfdump  var="#cfcatch.cause.message#"><br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query36">
+        create table emp_survey_review like survey;
+    </cfquery>
+<cfcatch type="any">
+    query36:<cfdump  var="#cfcatch.cause.message#"><br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query37">
+        ALTER TABLE `payroll`.`emp_survey_review` 
+        DROP COLUMN `status`,
+        ADD COLUMN `survey_id` INT(11) NULL AFTER `id`,
+        ADD COLUMN `employee_id` VARCHAR(45) NULL AFTER `survey_id`;
+    </cfquery>
+<cfcatch type="any">
+    query37:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query38">
+        ALTER TABLE `payroll`.`emp_survey_review` 
+        ADD COLUMN `is_submitted` VARCHAR(3) NULL DEFAULT 'N' AFTER `question10`;
+    </cfquery>
+<cfcatch type="any">
+    query38:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name='query39'>
+        ALTER TABLE `payroll`.`emp_survey_review` 
+        DROP COLUMN `description`,
+        DROP COLUMN `title`;
+    </cfquery>
+<cfcatch type="any">
+    query39:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
 </cfoutput>
 <cfinclude  template="/includes/foot.cfm">
