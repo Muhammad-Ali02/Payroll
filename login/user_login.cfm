@@ -35,7 +35,7 @@
 
                 <cfif isDefined("get_employee") and get_employee.recordcount eq 0>
                         <script>
-                            alert('Incorrect User name or Password');
+                            alert('This user is not available.');
                         </script>
                 <cfelse>
                     <cfif (hashed_Password eq showError.password) or (isDefined("get_employee.password")  and (hashed_Password eq get_employee.password))> 

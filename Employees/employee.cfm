@@ -106,39 +106,39 @@
                     basic_salary)
                     values(
                     <!--- concat('#get_designation.short_word#','#form.txt_employee_number#'), --->
-                    '#form.txt_employee_number#',
-                    '#form.txt_first_name#',
-                    '#form.txt_middle_name#',
-                    '#form.txt_last_name#',
-                    '#form.txt_father_name#',
-                    '#form.txt_father_cnic#', 
-                    '#form.contact#',
-                    '#form.emergency_contact1#',
-                    '#form.emergency_contact2#', 
-                    '#form.cnic#', 
-                    '#form.personal_email#',
-                    '#form.official_email#',
-                    '#form.txt_city#',
-                    '#form.txt_country#', 
-                    '#form.txt_full_address#',
-                    '#form.gender#',
-                    '#form.dob#', 
-                    '#form.marital_status#',
-                    '#form.blood_group#',
-                    '#form.religion#',
-                    '#form.designation#', 
-                    '#form.joining_date#',
-                    '#form.leaving_date#',
-                    '#form.covid_vaccination#',
-                    '#form.department#', 
-                    '#form.employment_type1#', 
-                    '#form.employment_type2#',
-                    '#form.workingdays_group#',
-                    '#form.payment_mode#',
-                    '#form.txt_bank_name#',
-                    '#form.bank_account_no#',
+                    <cfqueryparam value = '#form.txt_employee_number#'>,
+                    <cfqueryparam value = '#form.txt_first_name#'>,
+                    <cfqueryparam value = '#form.txt_middle_name#'>,
+                    <cfqueryparam value = '#form.txt_last_name#'>,
+                    <cfqueryparam value = '#form.txt_father_name#'>,
+                    <cfqueryparam value = '#form.txt_father_cnic#'>, 
+                    <cfqueryparam value = '#form.contact#'>,
+                    <cfqueryparam value = '#form.emergency_contact1#'>,
+                    <cfqueryparam value = '#form.emergency_contact2#'>, 
+                    <cfqueryparam value = '#form.cnic#'>, 
+                    <cfqueryparam value = '#form.personal_email#'>,
+                    <cfqueryparam value = '#form.official_email#'>,
+                    <cfqueryparam value = '#form.txt_city#'>,
+                    <cfqueryparam value = '#form.txt_country#'>, 
+                    <cfqueryparam value = '#form.txt_full_address#'>,
+                    <cfqueryparam value = '#form.gender#'>,
+                    <cfqueryparam value = '#form.dob#'>, 
+                    <cfqueryparam value = '#form.marital_status#'>,
+                    <cfqueryparam value = '#form.blood_group#'>,
+                    <cfqueryparam value = '#form.religion#'>,
+                    <cfqueryparam value = '#form.designation#'>, 
+                    <cfqueryparam value = '#form.joining_date#'>,
+                    <cfqueryparam value = '#form.leaving_date#'>,
+                    <cfqueryparam value = '#form.covid_vaccination#'>,
+                    <cfqueryparam value = '#form.department#'>, 
+                    <cfqueryparam value = '#form.employment_type1#'>, 
+                    <cfqueryparam value = '#form.employment_type2#'>,
+                    <cfqueryparam value = '#form.workingdays_group#'>,
+                    <cfqueryparam value = '#form.payment_mode#'>,
+                    <cfqueryparam value = '#form.txt_bank_name#'>,
+                    <cfqueryparam value = '#form.bank_account_no#'>,
                     now(),
-                    '#get_designation.basic_salary#'
+                    <cfqueryparam value = '#get_designation.basic_salary#'>
                     )
                 </cfquery>
                 <!---    Password encryption     --->
@@ -164,9 +164,10 @@
                         user_name, password, level
                     )
                     values
-                    (   '#form.txt_employee_number#',
-                        '#hashed_Password#',
-                        'employee'
+                    (   
+                        <cfqueryparam value = '#form.txt_employee_number#'>,
+                        <cfqueryparam value = '#hashed_Password#'>,
+                        <cfqueryparam value = 'employee'>
                     )
                 </cfquery>
                 <cfquery name = "get_employee"> <!--- this query will return id of a recently created Employee --->
@@ -186,11 +187,13 @@
                                 added_date,
                                 status)
                             values 
-                                ('#get_employee.id#',
-                                '#evaluate('form.chk_allowance#id#')#',
-                                '#evaluate('form.allowance_amount#id#')#',
-                                now(),
-                                'Y')
+                                (
+                                    <cfqueryparam value = '#get_employee.id#'>,
+                                    <cfqueryparam value = '#evaluate('form.chk_allowance#id#')#'>,
+                                    '#evaluate('form.allowance_amount#id#')#',
+                                    now(),
+                                    <cfqueryparam value = 'Y'>
+                                )
                         </cfquery>
                         <!--- Insert Allowance items in to pay_allowance --->
                         <cfquery name = "insert_pay_allowance">
@@ -200,10 +203,12 @@
                                 allowance_amount,
                                 status)
                             values
-                                ('#get_employee.id#',
-                                '#evaluate('form.chk_allowance#id#')#',
-                                '#evaluate('form.allowance_amount#id#')#',
-                                'Y')
+                                (
+                                    <cfqueryparam value = '#get_employee.id#'>,
+                                    <cfqueryparam value = '#evaluate('form.chk_allowance#id#')#'>,
+                                    <cfqueryparam value = '#evaluate('form.allowance_amount#id#')#'>,
+                                    <cfqueryparam value = 'Y'>
+                                )
                         </cfquery>
                     </cfif>
                 </cfloop>
@@ -213,13 +218,22 @@
                     <cfif isDefined("form.chk_deduction#id#")>
                         <cfquery name = "insert_deduction">
                             insert into employee_deduction (employee_id, deduction_id, deduction_amount, added_date, status)
-                            values ('#get_employee.id#', '#evaluate('form.chk_deduction#id#')#', '#evaluate('form.deduction_amount#id#')#', now(), "Y")
+                            values (
+                                <cfqueryparam value = '#get_employee.id#'>, 
+                                <cfqueryparam value = '#evaluate('form.chk_deduction#id#')#'>, 
+                                <cfqueryparam value = '#evaluate('form.deduction_amount#id#')#'>, 
+                                now(), 
+                                <cfqueryparam value = "Y">)
                         </cfquery>
                     </cfif>
                     <cfif isDefined("form.chk_deduction#id#")>
                         <cfquery name = "insert_pay_deduction">
                             insert into pay_deduction (employee_id, deduction_id, deduction_amount, status)
-                            values ('#get_employee.id#', '#evaluate('form.chk_deduction#id#')#', '#evaluate('form.deduction_amount#id#')#', "Y")
+                            values (
+                                <cfqueryparam value = '#get_employee.id#'>, 
+                                <cfqueryparam value = '#evaluate('form.chk_deduction#id#')#'>, 
+                                <cfqueryparam value = '#evaluate('form.deduction_amount#id#')#'>, 
+                                <cfqueryparam value = "Y">)
                         </cfquery>
                     </cfif>
                 </cfloop>
@@ -237,14 +251,19 @@
                         <!---  change by M Usama add leave_balance column into insert query --->
                         <cfquery name = "insert_leaves"> 
                             insert into employee_leaves (employee_id, leave_id, leaves_allowed, leaves_balance, status)
-                            values ('#get_employee.id#', '#evaluate('form.chk_leaves#id#')#', '#net_balance#' , '#net_balance#' ,'Y')
+                            values (
+                                <cfqueryparam value = '#get_employee.id#'>, 
+                                <cfqueryparam value = '#evaluate('form.chk_leaves#id#')#'>, 
+                                <cfqueryparam value = '#net_balance#'> , 
+                                <cfqueryparam value = '#net_balance#'> ,
+                                <cfqueryparam value = 'Y'>)
                         </cfquery>
                         <!---  change by M Usama add leave_balance column into insert query --->
                     </cfif>
                 </cfloop>
                 <cfquery name = "pay_employee"> <!--- Query will insert just employee_id as primary key and other coloums as null into current_month_pay table, data will be updated from another page --->
                     insert into current_month_pay (employee_id, pay_status)
-                    values ('#get_employee.id#', 'Y')    
+                    values (<cfqueryparam value = '#get_employee.id#'>, <cfqueryparam value = 'Y'>)    
                 </cfquery>
                 <!--- upload file process --->
                 <cfquery name = "get_file_names">
@@ -253,7 +272,7 @@
                 <cfif get_file_names.recordcount eq 0> <!--- if employee not exist already insert employee in table file_names  ---> 
                     <cfquery name = "insert_file_names">
                         insert into file_names (employee_id)
-                        values ('#get_employee.id#')
+                        values (<cfqueryparam value = '#get_employee.id#'>)
                     </cfquery>
                 </cfif>
                 <cfset document_path = expandPath("/employees/documents/#get_employee.id#")>
@@ -282,7 +301,8 @@
                         >
                         <cfset file_name = currentFile & file_type>
                         <cfquery name = "update_file_names">
-                            update file_names set #currentFile# = "#file_name#" where employee_id = "#get_employee.id#"
+                            update file_names set #currentFile# = <cfqueryparam value = "#file_name#"> 
+                            where employee_id = "#get_employee.id#"
                         </cfquery>
                     </cfif>
                 </cfloop>
@@ -315,38 +335,38 @@
             <cfquery name  = "update_employee"> <!--- update data in  employee table ---> 
                 update employee
                 set
-                    first_name = '#form.txt_first_name#',  
-                    middle_name = '#form.txt_middle_name#', 
-                    last_name = '#form.txt_last_name#', 
-                    father_name = '#form.txt_father_name#', 
-                    father_cnic = '#form.txt_father_cnic#', 
-                    contact = '#form.contact#', 
-                    emergency_contact1 = '#form.emergency_contact1#', 
-                    emergency_contact2 = '#form.emergency_contact2#', 
-                    cnic = '#form.cnic#', 
-                    personal_email = '#form.personal_email#', 
-                    official_email = '#form.official_email#', 
-                    city = '#form.txt_city#', 
-                    country ='#form.txt_country#', 
-                    full_address = '#form.txt_full_address#', 
-                    gender = '#form.gender#', 
-                    dob = '#form.dob#', 
-                    marital_status = '#form.marital_status#', 
-                    blood_group = '#form.blood_group#', 
-                    Religion = '#form.religion#', 
-                    designation = '#form.designation#',  
-                    joining_date = '#form.joining_date#', 
-                    leaving_date = '#form.leaving_date#', 
-                    covid_vaccination = '#form.covid_vaccination#', 
-                    department = '#form.department#',
-                    employment_type1 = '#form.employment_type1#',
-                    employment_type2 = '#form.employment_type2#',
-                    workingdays_group = '#form.workingdays_group#',
-                    payment_mode = '#form.payment_mode#',
-                    bank_name = '#form.txt_bank_name#',
-                    bank_account_no = '#form.bank_account_no#',
+                    first_name = <cfqueryparam value = '#form.txt_first_name#'>,  
+                    middle_name = <cfqueryparam value = '#form.txt_middle_name#'>, 
+                    last_name = <cfqueryparam value = '#form.txt_last_name#'>, 
+                    father_name = <cfqueryparam value = '#form.txt_father_name#'>, 
+                    father_cnic = <cfqueryparam value = '#form.txt_father_cnic#'>, 
+                    contact = <cfqueryparam value = '#form.contact#'>, 
+                    emergency_contact1 = <cfqueryparam value = '#form.emergency_contact1#'>, 
+                    emergency_contact2 = <cfqueryparam value = '#form.emergency_contact2#'>, 
+                    cnic = <cfqueryparam value = '#form.cnic#'>, 
+                    personal_email = <cfqueryparam value = '#form.personal_email#'>, 
+                    official_email = <cfqueryparam value = '#form.official_email#'>, 
+                    city = <cfqueryparam value = '#form.txt_city#'>, 
+                    country = <cfqueryparam value = '#form.txt_country#'>, 
+                    full_address = <cfqueryparam value = '#form.txt_full_address#'>, 
+                    gender = <cfqueryparam value = '#form.gender#'>, 
+                    dob = <cfqueryparam value = '#form.dob#'>, 
+                    marital_status = <cfqueryparam value = '#form.marital_status#'>, 
+                    blood_group = <cfqueryparam value = '#form.blood_group#'>, 
+                    Religion = <cfqueryparam value = '#form.religion#'>, 
+                    designation = <cfqueryparam value = '#form.designation#'>,  
+                    joining_date = <cfqueryparam value = '#form.joining_date#'>, 
+                    leaving_date = <cfqueryparam value = '#form.leaving_date#'>, 
+                    covid_vaccination = <cfqueryparam value = '#form.covid_vaccination#'>, 
+                    department = <cfqueryparam value = '#form.department#'>,
+                    employment_type1 = <cfqueryparam value = '#form.employment_type1#'>,
+                    employment_type2 = <cfqueryparam value = '#form.employment_type2#'>,
+                    workingdays_group = <cfqueryparam value = '#form.workingdays_group#'>,
+                    payment_mode = <cfqueryparam value = '#form.payment_mode#'>,
+                    bank_name = <cfqueryparam value = '#form.txt_bank_name#'>,
+                    bank_account_no = <cfqueryparam value = '#form.bank_account_no#'>,
                     last_update = now(),
-                    basic_salary = '#form.basic_salary#'                
+                    basic_salary = <cfqueryparam value = '#form.basic_salary#'>                
                 where employee_id = '#form.txt_employee_id#'
             </cfquery>
             <cfquery name = "get_employee_allowance">  <!---Reminder: a function can make code reuse --->
@@ -365,21 +385,30 @@
                             <cfif get_allowances.recordCount eq 0> 
                                 <cfquery name = "insert_newly_selected"> <!--- update employee allowance --->
                                     insert into employee_allowance (employee_id, allowance_id,allowance_amount, added_date , status)
-                                    values ('#form.txt_employee_id#', '#evaluate('form.chk_allowance#id#')#', '#evaluate('form.allowance_amount#id#')#', now(), "Y")
+                                    values (
+                                        <cfqueryparam value = '#form.txt_employee_id#'>, 
+                                        <cfqueryparam value = '#evaluate('form.chk_allowance#id#')#'>, 
+                                        <cfqueryparam value = '#evaluate('form.allowance_amount#id#')#'>, 
+                                        now(), 
+                                        <cfqueryparam value = "Y">)
                                 </cfquery>
                                 <cfquery name = "insert_newly_selected_pay"> <!--- update pay allowance --->
                                     insert into pay_allowance (employee_id, allowance_id, allowance_amount, status)
-                                    values ('#form.txt_employee_id#', '#evaluate('form.chk_allowance#id#')#', '#evaluate('form.allowance_amount#id#')#', 'Y')
+                                    values (
+                                        <cfqueryparam value = '#form.txt_employee_id#'>, 
+                                        <cfqueryparam value = '#evaluate('form.chk_allowance#id#')#'>, 
+                                        <cfqueryparam value = '#evaluate('form.allowance_amount#id#')#'>, 
+                                        <cfqueryparam value = 'Y'>)
                                 </cfquery>
                             <cfelse>
                                 <cfquery name = "update_existing"> <!--- update employee allowance --->
                                     update employee_allowance
-                                    set allowance_amount = '#evaluate('form.allowance_amount#id#')#', status = "Y"
+                                    set allowance_amount = <cfqueryparam value = '#evaluate('form.allowance_amount#id#')#'>, status = <cfqueryparam value = "Y">
                                     where allowance_id = '#evaluate('form.chk_allowance#id#')#' and employee_id = '#form.txt_employee_id#'
                                 </cfquery>
                                 <cfquery name = "update_existing_pay"> <!--- update pay allowance --->
                                     update pay_allowance
-                                    set allowance_amount = '#evaluate('form.allowance_amount#id#')#', status = "Y"
+                                    set allowance_amount = <cfqueryparam value = '#evaluate('form.allowance_amount#id#')#'>, status = <cfqueryparam value = "Y">
                                     where allowance_id = '#evaluate('form.chk_allowance#id#')#' and employee_id = '#form.txt_employee_id#'
                                 </cfquery>
                             </cfif>
@@ -391,7 +420,7 @@
                                     from employee_allowance
                                     where employee_id = '#form.txt_employee_id#' and allowance_id = '#id#'
                                 )) as b
-                            set status = "N", disabled_date = now(), disabled_by = '#session.loggedin.username#'
+                            set status = <cfqueryparam value = "N">, disabled_date = now(), disabled_by = <cfqueryparam value = '#session.loggedin.username#'>
                             where employee_id  = '#form.txt_employee_id#' and a.allowance_id = b.allowance_id
                         </cfquery>
                         <!--- If check box not checked update pay allowance's status as "N" --->
@@ -402,7 +431,7 @@
                                     from pay_allowance
                                     where employee_id = '#form.txt_employee_id#' and allowance_id = '#id#'
                                 )) as b
-                            set status = "N"
+                            set status = <cfqueryparam value = "N">
                             where employee_id  = '#form.txt_employee_id#' 
                             and a.allowance_id = b.allowance_id
                         </cfquery>
@@ -420,23 +449,32 @@
                         <cfif get_deductions.recordCount eq 0> 
                             <cfquery name = "insert_newly_selected_deduction">
                                 insert into employee_deduction (employee_id, deduction_id,deduction_amount, added_date , status)
-                                values ('#form.txt_employee_id#', '#evaluate('form.chk_deduction#id#')#', '#evaluate('form.deduction_amount#id#')#', now(), 'Y')
+                                values (
+                                    <cfqueryparam value = '#form.txt_employee_id#'>, 
+                                    <cfqueryparam value = '#evaluate('form.chk_deduction#id#')#'>, 
+                                    <cfqueryparam value = '#evaluate('form.deduction_amount#id#')#'>, 
+                                    now(), 
+                                    <cfqueryparam value = 'Y'>)
                             </cfquery>
                             <!--- pay deduction --->
                             <cfquery name = "insert_newly_selected_pay_deduction">
                                 insert into pay_deduction (employee_id, deduction_id, deduction_amount, status)
-                                values ('#form.txt_employee_id#', '#evaluate('form.chk_deduction#id#')#', '#evaluate('form.deduction_amount#id#')#', 'Y')
+                                values (
+                                    <cfqueryparam value = '#form.txt_employee_id#'>, 
+                                    <cfqueryparam value = '#evaluate('form.chk_deduction#id#')#'>, 
+                                    <cfqueryparam value = '#evaluate('form.deduction_amount#id#')#'>, 
+                                    <cfqueryparam value = 'Y'>)
                             </cfquery>
                         <cfelse>
                             <cfquery name = "update_existing_deduction">
                                 update employee_deduction
-                                set deduction_amount = '#evaluate('form.deduction_amount#id#')#', status = 'Y', disabled_date = now(), disabled_by = '#session.loggedin.username#'
+                                set deduction_amount = <cfqueryparam value = '#evaluate('form.deduction_amount#id#')#'>, status = <cfqueryparam value = 'Y'>, disabled_date = now(), disabled_by = <cfqueryparam value = '#session.loggedin.username#'>
                                 where deduction_id = '#evaluate('form.chk_deduction#id#')#' and employee_id = '#form.txt_employee_id#'
                             </cfquery>
                             <!--- pay deduction --->
                             <cfquery name = "update_existing_pay_deduction">
                                 update pay_deduction
-                                set deduction_amount = '#evaluate('form.deduction_amount#id#')#', status = 'Y'
+                                set deduction_amount = <cfqueryparam value = '#evaluate('form.deduction_amount#id#')#'>, status = <cfqueryparam value = 'Y'>
                                 where deduction_id = '#evaluate('form.chk_deduction#id#')#' and employee_id = '#form.txt_employee_id#'
                             </cfquery>
                         </cfif>
@@ -448,7 +486,7 @@
                                         from employee_deduction
                                         where employee_id = '#form.txt_employee_id#' and deduction_id = '#id#'
                                     )) as b
-                                set status = "N"
+                                set status = <cfqueryparam value = "N">
                                 where employee_id  = '#form.txt_employee_id#' and a.deduction_id = b.deduction_id
                         </cfquery>
                         <!--- pay deduction --->
@@ -459,7 +497,7 @@
                                         from pay_deduction
                                         where employee_id = '#form.txt_employee_id#' and deduction_id = '#id#'
                                     )) as b
-                                set status = "N"
+                                set status = <cfqueryparam value = "N">
                                 where employee_id  = '#form.txt_employee_id#' and a.deduction_id = b.deduction_id
                         </cfquery>
                     </cfif>
@@ -495,12 +533,16 @@
                                 <cfset net_balance = balance_per_month * remaining_months>
                                 <cfquery name = "insert_leaves"> <!--- Insert Leaves ---> 
                                     insert into employee_leaves (employee_id, leave_id, leaves_allowed, status)
-                                    values ('#form.txt_employee_id#', '#evaluate('form.chk_leaves#id#')#', '#net_balance#', 'Y')
+                                    values (
+                                        <cfqueryparam value = '#form.txt_employee_id#'>, 
+                                        <cfqueryparam value = '#evaluate('form.chk_leaves#id#')#'>, 
+                                        <cfqueryparam value = '#net_balance#'>, 
+                                        <cfqueryparam value = 'Y'>)
                                 </cfquery>
                             <cfelse>
                                 <cfquery name = "update_existing_leaves">
                                     update employee_leaves
-                                    set status = 'Y'
+                                    set status = <cfqueryparam value = 'Y'>
                                     where leave_id = '#evaluate('form.chk_leaves#id#')#' and employee_id = '#form.txt_employee_id#'
                                 </cfquery>
                             </cfif>
@@ -512,7 +554,7 @@
                                     from employee_leaves
                                     where employee_id = '#form.txt_employee_id#' and leave_id = '#id#'
                                 )) as b
-                            set status = "N", disabled_date = now(), disabled_by = '#session.loggedin.username#'
+                            set status = <cfqueryparam value = "N">, disabled_date = now(), disabled_by = <cfqueryparam value = '#session.loggedin.username#'>
                             where employee_id  = '#form.txt_employee_id#' and a.leave_id = b.leave_id
                         </cfquery>
                     </cfif>
@@ -525,7 +567,7 @@
             <cfif get_file_names.recordcount eq 0> <!--- if employee not exist already insert employee in table file_names  ---> 
                 <cfquery name = "insert_file_names">
                     insert into file_names (employee_id)
-                    values ('#form.txt_employee_id#')
+                    values (<cfqueryparam value = '#form.txt_employee_id#'>)
                 </cfquery>
             </cfif>
             <cfset document_path = expandPath("/employees/documents/#form.txt_employee_id#")>
@@ -554,7 +596,8 @@
                     >
                     <cfset file_name = currentFile & file_type>
                     <cfquery name = "update_file_names">
-                        update file_names set #currentFile# = "#file_name#" where employee_id = "#form.txt_employee_id#"
+                        update file_names set #currentFile# = <cfqueryparam value = "#file_name#"> 
+                        where employee_id = "#form.txt_employee_id#"
                     </cfquery>
                 </cfif>
             </cfloop>
