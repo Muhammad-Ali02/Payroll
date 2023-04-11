@@ -71,6 +71,8 @@
             if( (txt_designation_title == "") || (basic_salary == "") || (txt_short_word =="") || (txt_description =="")){
                 alert("All field must be filled out!");
                 return false;
+            }else{
+                return true;
             }
         }
 </script>

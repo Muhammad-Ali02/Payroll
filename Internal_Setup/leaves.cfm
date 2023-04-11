@@ -73,6 +73,8 @@
         if( (txt_leave_title == "") || (txt_leave_type == "") || (allowed_per_year =="") || (txt_description =="")){
             alert("All field must be filled out!");
             return false;
+        }else{
+            return true;
         }
     }
 </script>

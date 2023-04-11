@@ -75,6 +75,8 @@
         if( (txt_Deduction_name == "") || (Deduction_amount == "") || (is_percent =="") || (txt_description =="")){
             alert("All field must be filled out!");
             return false;
+        }else{
+           return true;
         }
     }
 </script>
