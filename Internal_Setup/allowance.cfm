@@ -66,8 +66,9 @@
         if((txt_allowance_name == "") || (allowance_amount == "") || (txt_description == "")){
             alert("All field must be filled out!");
             return false;
+        }else{
+            return true;
         }
-
     }
 </script>
 <cfinclude  template="..\includes\foot.cfm">
