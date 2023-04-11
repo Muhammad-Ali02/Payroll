@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="\includes\head.cfm">
+     
 <cfif structKeyExists(session, 'loggedin')>
     <cfif structKeyExists(form, 'submit')> <!--- To create new workingdays group --->
         <cfquery name = "get_existing_group">
@@ -103,7 +103,7 @@
                     <label for = "friday_time_in" class = "form-control-label"> Friday Time In: </label> 
                 </div>
                 <div class = "col-md-6">
-                    <input name = "Friday_time_in" id = "friday_time_in" type = "time" value = "09:00" class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.friday_time_in , "hh:mm")#" <cfelse> value = "09:00" </cfif>>
+                    <input name = "Friday_time_in" id = "friday_time_in" type = "time" <!---value = "09:00"---> class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.friday_time_in , "hh:mm")#" <cfelse> value = "09:00" </cfif>>
                 </div>
             </div>
             <div class = "row mt-3">
@@ -111,7 +111,7 @@
                     <label for = "friday_time_out" class = "form-control-label"> Friday Time Out: </label> 
                 </div>
                 <div class = "col-md-6">
-                    <input name = "Friday_time_out" id = "friday_time_out" type = "time" value = "18:30" class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.time_out , "hh:mm")#" <cfelse> value = "18:30" </cfif>>
+                    <input name = "Friday_time_out" id = "friday_time_out" type = "time" <!---value = "18:30"---> class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.friday_time_out , "hh:mm")#" <cfelse> value = "18:30" </cfif>>
                 </div>
             </div>
             <div class="text-right mt-3">
@@ -144,4 +144,4 @@
         }
     }
 </script>
-<cfinclude  template="\includes\foot.cfm">
+ 

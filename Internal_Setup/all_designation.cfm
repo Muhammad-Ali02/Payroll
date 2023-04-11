@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
     <cfif structKeyExists(session, 'loggedIn')>
         <cfquery name = "all_designation">
             select * from designation
@@ -98,4 +98,4 @@
         </cfif>
     </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

@@ -1,4 +1,4 @@
-<cfinclude  template="\includes\head.cfm">
+ 
     <cfoutput>
         <cfif structKeyExists(form, "old_password")>
             <cfquery name="confirm_password">
@@ -80,4 +80,4 @@
            }
         }
     </script>
-<cfinclude  template="\includes\foot.cfm">
+ 

@@ -1,4 +1,4 @@
-<cfinclude  template="\includes\head.cfm">
+ 
             <!---       Back End        --->
     <cfquery name = "get_employee"> <!--- to print All employees list --->
         select concat(first_name,' ', middle_name, ' ', last_name) as name 
@@ -10,4 +10,4 @@
     <cfoutput>
         <h2 class="text-center"> Welcome #get_employee.name# </h2>
     </cfoutput>
-<cfinclude  template="\includes\foot.cfm">
+ 

@@ -1,5 +1,4 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- ___________________________________________________ Back end ________________________________________________ --->
         <!--- Query to print dynamic drop dwon list of all employees --->
@@ -18,7 +17,7 @@
                     <cfif form.employee_id neq "All">
                         employee_id = "#form.employee_id#" and
                     </cfif>
-                    processed is not null or processed <> ''
+                    (processed is not null or processed <> '')
             </cfquery>
             <cfif get_pay_data.recordcount neq 0>
                 <cfloop query="get_pay_data">
@@ -100,8 +99,11 @@
                     <cfset amount_of_percentage_tax = (var_gross_salary/100) * deduction_percent >
                     <cfset total_deduction = deduction_tax_amount + amount_of_percentage_tax>
                     <cfset var_gross_deductions = total_deduction + (basic_rate * (leaves_without_pay + deducted_days)) >
-                    <cfset var_net_salary = var_gross_salary - var_gross_deductions>
+                    <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
+                  
                     <cfquery name = "update_pay"> <!--- Query Will update all requirements --->
+                    
+                    <cfoutput>
                         update current_month_pay
                         set 
                             gross_salary = '#var_gross_salary#',
@@ -115,7 +117,10 @@
                             <cfelse>
                                 employee_id = '#employee_id#'
                             </cfif> 
-                    </cfquery>
+                    </cfoutput> 
+                   
+                   </cfquery> 
+                   
                 </cfloop>
                 <script>
                     alert("Pay Process Run Successfully!");
@@ -151,4 +156,4 @@
         </form>
     </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+

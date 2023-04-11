@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="..\includes\head.cfm">
+ 
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- |________________________________\|/_Back End _\|/________________________________|--->
         <cfparam  name = "merror" default = 0>
@@ -19,15 +19,20 @@
                 <!--- Insert query here --->
                 <cfquery name = "insert_allowance">
                     insert into allowance (allowance_name, allowance_amount, description)
-                    values ('#form.txt_allowance_name#', '#form.allowance_amount#' , '#form.txt_description#')
+                    values (
+                        <cfqueryparam value = '#form.txt_allowance_name#'>, 
+                        <cfqueryparam value = '#form.allowance_amount#'> , 
+                        <cfqueryparam value = '#form.txt_description#'>)
                 </cfquery>
                 <cflocation  url="all_allowance.cfm?created=true">
             </cfif>
         <cfelseif structKeyExists(form, 'update')>
             <cfquery name = "update_allowance">
                 update allowance 
-                set allowance_amount = "#form.allowance_amount#", description = "#form.txt_description#"
-                where allowance_name = "#form.txt_allowance_name#"
+                set allowance_name = <cfqueryparam value = "#form.txt_allowance_name#">, 
+                    allowance_amount = <cfqueryparam value = "#form.allowance_amount#">, 
+                    description = <cfqueryparam value = "#form.txt_description#">
+                where allowance_id = "#form.allowance_id#"
             </cfquery>
             <cflocation  url="all_allowance.cfm?updated=true">
         </cfif>
@@ -45,7 +50,8 @@
                             </cfif>
                         </div>
                         <form name="allowance_form" onsubmit="return formValidate();" Action = "allowance.cfm" Method = "post">
-                            <input type = "text" name = "txt_allowance_name" placeholder = "Allowance Name" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.txt_allowance_name#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.allowance_name#"</cfif>>
+                            <input type = "hidden" name = "allowance_id" <cfif structKeyExists(url, 'edit')> value = "#get_data.allowance_id#"</cfif> >
+                            <input type = "text" name = "txt_allowance_name" placeholder = "Allowance Name" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.txt_allowance_name#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.allowance_name#"</cfif> >
                             <input type = "number"  min = "0" name = "allowance_amount" placeholder = "Allowance amount" class = "form-control mb-3" required<cfif #merror# eq 1 > value = "#form.allowance_amount#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.allowance_amount#"</cfif>>
                             <textarea class="form-control mb-3" rows = "5" cols = "30" name = "txt_description" placeholder = "Write Description Maximum words 200" required = "true" ><cfif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
                             <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "Update" <cfelse> "Add" </cfif> > <!--- name "update" will update existing data, name "add" will insert new data --->
@@ -70,4 +76,4 @@
 
     }
 </script>
-<cfinclude  template="..\includes\foot.cfm">
+ 

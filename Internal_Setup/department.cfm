@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="..\includes\head.cfm">
+ 
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- |________________________________\|/_Back End _\|/________________________________|--->
         <cfparam  name = "merror" default = "0">
@@ -9,7 +9,7 @@
                 select * 
                 from department 
                 where department_id = "#url.edit#"
-                and is_deleted <> "Y" or is_deleted is null
+                and is_deleted <> "Y" or is_deleted is null 
             </cfquery>
             <cfif get_data.recordcount eq 0>
                 <cfset existing_department = 0>
@@ -26,15 +26,17 @@
                 <!--- Insert query here --->
                 <cfquery name = "insert_department">
                     insert into department (department_name, description)
-                    values ('#form.txt_department_name#', '#form.txt_department_description#')
+                    values (
+                        <cfqueryparam value = '#form.txt_department_name#'>, 
+                        <cfqueryparam value = '#form.txt_department_description#'>)
                 </cfquery>
                 <cflocation  url="all_departments.cfm?created=true">
             </cfif>
         <cfelseif structKeyExists(form, 'update')>
             <cfquery name = "update_department">
                 update department
-                set department_name = '#form.txt_department_name#', description = '#form.txt_department_description#'
-                where department_name = "#form.txt_department_name#"
+                set department_name = <cfqueryparam value = '#form.txt_department_name#'>, description = <cfqueryparam value = '#form.txt_department_description#'>
+                where department_id = "#form.department_id#"
             </cfquery>
             <cflocation  url="all_departments.cfm?updated=true">
         </cfif>
@@ -55,6 +57,7 @@
                                     </cfif>
                                 </div>   
                                 <form name="create_department" onsubmit="return formValidate();" Action = "department.cfm" Method = "post">
+                                    <input type= "hidden" name = "department_id" <cfif structKeyExists(url, 'edit')> value ="#get_data.department_id#"</cfif> >
                                     <input type = "text" name = "txt_department_name" placeholder = "Department Name" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.txt_department_name#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.department_name#" </cfif>>
                                     <textarea class="form-control mb-3" name = "txt_department_description" maxlength = "200" cols = "30" rows = "5" Placeholder = "Write Description Maximum Charactors 200 ..." required = "true"><cfif #merror# eq 1 >#form.txt_department_description#<cfelseif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
                                     <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif> > <!--- name "update" will update existing data, name "create" will insert new data --->
@@ -78,4 +81,4 @@
         }
     }
 </script>
-<cfinclude  template="..\includes\foot.cfm">
+ 

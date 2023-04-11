@@ -1,4 +1,4 @@
-<cfinclude  template="\includes\head.cfm">
+ 
     <cfif structKeyExists(form, 'Applied_amount')>
         <cfquery name = "get_Advance">
             select action, status
@@ -98,4 +98,4 @@
                     }
                 }
     </script>
-<cfinclude  template="\includes\foot.cfm">
+ 

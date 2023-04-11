@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
     <cfif structKeyExists(session, 'loggedIn')>
         <cfif structKeyExists(url, 'edit_process_detail')>
             <!--- Query to get Employee for edit --->
@@ -90,10 +90,10 @@
                 where b.employee_id = "#url.edit_process_detail#"
             </cfquery>
             <cfset firstDay = createDate(#setting_info.current_year#, #setting_info.current_month#, 1)>
-            <cfset lastDay = createDate(#setting_info.current_year#, #setting_info.current_month#, daysInMonth(firstDay))> 
+            <cfset lastDay = createDate(#setting_info.current_year#, #setting_info.current_month#, daysInMonth(firstDay))>
             <!--- Loop to check for working days of current month by comparing each date of month with the working days group's days --->
-            <cfset working_days = 0>
-                <cfloop from = "#day(firstDay)#" to = "#day(lastday)#" index = "i"> 
+            <cfset working_days = day(lastday)>
+                <!---<cfloop from = "#day(firstDay)#" to = "#day(lastday)#" index = "i"> 
                     <cfset date = createDate(#setting_info.current_year#, #setting_info.current_month#, #i#)>
                     <cfset day_of_week = dayOfWeek(#date#)>
                     
@@ -105,7 +105,7 @@
                             <cfset working_days = working_days + 0.5>
                         </cfif>
                         --->
-                </cfloop>
+                </cfloop>--->
             <!--- Calculate Basic Rate Per Day using Basic Salary of Employee --->
             <cfset basic_rate = get_employee.basic_salary / working_days>
         <!---________________________________________________________Create/Update Front End _________________________________________________________--->
@@ -389,4 +389,4 @@
         </script>
     </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

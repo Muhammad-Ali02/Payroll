@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="..\includes\head.cfm">
+ 
 <cfif structKeyExists(session, 'loggedin')>
     <cfquery name = "get_employees">
         select concat(first_name," ", middle_name, " " , last_name) as name , employee_id
@@ -140,4 +140,4 @@
         </script>
 </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 
