@@ -45,9 +45,13 @@
             <cflocation  url="\login\user_login.cfm">
     </cfif>
 <!---     <cftransaction>      --->
-         <cfinclude  template="\includes\head.cfm">
-          <cfinclude template="#CGI.SCRIPT_NAME#">
-        <cfinclude  template="\includes\foot.cfm">
+        <cfif structKeyExists(session, 'loggedIn')>
+          <cfinclude  template="\includes\head.cfm">
+        </cfif>
+        <cfinclude template="#CGI.SCRIPT_NAME#">
+        <cfif structKeyExists(session, 'loggedIn')>
+          <cfinclude  template="\includes\foot.cfm">
+        </cfif>
 <!---     </cftransaction> --->
   </cffunction>
 
