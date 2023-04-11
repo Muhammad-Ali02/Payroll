@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="..\includes\head.cfm">
+ 
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- |________________________________\|/_Back End _\|/________________________________|--->
         <cfparam  name = "merror" default = 0>
@@ -22,15 +22,22 @@
                 <!--- Insert query here --->
                 <cfquery name = "insert_designation">
                     insert into designation (designation_title, description, short_word, basic_salary)
-                    values ('#form.txt_designation_title#', '#form.txt_description#', '#form.txt_short_word#', '#form.basic_salary#')
+                    values (
+                        <cfqueryparam value = '#form.txt_designation_title#'>, 
+                        <cfqueryparam value = '#form.txt_description#'>, 
+                        <cfqueryparam value = '#form.txt_short_word#'>, 
+                        <cfqueryparam value = '#form.basic_salary#'>)
                 </cfquery>
                 <cflocation  url="all_designation.cfm?updated=true">
             </cfif>
         <cfelseif structKeyExists(form, 'update')>
             <cfquery name = "update_designation">
                 update designation 
-                set basic_salary = "#form.basic_salary#", description = '#form.txt_description#', short_word = '#form.txt_short_word#'
-                where designation_title = "#form.txt_designation_title#"
+                set designation_title = <cfqueryparam value = "#form.txt_designation_title#">, 
+                    basic_salary = <cfqueryparam value = "#form.basic_salary#">, 
+                    description = <cfqueryparam value = '#form.txt_description#'>, 
+                    short_word = <cfqueryparam value = '#form.txt_short_word#'>
+                where designation_id = "#form.designation_id#"
             </cfquery>
             <cflocation  url="all_designation.cfm?updated=true">
         </cfif>
@@ -48,7 +55,8 @@
                             </cfif>
                         </div>
                         <form name="designation_form" Action = "designation.cfm" onsubmit="return formValidate();" Method = "post">
-                            <input type = "text" name = "txt_designation_title" placeholder = "Designation Title" class = "form-control mb-3" <cfif #merror# eq 1 > value = "#form.txt_designation_title#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.designation_title#"</cfif>>
+                            <input type = "hidden" name = "designation_id" <cfif structKeyExists(url, 'edit')> value = "#get_data.designation_id#"</cfif> >
+                            <input type = "text" name = "txt_designation_title" placeholder = "Designation Title" class = "form-control mb-3" <cfif #merror# eq 1 > value = "#form.txt_designation_title#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.designation_title#"</cfif> >
                             <input type = "number" min = "0" name = "basic_salary" placeholder = "Basic Salary" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.basic_salary#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.basic_salary#"</cfif>>
                             <input type = "Text" name = "txt_short_word" minlength = "2" maxlength = "2" placeholder = "Short Word like 'SE'" class = "form-control mb-3" required = "true" <cfif #merror# eq 1 > value = "#form.txt_short_word#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.short_word#"</cfif>>
                             <textarea class="form-control mb-3" name = "txt_description" rows = "5" cols = "30" maxlength = "200" placeholder = "Write Description. Maximum Words 200 ..."  required = "true"><cfif #merror# eq 1 >#form.txt_description#<cfelseif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
@@ -76,4 +84,4 @@
             }
         }
 </script>
-<cfinclude  template="..\includes\foot.cfm">
+ 

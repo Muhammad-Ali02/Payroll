@@ -1,4 +1,4 @@
-<cfinclude  template="\includes\head.cfm">
+ 
 <cfoutput>
         <!---         Front End       --->
     <div class="employee_box">
@@ -80,4 +80,4 @@
         }
     }
 </script>
-<cfinclude  template="\includes\foot.cfm">
+ 

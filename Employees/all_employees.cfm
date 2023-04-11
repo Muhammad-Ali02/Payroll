@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
     <cfif structKeyExists(session, 'loggedIn')>
         <script>
             <cfif structKeyExists(url, 'edited')>
@@ -117,4 +117,4 @@
         document.getElementById('left').style.display='inline';
     }
 </script>
-<cfinclude  template="..\includes\foot.cfm">
+ 

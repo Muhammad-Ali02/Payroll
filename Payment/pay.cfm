@@ -1,4 +1,4 @@
-<cfinclude  template="..\includes\head.cfm">
+ 
 <cfoutput>
     <cfif structKeyExists(session, 'loggedIn')>
         <div class="employee_box">
@@ -13,4 +13,4 @@
         </div>
     </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

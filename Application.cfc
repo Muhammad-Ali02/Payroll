@@ -45,7 +45,9 @@
             <cflocation  url="\login\user_login.cfm">
     </cfif>
 <!---     <cftransaction>      --->
-        <cfinclude template="#CGI.SCRIPT_NAME#">
+         <cfinclude  template="\includes\head.cfm">
+          <cfinclude template="#CGI.SCRIPT_NAME#">
+        <cfinclude  template="\includes\foot.cfm">
 <!---     </cftransaction> --->
   </cffunction>
 

@@ -1,4 +1,4 @@
-<cfinclude  template="\includes\head.cfm">
+ 
     <!---    Back End    --->
         <cfquery name='get_survey'>
             select * from survey
@@ -43,4 +43,4 @@
             </table>
         </div>
     </cfoutput>
-<cfinclude  template="\includes\foot.cfm">
+ 

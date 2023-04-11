@@ -1,4 +1,4 @@
-<cfinclude  template="..\includes\head.cfm">
+ 
 <cfoutput>
     <cfif structKeyExists(url, 'request_generated')>
         <cfif url.request_generated eq 'true'>
@@ -80,4 +80,4 @@
         No Advance Salary Requests! You Have Never Apply For Advance Salary.
     </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

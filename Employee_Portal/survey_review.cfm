@@ -1,4 +1,4 @@
-<cfinclude  template="\includes\head.cfm">
+ 
         <!---     Back End          --->
     <cfif structKeyExists(url, 'view')>
         <cfif structKeyExists(form, 'question1')>
@@ -79,4 +79,4 @@
             </script>
         </cfoutput>
     </cfif>
-<cfinclude  template="\includes\foot.cfm">
+ 

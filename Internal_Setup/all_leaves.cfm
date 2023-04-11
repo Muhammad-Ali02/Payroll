@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
     <cfif structKeyExists(session, 'loggedIn')>
         <cfquery name = "all_Leave">
             select * from Leaves
@@ -93,4 +93,4 @@
         </script>
     </cfif>
 </cfoutput>
-    <cfinclude  template="..\includes\foot.cfm">
+     
