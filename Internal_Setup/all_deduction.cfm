@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- Back End --->
         <cfquery name = "all_Deduction"> <!--- get all deductions to display on front end --->
@@ -100,4 +100,4 @@
         </cfif>
     </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

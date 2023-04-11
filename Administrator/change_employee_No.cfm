@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="\includes\head.cfm">
+     
         <cfif isDefined('form.new_emp_No')>
             <cfquery name="get_employee_id">
                 SELECT employee_id FROM payroll.employee
@@ -93,5 +93,5 @@
             }
         }
     </script>
-    <cfinclude  template="\includes\foot.cfm">
+     
 </cfoutput>

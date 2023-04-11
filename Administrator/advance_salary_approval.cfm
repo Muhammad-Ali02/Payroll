@@ -1,4 +1,4 @@
-<cfinclude  template="\includes\head.cfm">
+ 
 <cfoutput>
     <cfquery name='advance_salary_request'>
         Select advance_salary.*, concat(emp.first_name,' ',emp.middle_name,' ',emp.last_name) as name
@@ -248,4 +248,4 @@
     </cfif>
 </cfoutput>
 
-<cfinclude  template="\includes\foot.cfm">
+ 

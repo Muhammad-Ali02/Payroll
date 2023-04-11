@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
         <cfif structKeyExists(session, 'loggedIn')>
             <!--- Back End to Insert Leaves --->
             <!--- Insert Leaves in All leaves Table --->
@@ -224,4 +224,4 @@
             </script>
         </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

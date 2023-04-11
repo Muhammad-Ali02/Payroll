@@ -1,4 +1,4 @@
-<cfinclude  template="..\includes\head.cfm">
+ 
     <cfoutput>
         <!--- _________________________________________ Back End ______________________________________--->
         <cfquery name = "leave_requests">
@@ -113,4 +113,4 @@
             <p> No Leave Requests Found! </p>
         </cfif>
     </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

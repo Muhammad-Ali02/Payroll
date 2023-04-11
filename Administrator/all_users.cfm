@@ -1,4 +1,4 @@
-<cfinclude  template="..\includes\head.cfm">
+ 
     <cfoutput>
         <cfif structKeyExists(session, 'loggedIn')>
             <script>
@@ -54,4 +54,4 @@
             </table>
         </cfif>
     </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 
