@@ -75,6 +75,8 @@
         if((txt_department_name == "") || (txt_department_description == "")){
             alert("All field must be filled out!");
             return false;
+        }else{
+            return true;
         }
     }
 </script>

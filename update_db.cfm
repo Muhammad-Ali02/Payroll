@@ -521,5 +521,24 @@
     query39:<cfdump  var="#cfcatch.cause.message#">
 </cfcatch>
 </cftry>
+<cftry>
+    <cfquery name='query40'>
+        ALTER TABLE `payroll`.`employee_allowance` 
+        CHANGE COLUMN `allowance_amount` `allowance_amount` FLOAT(11) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="any">
+    query40:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name='query41'>
+        ALTER TABLE `payroll`.`employee_deduction` 
+        CHANGE COLUMN `deduction_amount` `deduction_amount` FLOAT(11) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="any">
+    query41:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
 </cfoutput>
 <cfinclude  template="/includes/foot.cfm">
