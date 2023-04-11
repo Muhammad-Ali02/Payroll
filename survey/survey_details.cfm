@@ -1,4 +1,4 @@
-<cfinclude  template="\includes\head.cfm">
+ 
     <!---    Back End     --->
     <cfif structKeyExists(url, 'detail')>
         <cfquery name="survey_details">
@@ -41,4 +41,4 @@
             </table>
         </div>
     </cfoutput>
-<cfinclude  template="\includes\foot.cfm">
+ 

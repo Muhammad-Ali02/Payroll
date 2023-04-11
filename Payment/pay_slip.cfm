@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm"> 
+      
     <cfif structKeyExists(session, 'loggedin')>
         <!--- ____________________________________ Back End ______________________________________________ --->
         <cfquery name = "get_employees"> <!--- to print All employees list --->
@@ -189,5 +189,18 @@
             </form>
         </cfif>
     </cfif>
+    <cfset month = 4> <!--- replace 4 with the month number you want to calculate for --->
+<cfset year = 2023> <!--- replace 2023 with the year you want to calculate for --->
+
+<cfset daysInMonth = DateDiff("d", "#month#/1/#year#", DateAdd("m", 1, "#month#/1/#year#"))>
+
+<cfset weekdaysInMonth = 0>
+<cfloop from="1" to="#daysInMonth#" index="day">
+    <cfif DayOfWeek("#month#/#day#/#year#") neq 1 and DayOfWeek("#month#/#day#/#year#") neq 7>
+        <cfset weekdaysInMonth = weekdaysInMonth + 1>
+    </cfif>
+</cfloop>
+
+<cfoutput>There are #weekdaysInMonth# weekdays in #month#/#year#.</cfoutput>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

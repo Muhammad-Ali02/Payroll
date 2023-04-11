@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
     <cfif structKeyExists(session, 'loggedIn')>
         <cfset date1 = dateformat(now(), "mmmm")>
         <cfif structKeyExists(form, 'current_month')>
@@ -68,4 +68,4 @@
         <!---     </script> --->
     </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 

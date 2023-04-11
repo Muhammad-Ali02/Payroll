@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="..\includes\head.cfm">
+ 
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- |________________________________\|/_Back End _\|/________________________________|--->
         <cfparam  name = "merror" default = 0>
@@ -39,7 +39,10 @@
                 <!--- Insert query  --->
                 <cfquery name = "insert_user">
                     insert into users (user_name, password, level)
-                    values ('#form.user_name#', '#hashed_Password#', '#form.user_level#')
+                    values (
+                        <cfqueryparam value = '#form.user_name#'>, 
+                        <cfqueryparam value = '#hashed_Password#'>, 
+                        <cfqueryparam value = '#form.user_level#'>)
                 </cfquery>
                 <cflocation  url="all_users.cfm?created=true">
             </cfif>
@@ -56,8 +59,10 @@
                 
             <cfquery name = "update_user">
                 update users 
-                set password = "#hashed_Password#"
-                where user_name = "#form.user_name#"
+                set user_name = <cfqueryparam value = "#form.user_name#">,
+                    password = <cfqueryparam value = "#hashed_Password#">,
+                    level = <cfqueryparam value = "#form.user_level#">
+                where id = "#form.user_id#"
             </cfquery>
             <cflocation  url="all_users.cfm?updated=true">
         </cfif>
@@ -128,7 +133,8 @@
                                         <option value=""> --Select Level-- </option>
                                         <option> Admin </option>
                                         <option <cfif #merror# eq 1 ><cfif form.user_level eq 'Employee'> selected = "true"</cfif> </cfif> > Employee </option>
-                                    </select>                        
+                                    </select>  
+                                    <input type = "hidden" name = "user_id" <cfif structKeyExists(url, 'edit')> value = "#get_data.id#" </cfif> >                      
                                     <br>
                                     <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif> > <!--- name "update" will update existing data, name "create" will insert new data --->
                                     <div class="text-center">
@@ -155,4 +161,4 @@
         }
     }
 </script>
-<cfinclude  template="..\includes\foot.cfm">
+ 

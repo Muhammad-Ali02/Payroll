@@ -1,5 +1,5 @@
 <cfoutput>
-<cfinclude  template="..\includes\head.cfm">
+ 
     <cfif structKeyExists(session, 'loggedIn')>
         <!--- |________________________________\|/_Back End _\|/________________________________|--->
         <cfparam  name = "merror" default = 0>
@@ -21,7 +21,11 @@
                 <!--- Insert query --->
                 <cfquery name = "insert_Deduction">
                     insert into Deduction (Deduction_name, Deduction_amount, is_percent, description)
-                    values ('#form.txt_Deduction_name#', '#form.Deduction_amount#', '#form.is_percent#', '#form.txt_description#')
+                    values (
+                        <cfqueryparam value = '#form.txt_Deduction_name#'>, 
+                        <cfqueryparam value = '#form.Deduction_amount#'>, 
+                        <cfqueryparam value = '#form.is_percent#'>, 
+                        <cfqueryparam value = '#form.txt_description#'>)
                 </cfquery>
                 <cflocation  url="all_deduction.cfm?created=true">
             </cfif>
@@ -29,8 +33,11 @@
             <!--- update Query --->
             <cfquery name = "update_Deduction">
                 update Deduction 
-                set Deduction_amount = "#form.Deduction_amount#"
-                where Deduction_name = "#form.txt_Deduction_name#"
+                set Deduction_name = <cfqueryparam value = '#form.txt_Deduction_name#'>, 
+                    Deduction_amount = <cfqueryparam value = "#form.Deduction_amount#">,
+                    is_percent = <cfqueryparam value = "#form.is_percent#">,
+                    description = <cfqueryparam value = "#form.txt_description#">
+                where Deduction_id = "#form.deduction_id#"
             </cfquery>
             <cflocation  url="all_deduction.cfm?updated=true">
         </cfif>
@@ -48,6 +55,7 @@
                             </cfif>
                         </div>  
                         <form name="deduction_form" onsubmit="return formValidate();" Action = "Deduction.cfm" Method = "post">
+                            <input type ="hidden" name = "deduction_id" <cfif structKeyExists(url, 'edit')>value = "#get_data.deduction_id#"</cfif>>
                             <input type = "text" name = "txt_Deduction_name" placeholder = "Deduction Name" class = "form-control mb-3" required <cfif #merror# eq 1 > value = "#form.txt_Deduction_name#" style = "border-color : red; color : red;" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.Deduction_name#" readonly</cfif>>
                             <input type = "number"  min = "0" name = "Deduction_amount" placeholder = "Deduction amount" class = "form-control mb-3" required <cfif #merror# eq 1 > value = "#form.Deduction_amount#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.Deduction_amount#"</cfif>>
                             <label>Amount in Percentage?</label>
@@ -80,4 +88,4 @@
         }
     }
 </script>
-<cfinclude  template="..\includes\foot.cfm">
+ 

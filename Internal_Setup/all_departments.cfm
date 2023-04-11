@@ -1,5 +1,5 @@
 <!---<cfif structKeyExists(url, 'delete')> onLoad="noBack();" onpageshow="if (event.persisted) noBack();" onUnload="" </cfif>--->
-<cfinclude  template="..\includes\head.cfm">
+ 
 <cfoutput>
     <cfif structKeyExists(session, 'loggedIn')>
         <cfif structKeyExists(url, 'delete')>
@@ -89,7 +89,7 @@
         </cfif>
     </cfif>
 </cfoutput>
-<cfinclude  template="..\includes\foot.cfm">
+ 
          <script>
             <!--- This Function will generate Confirm Alert when delete Button Clicked --->
             function confirmDelete(id){

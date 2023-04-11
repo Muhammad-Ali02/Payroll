@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
     <cfif structKeyExists(session, 'loggedIn')>
         <cfquery name = "last_employee"> <!--- get last employee to generate auto employee number of new employee ---> 
                 select employee_id
@@ -1210,5 +1210,5 @@
             allowance_deduction('deduction');
             bank('cash');
         </script>
-<cfinclude  template="..\includes\foot.cfm">
+ 
 

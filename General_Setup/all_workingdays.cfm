@@ -1,5 +1,5 @@
 <cfoutput>
-    <cfinclude  template="..\includes\head.cfm">
+     
     <cfif structKeyExists(session, 'loggedIn')>
         <cfquery name = "all_workingdays">
             select * from working_days
@@ -36,4 +36,4 @@
         </table>
     </cfif>
 </cfoutput>
-    <cfinclude  template="..\includes\foot.cfm">
+     
