@@ -127,6 +127,7 @@
         <!--- query result used to show a message if employee not allowed any leave ---> 
             <cfquery name = "get_employee">
                 select concat(first_name,' ',middle_name,' ',last_name) as employee_name from employee
+                where employee_id = <cfqueryparam value="#session.loggedin.username#">
             </cfquery>
                 <p>Dear #get_employee.employee_name# You are Not Allowed to Request a Leave. Please Contact HR Department.</p>
             </cfif>
