@@ -79,7 +79,7 @@
                     <label for = "time_in" class = "form-control-label"> Time In: </label> 
                 </div>
                 <div class = "col-md-6">
-                    <input name = "time_in" id = "time_in" type = "time" class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.time_in , "hh:mm")#" <cfelse> value = "09:00" </cfif> >
+                    <input name = "time_in" id = "time_in" type = "time" class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.time_in , "HH:mm")#" <cfelse> value = "09:00" </cfif> >
                 </div>
             </div>
             <div class = "row mt-3">
@@ -87,7 +87,7 @@
                     <label for = "time_out" class = "form-control-label"> Time Out: </label> 
                 </div>
                 <div class = "col-md-6">
-                    <input name = "time_out" id = "time_out" type = "time" class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.time_out , "hh:mm")#" <cfelse> value = "18:00" </cfif>>
+                    <input name = "time_out" id = "time_out" type = "time" class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.time_out , "HH:mm")#" <cfelse> value = "18:00" </cfif>>
                 </div>
             </div>
             <div class = "row mt-3">
@@ -103,7 +103,7 @@
                     <label for = "friday_time_in" class = "form-control-label"> Friday Time In: </label> 
                 </div>
                 <div class = "col-md-6">
-                    <input name = "Friday_time_in" id = "friday_time_in" type = "time" <!---value = "09:00"---> class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.friday_time_in , "hh:mm")#" <cfelse> value = "09:00" </cfif>>
+                    <input name = "Friday_time_in" id = "friday_time_in" type = "time" <!---value = "09:00"---> class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.friday_time_in , "HH:mm")#" <cfelse> value = "09:00" </cfif>>
                 </div>
             </div>
             <div class = "row mt-3">
@@ -111,7 +111,7 @@
                     <label for = "friday_time_out" class = "form-control-label"> Friday Time Out: </label> 
                 </div>
                 <div class = "col-md-6">
-                    <input name = "Friday_time_out" id = "friday_time_out" type = "time" <!---value = "18:30"---> class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.friday_time_out , "hh:mm")#" <cfelse> value = "18:30" </cfif>>
+                    <input name = "Friday_time_out" id = "friday_time_out" type = "time" class = "form-control" <cfif structKeyExists(url, 'edit')> value = "#Timeformat(get_workingdays.friday_time_out , "HH:mm")#" <cfelse> value = "18:30" </cfif>>
                 </div>
             </div>
             <div class="text-right mt-3">
@@ -130,6 +130,8 @@
         var break_time = document.getElementById('break_time').value;
         var time_out = $('#time_out').val();
         var time_in = $('#time_in').val();
+        var Friday_time_in = $('#friday_time_in').val();
+        var Friday_time_out = $('#friday_time_out').val();
         if(group_name == ''){
             alert("Group Name is Must Required!");
             return false;
@@ -137,10 +139,13 @@
             alert("Break Time Must Required!")
             return false;
         }else if(time_in >= time_out){
-            alert('Time out value must be greater than Time in.');
+            alert('Time out must be greater than Time in.');
+            return false;
+        }else if(Friday_time_in >= Friday_time_out){
+            alert('Friday Time out must be greater than Time in.');
             return false;
         }else{
-            return true
+            return true;
         }
     }
 </script>
