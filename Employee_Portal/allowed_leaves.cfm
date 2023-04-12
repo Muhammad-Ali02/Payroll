@@ -1,4 +1,4 @@
-<cfinclude  template="../includes/head.cfm">
+
 <cfoutput>
     <cfquery name = "Leave_list"> <!---With the help of Result, generate a dynamic list of Available Leaves --->
         select L.leave_title, L.leave_id, E.leaves_allowed, ifNull(E.leaves_availed, 0) as leaves_availed, E.leaves_balance
@@ -33,9 +33,9 @@
         <!--- query result used to show a message if employee not allowed any leave ---> 
         <cfquery name = "get_employee">
             select concat(first_name,' ',middle_name,' ',last_name) as employee_name from employee
+            where employee_id = <cfqueryparam value="#session.loggedin.username#">
         </cfquery>
 
         <p>Dear #get_employee.employee_name# You are Not Allowed any Leave. Please Contact HR Department.</p>
     </cfif>
 </cfoutput>
-<cfinclude  template="../includes/foot.cfm">

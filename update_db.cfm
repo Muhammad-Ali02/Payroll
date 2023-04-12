@@ -540,5 +540,66 @@
     query41:<cfdump  var="#cfcatch.cause.message#">
 </cfcatch>
 </cftry>
+
+<cftry>
+    <cfquery name="query42">
+        ALTER TABLE `payroll`.`department`
+        CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL;
+    </cfquery>
+<cfcatch type="any">
+    query42:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query43">
+        ALTER TABLE `payroll`.`designation`
+        CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="any">
+    query43:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query44">
+        ALTER TABLE `payroll`.`allowance`
+        CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="any">
+    query44:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query45">       
+        ALTER TABLE `payroll`.`loan` 
+        CHANGE COLUMN `Apply_Description` `Apply_Description` VARCHAR(1000) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="any">
+    query45:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query46">       
+        ALTER TABLE `payroll`.`advance_salary` 
+        CHANGE COLUMN `Apply_Description` `Apply_Description` VARCHAR(1000) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="any">
+    query46:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query47">       
+        ALTER TABLE `payroll`.`all_leaves` 
+        CHANGE COLUMN `reason` `reason` VARCHAR(1000) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="any">
+    query47:<cfdump  var="#cfcatch.cause.message#">
+</cfcatch>
+</cftry>
 </cfoutput>
 <cfinclude  template="/includes/foot.cfm">
+
