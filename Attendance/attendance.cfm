@@ -46,10 +46,10 @@
                                 </cfloop>
                             </select>
                     </div>
+                    <div class = "col-md-1 mt-2">
+                        <input type = "submit" class = "btn btn-outline-dark mt-4" value = "Search">
+                    </div>
                 </div>    
-                <div class = "row">
-                    <input type = "submit" class = "btn btn-outline-dark mt-4" value = "Search">
-                </div>
             </form>
 <!---         </div> --->
         <cfelse>
