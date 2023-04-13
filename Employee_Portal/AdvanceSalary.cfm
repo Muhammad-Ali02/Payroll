@@ -100,7 +100,7 @@
                      if((Applied_amount == "")||(apply_description == "")||(Term_Condition == "")){
                         alert("All field must be filled out!");
                          return false;
-                        }else if(apply_description.length > "900"){
+                        }else if(apply_description.length > "199"){
                             alert("Text is too much long in describe reason box.");
                             $('#apply_description').focus();
                             return false;

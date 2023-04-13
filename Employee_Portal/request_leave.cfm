@@ -43,7 +43,7 @@
                                 '#form.to_date#', 
                                 '#form.leave_days#',
                                 '#form.txt_reason#', 
-                                now(), 
+                                #now()#, 
                                 'Pending',
                                 'None'
                             )
@@ -168,7 +168,7 @@
                     if( (from_date == "") || (to_date = "")||(leave_days == "")||(Leave_id == "")||(txt_reason == "")){
                         alert("All field must be filled out!");
                         return false;
-                    }else if(txt_reason.length > '900'){
+                    }else if(txt_reason.length > '199'){
                         alert("Text is too much long in reason box.");
                         $('##txt_reason').focus();
                         return false;
