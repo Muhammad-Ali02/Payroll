@@ -20,9 +20,10 @@
 
   <!--- Pre-request processing --->
   <cffunction name="onRequestStart" returnType="void" output="false">
+
     <!--- Perform any necessary pre-request processing here --->
     <cfset stringurl = CGI.SCRIPT_NAME>
-    <cfset searchString = 'Employee_Portal'>
+    <cfset searchString = 'Employee_Portal'> 
     <cfif structKeyExists(session, 'loggedIn')> 
         <cfif structKeyExists(url, 'logout')>
             <cfset createObject("component", '\components.user_authentication').user_logout() />
@@ -40,6 +41,9 @@
   <!--- Process the request --->
   <cffunction name="onRequest" returnType="void" output="true">
     <!--- Global Variables here --->
+    <cferror type="exception" template="/error.cfm">
+    <cferror type="request" template="/error.cfm">
+    <cferror type="validation" template="/error.cfm">  
     <cfset current_ipAddress = this.ipAddress>
     <cfif not structKeyExists(session, 'loggedIn') and CGI.SCRIPT_NAME neq '/login/user_login.cfm'>
             <cflocation  url="\login\user_login.cfm">
