@@ -154,6 +154,8 @@
                         alert("Sorry! Your Applied leave less then your available leaves.");
                         $("##Leave_id").val("").change();
                         return false;
+                    }else{
+                        return true;
                     }
                 }
                 // function for form validations from cant be submitted if any field is empty
@@ -165,6 +167,10 @@
                     let txt_reason = document.forms["leaveRequest"]["txt_reason"].value;
                     if( (from_date == "") || (to_date = "")||(leave_days == "")||(Leave_id == "")||(txt_reason == "")){
                         alert("All field must be filled out!");
+                        return false;
+                    }else if(txt_reason.length > '900'){
+                        alert("Text is too much long in reason box.");
+                        $('##txt_reason').focus();
                         return false;
                     }else{
                         var a= leavechecker();

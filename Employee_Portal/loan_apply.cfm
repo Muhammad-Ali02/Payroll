@@ -89,11 +89,23 @@
                 }else if(parseInt(Applied_amount) < parseInt(return_Amount)){
                     alert("Installment Amount can't be Greater then Applied Amount!");
                     return false;
-                } 
+                }else if(Apply_description.length > "900"){
+                    alert("Text is too much long in describe reason box.");
+                    $('#apply_description').focus();
+                    return false;
+                }else{
+                    return true;
+                }
             }else{
-                if((Applied_amount == "")||(apply_description == "")||(Terms2 == "")||(TermCondition == "")){
+                if((Applied_amount == "")||(Apply_description == "")||(Terms2 == "")||(TermCondition == "")){
                     alert("All field must be filled out!");
                     return false;
+                }else if(Apply_description.length > "900"){
+                    alert("Text is too much long in describe reason box.");
+                    $('#apply_description').focus();
+                    return false;
+                }else{
+                    return true;
                 }
             }
         }

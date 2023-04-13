@@ -1,4 +1,4 @@
-<cfinclude  template="/includes/head.cfm">
+
 <cfoutput>
 <cftry>
 <cfquery name = "query1">
@@ -601,5 +601,4 @@
 </cfcatch>
 </cftry>
 </cfoutput>
-<cfinclude  template="/includes/foot.cfm">
 
