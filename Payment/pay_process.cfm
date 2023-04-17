@@ -3,7 +3,7 @@
         <!--- ___________________________________________________ Back end ________________________________________________ --->
         <!--- Query to print dynamic drop dwon list of all employees --->
         <cfquery name = "get_employee_list">
-            select concat(a.employee_id, " | ", a.first_name," ",a.middle_name," ",a.last_name) as name, a.employee_id as id
+            select concat(a.employee_id, " | ", a.first_name," ",a.middle_name," ",a.last_name) as name, a.employee_id as id, a.leaving_date 
             from employee a
             inner join current_month_pay b on a.employee_id = b.employee_id
             where b.pay_status = "Y" 
@@ -94,13 +94,48 @@
                         <cfset deduction_percent = deduction_percentage.percentage>
                     </cfif>
 
+                <cfquery name = "setting_info">
+                    select * from setup
+                </cfquery>
+                <cfquery name="left_emp">
+                    select * from employee where leaving_date <> '' and employee_id = '#get_employee_list.id#'
+                </cfquery>
+
+                <cfif left_emp.RecordCount gt 0>
+                    <cfif year(left_emp.joining_date) neq year(now()) or month(left_emp.joining_date) neq month(now())>
+                        <cfset startMonth = CreateDate(Year(now()), Month(now()), 1)>
+                    <cfelse>
+                        <cfset startMonth = #left_emp.joining_date#>
+                    </cfif>    
+                    <cfset endMonth = #left_emp.leaving_date#>
+                    <cfset workingDays = 0>
+                    <cfloop from="#startMonth#" to="#endMonth#" index="day">
+                        <cfif DayOfWeek(day) neq 1 and DayOfWeek(day) neq 7>
+                            <cfset workingDays = workingDays + 1>
+                        </cfif>
+                    </cfloop>
+                    <cfset total_work_days = #workingDays#>
+                <cfelse>    
+                    <cfset year = #setting_info.current_year#> 
+                    <cfset month = #setting_info.current_month#> 
+                    <cfset daysInMonth = DateDiff("d", "#month#/1/#year#", DateAdd("m", 1, "#month#/1/#year#"))>
+                    <cfset workdaysInMonth = 0>
+                    <cfloop from="1" to="#daysInMonth#" index="day">
+                        <cfif DayOfWeek("#month#/#day#/#year#") neq 1 and DayOfWeek("#month#/#day#/#year#") neq 7>
+                            <cfset workdaysInMonth = workdaysInMonth + 1>
+                        </cfif>
+                    </cfloop>
+                    <cfset total_work_days = #workdaysInMonth#>
+                </cfif>
+                    <cfset absent_days = (total_work_days - days_worked) - paid_leaves - (half_paid_leaves/2) - leaves_without_pay>
+                    <cfset worked_days = working_days - absent_days>
                     <cfset var_gross_allowances = allowance_amount + (basic_rate * (paid_leaves + additional_days + (half_paid_leaves/2)))>
-                    <cfset var_gross_salary = ((basic_rate * (days_worked + additional_days))) + var_gross_allowances>
+                    <cfset var_gross_salary = (basic_rate * (worked_days + additional_days)) + var_gross_allowances>
                     <cfset amount_of_percentage_tax = (var_gross_salary/100) * deduction_percent >
                     <cfset total_deduction = deduction_tax_amount + amount_of_percentage_tax>
-                    <cfset var_gross_deductions = total_deduction + (basic_rate * (leaves_without_pay + deducted_days)) >
+                    <cfset var_gross_deductions = total_deduction + (basic_rate * (leaves_without_pay + deducted_days))>
                     <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
-                  
+
                     <cfquery name = "update_pay"> <!--- Query Will update all requirements --->
                     
                     <cfoutput>
