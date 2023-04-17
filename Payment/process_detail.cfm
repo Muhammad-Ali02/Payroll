@@ -4,8 +4,8 @@
         <cfif structKeyExists(url, 'edit_process_detail')>
             <!--- Query to get Employee for edit --->
             <cfquery name = "get_employee">
-                select concat(emp.first_name,' ', emp.middle_name,' ', emp.last_name) as employee_name, emp.employee_id, des.designation_title as designation, emp.basic_salary
-                from employee emp, designation des
+                select concat(emp.first_name,' ', emp.middle_name,' ', emp.last_name) as employee_name, emp.employee_id, des.designation_title as designation, emp.basic_salary , cmp.gross_allowances
+                from employee emp, designation des, current_month_pay cmp
                 where emp.employee_id = "#url.edit_process_detail#" and des.designation_id = emp.designation
             </cfquery>
             <!--- Query to get current month of pay process  --->
@@ -108,6 +108,7 @@
                 </cfloop>--->
             <!--- Calculate Basic Rate Per Day using Basic Salary of Employee --->
             <cfset basic_rate = get_employee.basic_salary / working_days>
+
         <!---________________________________________________________Create/Update Front End _________________________________________________________--->
         <div class="employee_box"> 
             <div class="text-center mb-5">
