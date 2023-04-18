@@ -497,7 +497,7 @@
         ADD COLUMN `employee_id` VARCHAR(45) NULL AFTER `survey_id`;
     </cfquery>
 <cfcatch type="any">
-    query37:<cfdump  var="#cfcatch.cause.message#">
+    query37:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -507,7 +507,7 @@
         ADD COLUMN `is_submitted` VARCHAR(3) NULL DEFAULT 'N' AFTER `question10`;
     </cfquery>
 <cfcatch type="any">
-    query38:<cfdump  var="#cfcatch.cause.message#">
+    query38:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -518,7 +518,7 @@
         DROP COLUMN `title`;
     </cfquery>
 <cfcatch type="any">
-    query39:<cfdump  var="#cfcatch.cause.message#">
+    query39:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 <cftry>
@@ -527,7 +527,7 @@
         CHANGE COLUMN `allowance_amount` `allowance_amount` FLOAT(11) NULL DEFAULT NULL ;
     </cfquery>
 <cfcatch type="any">
-    query40:<cfdump  var="#cfcatch.cause.message#">
+    query40:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -537,7 +537,7 @@
         CHANGE COLUMN `deduction_amount` `deduction_amount` FLOAT(11) NULL DEFAULT NULL ;
     </cfquery>
 <cfcatch type="any">
-    query41:<cfdump  var="#cfcatch.cause.message#">
+    query41:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -547,7 +547,7 @@
         CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL;
     </cfquery>
 <cfcatch type="any">
-    query42:<cfdump  var="#cfcatch.cause.message#">
+    query42:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -557,7 +557,7 @@
         CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL ;
     </cfquery>
 <cfcatch type="any">
-    query43:<cfdump  var="#cfcatch.cause.message#">
+    query43:<cfdump  var="#cfcatch.cause.message#"> <cr>
 </cfcatch>
 </cftry>
 
@@ -567,7 +567,7 @@
         CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL ;
     </cfquery>
 <cfcatch type="any">
-    query44:<cfdump  var="#cfcatch.cause.message#">
+    query44:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -577,7 +577,7 @@
         CHANGE COLUMN `Apply_Description` `Apply_Description` VARCHAR(1000) NULL DEFAULT NULL ;
     </cfquery>
 <cfcatch type="any">
-    query45:<cfdump  var="#cfcatch.cause.message#">
+    query45:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -587,7 +587,7 @@
         CHANGE COLUMN `Apply_Description` `Apply_Description` VARCHAR(1000) NULL DEFAULT NULL ;
     </cfquery>
 <cfcatch type="any">
-    query46:<cfdump  var="#cfcatch.cause.message#">
+    query46:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -597,7 +597,64 @@
         CHANGE COLUMN `reason` `reason` VARCHAR(1000) NULL DEFAULT NULL ;
     </cfquery>
 <cfcatch type="any">
-    query47:<cfdump  var="#cfcatch.cause.message#">
+    query47:<cfdump  var="#cfcatch.cause.message#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name = "query49">
+            create table past_month_pay like current_month_pay;
+    </cfquery>
+<cfcatch type="any">
+    query49:<cfdump  var="#cfcatch.cause.message#">  <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query50">
+        ALTER TABLE `payroll`.`past_month_pay` 
+        CHANGE COLUMN `basic_salary` `basic_salary` INT(11) NULL DEFAULT '0' ,
+        CHANGE COLUMN `month` `month` INT(11) NOT NULL DEFAULT '0' ,
+        CHANGE COLUMN `days_worked` `days_worked` FLOAT NULL DEFAULT '0' ,
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (`employee_id`, `month`);
+    </cfquery>
+<cfcatch type="any">
+    query50:<cfdump  var="#cfcatch.cause.message#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query51">
+        ALTER TABLE `payroll`.`past_month_pay` 
+            ADD COLUMN `allowance1` VARCHAR(45) NULL DEFAULT '0' AFTER `processed`,
+            ADD COLUMN `allowance2` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance1`,
+            ADD COLUMN `allowance3` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance2`,
+            ADD COLUMN `allowance4` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance3`,
+            ADD COLUMN `allowance5` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance4`,
+            ADD COLUMN `allowance6` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance5`,
+            ADD COLUMN `allowance7` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance6`,
+            ADD COLUMN `allowance8` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance7`,
+            ADD COLUMN `allowance9` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance8`,
+            ADD COLUMN `allowance10` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance9`,
+            ADD COLUMN `allowance11` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance10`,
+            ADD COLUMN `allowance12` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance11`,
+            ADD COLUMN `allowance13` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance12`,
+            ADD COLUMN `allowance14` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance13`,
+            ADD COLUMN `allowance15` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance14`,
+            ADD COLUMN `deduction1` VARCHAR(45) NULL DEFAULT '0' AFTER `allowance15`,
+            ADD COLUMN `deduction2` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction1`,
+            ADD COLUMN `deduction3` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction2`,
+            ADD COLUMN `deduction4` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction3`,
+            ADD COLUMN `deduction5` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction4`,
+            ADD COLUMN `deduction6` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction5`,
+            ADD COLUMN `deduction7` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction6`,
+            ADD COLUMN `deduction8` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction7`,
+            ADD COLUMN `deduction9` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction8`,
+            ADD COLUMN `deduction10` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction9`; 
+        </cfquery>
+<cfcatch type="any">
+    query51:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 </cfoutput>
