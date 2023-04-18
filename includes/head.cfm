@@ -140,6 +140,9 @@
                             <li>
                                 <a href="..\general_setup\all_workingdays.cfm">Manange Working Days</a>
                             </li>
+                            <li>
+                                <a href="..\general_setup\month_end.cfm">Month End</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
