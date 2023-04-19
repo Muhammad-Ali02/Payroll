@@ -58,7 +58,7 @@
                             <select name = "txt_leave_type" class = "form-select mb-3">
                                 <option disabled >Leave Type</option> 
                                 <option value = "Paid"> Paid </option>
-                                <option value = "NonPaid" <cfif structKeyExists(url, 'edit')> <cfif get_data.leave_type eq "N" or (#merror# eq 1 and form.txt_leave_type eq "N")> value ="Non-Paid" selected </cfif> </cfif> > Non-Paid </option>
+                                <option value = "NonPaid" <cfif structKeyExists(url, 'edit')> <cfif #get_data.leave_type# eq "NonPaid" or (#merror# eq 1 and form.txt_leave_type eq "N")> value ="Non-Paid" selected </cfif> </cfif> > Non-Paid </option>
                             </select>
                             <input type = "number"  min = "0" name = "allowed_per_year" class = "form-control mb-3" placeholder = "Allowed Leaves/Year" min = "1"<cfif merror eq 1 > value = "#form.allowed_per_year#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.allowed_per_year#" </cfif> >
                             <textarea class="form-control mb-3" name = "txt_description" rows = "3" cols = "30" maxlength = "198" placeholder = "Description Maximum 180 words."><cfif #merror# eq 1 >#form.txt_description#<cfelseif structKeyExists(url, 'edit')>#get_data.description#</cfif></textarea>
