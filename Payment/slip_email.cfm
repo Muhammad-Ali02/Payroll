@@ -11,7 +11,6 @@
             </cfif>
         
         </cfquery>
-        
     <cfif structKeyExists(url, 'generate')>
        <cfloop query="get_employees">
             <cfquery name = "allowances"> <!--- Get Saved Allowances edited before process --->
@@ -46,7 +45,7 @@
 
         <!--- ____________________________________ Front End ______________________________________________ --->
       
-            <cfdocument pagetype="A4" orientation = "landscape" format="PDF" filename = "pay_slip#url.generate#.pdf" overwrite = "yes"> 
+            <cfdocument pagetype="A4" orientation = "landscape" format="PDF" filename = "pay_slip#get_employees.employee_id#.pdf" overwrite = "yes"> 
                 <cfinclude  template="pay_slip_process.cfm">
             </cfdocument>
              <!---<cfheader name = "content-disposition" value = "attachment;filename=pay_slip#url.generate#.pdf">
@@ -63,7 +62,7 @@
                 <p>Hi,</p>
                 
                 <p>Please find your pay slip attached to this email.</p>
-                <cfmailparam file="#expandPath("pay_slip#url.generate#.pdf")#" disposition="attachment" type="pdf" >
+                <cfmailparam file="#expandPath("pay_slip#get_employees.employee_id#.pdf")#" disposition="attachment" type="pdf" >
             </cfmail>
         </cfloop>  
             <p>Hi, Your email is send successfully</p>

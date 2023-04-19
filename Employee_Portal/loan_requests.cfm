@@ -77,7 +77,7 @@
             </cfloop>
         </table>
     <cfelse>
-        No Loan Requests! You Have Never Apply For Loan.
+        <p>No Loan Requests! You Have Not Any Request For Loan.</p>
     </cfif>
 </cfoutput>
  
