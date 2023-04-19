@@ -77,7 +77,7 @@
             </cfloop>
         </table>
     <cfelse>
-        No Advance Salary Requests! You Have Never Apply For Advance Salary.
+        <p>No Advance Salary Requests! You Have Not Any Request For Advance Salary.</p>
     </cfif>
 </cfoutput>
  

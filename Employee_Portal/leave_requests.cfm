@@ -110,7 +110,7 @@
                     </cfloop>
             </table>
         <cfelse>
-            <p> No Leave Requests Found! </p>
+            <p> No Leave Requests! You Have Not Any Request For Leave.</p>
         </cfif>
     </cfoutput>
  
