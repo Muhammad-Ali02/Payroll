@@ -11,7 +11,7 @@
         <cfquery name = "all_employees">
             select emp.employee_id as id, concat(emp.first_name," ",emp.middle_name," ",emp.last_name) as name, dep.department_name as department, des.designation_title as designation
             from employee emp, designation des, department dep
-            where emp.department = dep.department_id and emp.designation = des.designation_id and emp.leaving_date = ""
+            where emp.department = dep.department_id and emp.designation = des.designation_id and (emp.leaving_date IS NULL or emp.leaving_date = "")
         </cfquery>
         <cfquery name = "left_employees">
             select emp.employee_id as id, concat(emp.first_name," ",emp.middle_name," ",emp.last_name) as name, dep.department_name as department, des.designation_title as designation, emp.leaving_date as leaving_date
