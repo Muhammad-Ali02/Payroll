@@ -1128,7 +1128,7 @@
                     alert('Father cnic Number contain non numaric character or length not equal to 13 digit.')
                     return false;
                 }
-                if(((containsNonNumeric(contact) == true) || (containsNonNumeric(emergency_contact1) == true) || (containsNonNumeric(emergency_contact2) == true)) || (contact.length != 11 || emergency_contact1.length != 11 || emergency_contact2.length != 11)){
+                if((containsNonNumeric(contact) == true) || (containsNonNumeric(emergency_contact1) == true) || (contact.length != 11 || emergency_contact1.length != 11 )){
                     alert("Contacts with non numeric characters or length not equal to 11 are not allowed.");
                     return false;
                 } 

@@ -86,7 +86,7 @@
                             <tr>
                                 <cfif percent eq 'Y'>
                                     <cfset amount_of_percentage_tax = (#pay_info.gross_salary#/100) * deduction_amount >
-                                    <td>#name#</td>
+                                    <td>#name# #deduction_amount# %</td>
                                     <td>#evaluate("numberFormat(#amount_of_percentage_tax#,'0.00')")#</td>
                                 <cfelse>
                                     <td>#name#</td>

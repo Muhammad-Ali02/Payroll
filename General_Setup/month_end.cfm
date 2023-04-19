@@ -50,7 +50,7 @@
             </h3>
         </div>
         <div class="text-center">
-            <form id="month_end_form" name="month_end" action="" method="post">
+            <form id="month_end_form" onsubmit="return confirmation();" name="month_end" action="" method="post">
                 <input type="submit" class="btn btn-outline-dark" name="month_end_process" value="Month End">
             </form>
         </div>
@@ -59,12 +59,11 @@
                 <cfquery name="get_setup">
                     select * from setup
                 </cfquery>
-                <!---<cfquery name = "get_allowances">
-                    SELECT MAX(allowance_id) as total FROM allowance;
+                <cfquery name="left_employees">
+                    select employee_id from employee 
+                    where leaving_date <> ''
                 </cfquery>
-                <cfquery name = "get_deductions">
-                    SELECT MAX(allowance_id) as total FROM allowance;
-                </cfquery>--->
+                
                 <cfquery name="send_current_month_data_past_month">
                     insert into past_month_pay (employee_id,basic_salary,month,year,transaction_mode,bank_name,bank_account_no,transaction_date,pay_status,days_worked,working_days,additional_days
                                     ,deducted_days,basic_rate,paid_leaves,half_paid_leaves,leaves_without_pay,gross_salary,net_salary,gross_allowances,gross_deductions,processed)
@@ -93,26 +92,15 @@
                         </cfquery>
                     </cfif>
                 </cfloop>
-
-                <!---<cfquery name="allowance">
-                    select p.* from pay_allowance p , current_month_pay c
-                    where status = 'y' And p.employee_Id = c.employee_id;
-                </cfquery>
-                <cfquery name="deduction">
-                    select p.* from pay_deduction p , current_month_pay c
-                    where status = 'y' And p.employee_Id = c.employee_id;
-                </cfquery>--->
-                <!---
-                <cfloop iqueryndex="i" from="1" to="#get_allowances.total#">
-                    <cfif allowance.allowance_id eq #i#>
-                        <cfquery name="insert_allownces">
-                            update past_month_pay (allowance#i#)
-                            set allowance#i# = #allowance.allowance_amount#
-                            where employee_id = #allowance.employee_id#
+                <cfif left_employees.recordcount gt 0>
+                    <cfloop query="left_employees">
+                        <cfquery name="delete_left_employee">
+                            delete from current_month_pay
+                            where employee_id = <cfqueryparam value="#left_employees.employee_id#">
                         </cfquery>
-                    </cfif>
-                </cfloop>
-                --->
+                    </cfloop>
+                </cfif>
+              
                 <cfquery name="t_employee">
                     select employee_id from current_month_pay
                 </cfquery>
@@ -192,12 +180,19 @@
     <!---       Back End          --->
 </cfoutput>
 <script>
-    $(document).ready(function() {
-    // On form submit
-    $("#month_end_form").submit(function() {
-        // Show the loader
-        $('#loader-wrapper').fadeIn('fast');
-        $("#loader").show();
+    function confirmation(){
+        var con = confirm("Are you sure to run month End process?");
+        return con;
+    }
+    
+        $(document).ready(function() {
+        // On form submit
+            if(con == true){
+                $("#month_end_form").submit(function() {
+                    // Show the loader
+                    $('#loader-wrapper').fadeIn('fast');
+                    $("#loader").show();
+                });
+            }
         });
-    });
 </script>
