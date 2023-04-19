@@ -105,7 +105,11 @@
                     <cfif structKeyExists(url, 'employee_as_admin')>
                         <h3 class="mb-5 box_heading">Update Employee as Admin</h3>
                     <cfelseif structKeyExists(url, 'new_user')>
-                        <h3 class="mb-5 box_heading">Create New User</h3>
+                        <cfif structKeyExists(url, 'edit')>
+                            <h3 class="mb-5 box_heading">Update User</h3>
+                        <cfelse>
+                            <h3 class="mb-5 box_heading">Create New User</h3>
+                        </cfif>
                     </cfif>
                 </div>
                 <div class = container>
@@ -127,7 +131,7 @@
                                     <input type = "text" name = "user_name" required = "true" class = "form-control" placeholder = "User Name" <cfif merror eq 1 > <cfif structKeyExists(form, 'user_name')> value = "#form.user_name#" style = "border-color : red; color : red;"</cfif> <cfelseif structKeyExists(url, 'edit')> value = "#get_data.user_name#" </cfif>>
                             </cfif>
                                     <hr>
-                                    <input type = "password" name = "user_password" placeholder = "Create Password" class = "form-control" required<cfif #merror# eq 1 > value = "#form.user_password#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.password#"</cfif>>
+                                    <input type = "password" name = "user_password" placeholder = "Create Password" class = "form-control" required<cfif #merror# eq 1 > value = "" <cfelseif structKeyExists(url, 'edit')> value = ""</cfif>>
                                     <hr>
                                     
                                     <input type = "text" name = "user_level" value="Admin" class = "form-control" required="true" readonly>

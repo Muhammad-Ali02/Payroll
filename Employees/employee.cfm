@@ -542,11 +542,12 @@
                                     </cfif>
                                     <cfset net_balance = balance_per_month * remaining_months>
                                     <cfquery name = "insert_leaves"> <!--- Insert Leaves ---> 
-                                        insert into employee_leaves (employee_id, leave_id, leaves_allowed, status)
+                                        insert into employee_leaves (employee_id, leave_id, leaves_allowed, leaves_balance, status)
                                         values (
                                             <cfqueryparam value = '#form.txt_employee_id#'>, 
                                             <cfqueryparam value = '#evaluate('form.chk_leaves#id#')#'>, 
-                                            <cfqueryparam value = '#net_balance#'>, 
+                                            <cfqueryparam value = '#net_balance#'>,
+                                            <cfqueryparam value = '#net_balance#'>,  
                                             <cfqueryparam value = 'Y'>)
                                     </cfquery>
                                 <cfelse>
