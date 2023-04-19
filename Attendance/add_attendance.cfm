@@ -1,5 +1,4 @@
-<cfoutput>
- 
+<cfoutput> 
 <cfif structKeyExists(session, 'loggedin')>
     <cfquery name = "get_employees">
         select concat(first_name," ", middle_name, " " , last_name) as name , employee_id
@@ -10,22 +9,26 @@
         <cfset inserted_employees = 0>
         <cfset updated_employees = 0>
         <cfloop query = "get_employees" >
-            <cfif isDefined('form.chk_time#employee_id#')> <!--- for employees that are selected in checkbox --->
+            <cfset var_emp_id = form["employee_id#employee_id#"]>
+            <cfset var_time_in = form["time_in#employee_id#"]>
+            <cfset var_time_out = form["time_out#employee_id#"]>
+
+            <cfif structKeyExists(form, "chk_time#employee_id#")> <!--- for employees that are selected in checkbox --->
                 <cfquery name = "get_duplicate_date">
                     select date from attendance
-                    where date = '#form.attendance_date#' and employee_id = '#evaluate('form.employee_id#employee_id#')#'
+                    where date = "#form.attendance_date#" and employee_id = "#var_emp_id#"
                 </cfquery>
                 <cfif get_duplicate_date.recordCount eq 0>
                     <cfquery name = "insert_checked_employees">
                         insert into attendance (employee_id, date, time_in, time_out)
-                        values ( '#evaluate('form.employee_id#employee_id#')#' , '#form.attendance_date#', '#evaluate('form.time_in#employee_id#')#' , '#evaluate('form.time_out#employee_id#')#')
+                        values ( "#var_emp_id#" , '#form.attendance_date#', "#var_time_in#" , "#var_time_out#")
                     </cfquery>
                     <cfset inserted_employees = inserted_employees + 1>
                 <cfelse>
                     <cfquery name = "update_attendance">
                         update attendance 
-                        set time_in = '#evaluate('form.time_in#employee_id#')#' , time_out = '#evaluate('form.time_out#employee_id#')#'
-                        where date = '#form.attendance_date#' and employee_id = '#evaluate('form.employee_id#employee_id#')#'
+                        set time_in = "#var_time_in#" , time_out = "#var_time_out#"
+                        where date = "#form.attendance_date#" and employee_id = "#var_emp_id#"
                     </cfquery>
                     <cfset updated_employees = updated_employees + 1>
                 </cfif>
