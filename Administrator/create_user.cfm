@@ -129,11 +129,14 @@
                                     <hr>
                                     <input type = "password" name = "user_password" placeholder = "Create Password" class = "form-control" required<cfif #merror# eq 1 > value = "#form.user_password#" <cfelseif structKeyExists(url, 'edit')> value = "#get_data.password#"</cfif>>
                                     <hr>
-                                    <select class = "form-select" name = "user_level" required="true"> 
+                                    
+                                    <input type = "text" name = "user_level" value="Admin" class = "form-control" required="true" readonly>
+                            
+                                    <!---<select class = "form-select" name = "user_level" required="true"> 
                                         <option value=""> --Select Level-- </option>
                                         <option> Admin </option>
                                         <option <cfif #merror# eq 1 ><cfif form.user_level eq 'Employee'> selected = "true"</cfif> </cfif> > Employee </option>
-                                    </select>  
+                                    </select>--->  
                                     <input type = "hidden" name = "user_id" <cfif structKeyExists(url, 'edit')> value = "#get_data.id#" </cfif> >                      
                                     <br>
                                     <input type = "hidden" value = "action" name = <cfif structKeyExists(url, 'edit')> "update" <cfelse> "create" </cfif> > <!--- name "update" will update existing data, name "create" will insert new data --->
