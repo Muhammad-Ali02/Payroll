@@ -107,6 +107,9 @@
                             <li>
                                 <a href="..\payment\pay_slip.cfm">Generate Payslip</a>
                             </li>
+                            <li>
+                                <a href="..\payment\slip_email.cfm">Send Payslip via email</a>
+                            </li>
                         </ul>
                     </li>
                     <li>
