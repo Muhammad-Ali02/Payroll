@@ -30,7 +30,7 @@
         <div class = "container">    
             <div class = "row">
                 <div class = "col-6" style = "position:absolute; top:150px;left:30px; font-size:15px;">
-                    <p> Employee ID: <strong><u> #url.generate# </u></strong></p> 
+                    <p> Employee ID: <strong><u> #get_employees.employee_id# </u></strong></p> 
                     <p> Employee Name:<strong><u> #pay_info.employee_name# </u></strong></p> 
                     <p> Designation:<strong><u> #pay_info.designation#</u></strong></p>
                 </div>
