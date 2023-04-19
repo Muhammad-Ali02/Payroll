@@ -13,8 +13,8 @@
                 <cfquery name = "check_existing">
                     select * 
                     from all_leaves
-                    where (from_date >= '#form.from_date#' and from_date <= '#form.to_date#')
-                    and (to_date >= '#form.from_date#' and to_date <= '#form.to_date#')
+                    where ((from_date >= '#form.from_date#' and from_date <= '#form.to_date#')
+                    or(to_date >= '#form.from_date#' and to_date <= '#form.to_date#'))
                     and employee_id = '#session.loggedin.username#' 
                     <!--- Just for Later use if want to alow leave request again if rejected ---> 
                     <!--- and action != 'rejected' ---> 
