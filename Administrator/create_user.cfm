@@ -14,7 +14,7 @@
         <cfelseif structKeyExists(form, 'create')> <!--- show error when duplicate deparment name --->
             <cfquery name = "check">
                 select user_name as name from users
-                where user_name = '#form.user_name#'
+                where user_name = <cfqueryparam value='#form.user_name#'>
             </cfquery>
             <cfif check.name eq form.user_name>
                 <script>
@@ -31,7 +31,7 @@
             <!---      Get uuid of newly created user from uuid table and then hash the password and insert into user table  --->
                 <cfquery name="get_uuid">
                     select * from uuid_table
-                    where user_name = "#form.user_name#"
+                    where user_name = <cfqueryparam value='#form.user_name#'>
                 </cfquery>
                 <cfset salt = "#get_uuid.uuid#">
                 <cfset password = "#form.user_password#">
@@ -51,7 +51,7 @@
             <!--- Generate hashed password --->
                 <cfquery name="get_uuid">
                     select * from uuid_table
-                    where user_name = "#form.user_name#"
+                    where user_name = <cfqueryparam value='#form.user_name#'>
                 </cfquery>
                 <cfset salt = "#get_uuid.uuid#">
                 <cfset password = "#form.user_password#">

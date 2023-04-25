@@ -654,7 +654,21 @@
             ADD COLUMN `deduction10` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction9`; 
         </cfquery>
 <cfcatch type="any">
-    query51:<cfdump  var="#cfcatch.cause.message#"> <br>
+    query51:<cfdump  var="#cfcatch#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="52">
+        ALTER TABLE `payroll`.`past_month_pay` 
+        CHANGE COLUMN `employee_id` `employee_id` VARCHAR(45) NULL DEFAULT '' ,
+        CHANGE COLUMN `month` `month` INT(11) NULL DEFAULT '0' ,
+        ADD COLUMN `id` INT(11) NOT NULL AUTO_INCREMENT FIRST,
+        DROP PRIMARY KEY,
+        ADD PRIMARY KEY (`id`);
+    </cfquery>
+<cfcatch type="any">
+    query52:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 </cfoutput>
