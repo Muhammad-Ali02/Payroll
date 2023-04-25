@@ -6,7 +6,7 @@
                 <cfquery name = "showError" >
                     select * 
                     from users
-                    where user_name = '#form.txt_user_name#'
+                    where user_name = <cfqueryparam value='#form.txt_user_name#'> 
                 </cfquery>
                 <cfset user_level = showError.level>
                 <cfif showError.recordcount eq 0>
@@ -16,14 +16,14 @@
                         FROM payroll.emp_users u, employee e
                         where u.user_name = e.employee_id 
                         And (e.leaving_date ='' or e.leaving_date is null) 
-                        And u.user_name="#form.txt_user_name#";
+                        And u.user_name= <cfqueryparam value='#form.txt_user_name#'> ;
                     </cfquery>
                     <cfset user_level = get_employee.level>
                 </cfif>
                 <!---   encrypt the user password that coming to the form    --->
                 <cfquery name="get_uuid">
                     select * from uuid_table
-                    where user_name = "#form.txt_user_name#"
+                    where user_name = <cfqueryparam value='#form.txt_user_name#'> 
                 </cfquery>
                 <cfif get_uuid.recordcount gt 0>
                     <cfset salt = "#get_uuid.uuid#">

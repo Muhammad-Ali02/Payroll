@@ -92,6 +92,11 @@
                         </cfquery>
                     </cfif>
                 </cfloop>
+
+                <cfquery name="t_employee">
+                    select employee_id from current_month_pay
+                </cfquery>
+                <!---           This query delete the record of left employees after month end process   --->
                 <cfif left_employees.recordcount gt 0>
                     <cfloop query="left_employees">
                         <cfquery name="delete_left_employee">
@@ -100,11 +105,14 @@
                         </cfquery>
                     </cfloop>
                 </cfif>
-              
-                <cfquery name="t_employee">
-                    select employee_id from current_month_pay
+
+                <!---        This query select column names          --->
+                <cfquery name="columns_name">
+                    select column_name as col from information_schema.columns 
+                    where table_name = "Past_month_pay";
                 </cfquery>
                 <cfloop query="t_employee">
+                <!---         following query get allownce and deduction record  against each employee          --->
                     <cfquery name="allowance">
                         select p.* from pay_allowance p , current_month_pay c
                         where status = 'y' And p.employee_Id = c.employee_id And c.employee_id="#employee_id#"
@@ -114,11 +122,27 @@
                         where status = 'y' And p.employee_Id = c.employee_id And c.employee_id="#employee_id#"
                     </cfquery>
                     <cfif allowance.recordcount neq 0>
+                    <!---          this query update data from past_mounth_pay in allowance cols          --->
                         <cfquery name="insert_allownces">
                             update past_month_pay
                             set 
                             <cfset counter = 0>
                             <cfloop query = "allowance">
+                                <cfloop query="columns_name">
+                                    <cfif columns_name.col neq "allowance#allowance.allowance_id#">
+                                        <cfset flag1 = true>
+                                    <cfelse>
+                                        <cfset flag1 = false>
+                                        <cfbreak>
+                                    </cfif>
+                                </cfloop>
+                                <cfif flag1 eq true>
+                                    
+                                    <cfquery name="add_new_column">
+                                        ALTER TABLE `payroll`.`past_month_pay`
+                                        ADD COLUMN `allowance#allowance_id#` VARCHAR(45) NULL DEFAULT '0'; 
+                                    </cfquery>
+                                </cfif>
                                 <cfset counter += 1>
                                 <cfif allowance.recordcount eq counter>
                                     allowance#allowance_id# = "#allowance.allowance_amount#"
@@ -132,17 +156,32 @@
                         </cfquery>
                     </cfif>
                     <cfif deduction.recordcount neq 0>
+                        <!---          this query update data from past_mounth_pay in deduction columns          --->
                         <cfquery name="insert_deductions">
                             update past_month_pay
                             set 
                             <cfset counter = 0>
                             <cfloop query = "deduction">
-                            <cfset counter += 1>
-                            <cfif deduction.recordcount eq counter>
-                                deduction#deduction_id# = "#deduction.deduction_amount#"
-                            <cfelse>
-                                deduction#deduction_id# = "#deduction.deduction_amount#",
-                            </cfif>
+                                <cfloop query="columns_name">
+                                    <cfif columns_name.col neq "deduction#deduction.deduction_id#">
+                                        <cfset flag = true>
+                                    <cfelse>
+                                        <cfset flag = false>
+                                        <cfbreak>
+                                    </cfif>
+                                </cfloop>
+                                <cfif flag eq true>
+                                    <cfquery name="add_new_column">
+                                        ALTER TABLE `payroll`.`past_month_pay`
+                                        ADD COLUMN `deduction#deduction_id#` VARCHAR(45) NULL DEFAULT '0'; 
+                                    </cfquery>
+                                </cfif>
+                                <cfset counter += 1>
+                                <cfif deduction.recordcount eq counter>
+                                    deduction#deduction_id# = "#deduction.deduction_amount#"
+                                <cfelse>
+                                    deduction#deduction_id# = "#deduction.deduction_amount#",
+                                </cfif>
                             </cfloop>
                             where employee_id = "#deduction.employee_id# "
                             And month = "#get_setup.current_month#"

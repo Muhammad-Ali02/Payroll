@@ -36,11 +36,11 @@
                     </cfif>
                     action_by = "#session.loggedIn.username#",
                     action_date = now(),
-                    action_remarks = '#form.txt_remarks#'
-                    where id = '#url.id#'
+                    action_remarks = <cfqueryparam vlaue='#form.txt_remarks#'>
+                    where id = <cfqueryparam value='#url.id#'>
             </cfquery>
             <cfquery name = "get_leave_detail">
-                select * from all_leaves where id = "#url.id#"
+                select * from all_leaves where id = <cfqueryparam value='#url.id#'>
             </cfquery>
             <cfquery name = "get_working_days">
                 select b.* , a.workingdays_group from employee a, working_days b where a.employee_id = '#get_leave_detail.employee_id#' and b.group_id = a.workingdays_group
@@ -54,35 +54,35 @@
                     <cfif isDefined('form.Approve')>
                         <cfquery name="Approved_leaves">
                             Insert into leaves_approval (leave_id, leave_Date, action, approved_as)
-                            values ('#url.id#', '#dateFormat('#index#','yyyy-mm-dd')#', 'Approved', '1')
+                            values (<cfqueryparam value='#url.id#'>, '#dateFormat('#index#','yyyy-mm-dd')#', 'Approved', '1')
                         </cfquery>
                         <cfquery name="update_leave_balance">
                             Update employee_leaves
                             Set 
                                 leaves_balance = leaves_balance - 1,
                                 leaves_availed = IFNULL(leaves_availed, 0) + 1
-                            where leave_id = "#form.leave_type#" And employee_id = "#form.employee_id#"
+                            where leave_id = <cfqueryparam value="#form.leave_type#"> And employee_id = <cfqueryparam value="#form.employee_id#">
                         </cfquery>
                     <cfelseif isdefined("form.Reject")>
                         <cfquery name="Approved_leaves">
                             Insert into leaves_approval (leave_id, leave_Date, action, approved_as)
-                            values ('#url.id#', '#dateFormat('#index#','yyyy-mm-dd')#', 'Rejected', '0')
+                            values (<cfqueryparam value='#url.id#'>, '#dateFormat('#index#','yyyy-mm-dd')#', 'Rejected', '0')
                         </cfquery>
                     <cfelseif isDefined("form.Partial_leave")>
                         <cfif evaluate('form.date#counter1#') eq 1>
                             <cfquery name="Approved_leaves">
                                 Insert into leaves_approval (leave_id, leave_Date, action, approved_as)
-                                values ('#url.id#', '#dateFormat('#index#','yyyy-mm-dd')#', 'Approved', '1')
+                                values (<cfqueryparam value='#url.id#'>, '#dateFormat('#index#','yyyy-mm-dd')#', 'Approved', '1')
                             </cfquery>
                         <cfelseif evaluate('form.date#counter1#') eq 0.5>
                             <cfquery name="Approved_leaves">
                                 Insert into leaves_approval (leave_id, leave_Date, action, approved_as)
-                                values ('#url.id#', '#dateFormat('#index#','yyyy-mm-dd')#', 'Approved', '0.5')
+                                values (<cfqueryparam value='#url.id#'>, '#dateFormat('#index#','yyyy-mm-dd')#', 'Approved', '0.5')
                             </cfquery>
                         <cfelseif evaluate('form.date#counter1#') eq 0>
                             <cfquery name="Approved_leaves">
                                 Insert into leaves_approval (leave_id, leave_Date, action, approved_as)
-                                values ('#url.id#', '#dateFormat('#index#','yyyy-mm-dd')#', 'Rejected', '0')
+                                values (<cfqueryparam value='#url.id#'>, '#dateFormat('#index#','yyyy-mm-dd')#', 'Rejected', '0')
                             </cfquery>
                         </cfif>
                         <cfif evaluate('form.date#counter1#') eq 1 or evaluate('form.date#counter1#') eq 0.5>
