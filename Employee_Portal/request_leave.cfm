@@ -7,14 +7,14 @@
                 <cfquery name="leave_checker">
                     select leaves_balance
                     from employee_leaves
-                    where employee_id = '#session.loggedin.username#' And leave_id = '#form.Leave_id#'
+                    where employee_id = '#session.loggedin.username#' And leave_id = <cfqueryparam value='#form.Leave_id#'>
                 </cfquery>
                 <!--- query to check if leave request already exist in the table then no insert new request --->
                 <cfquery name = "check_existing">
                     select * 
                     from all_leaves
-                    where ((from_date >= '#form.from_date#' and from_date <= '#form.to_date#')
-                    or(to_date >= '#form.from_date#' and to_date <= '#form.to_date#'))
+                    where ((from_date >= <cfqueryparam value='#form.from_date#'> and from_date <= <cfqueryparam value='#form.to_date#'>)
+                    or(to_date >= <cfqueryparam value='#form.from_date#'> and to_date <= <cfqueryparam value='#form.to_date#'>))
                     and employee_id = '#session.loggedin.username#' 
                     <!--- Just for Later use if want to alow leave request again if rejected ---> 
                     <!--- and action != 'rejected' ---> 
@@ -38,11 +38,11 @@
                             values
                             (
                                 '#session.loggedin.username#', 
-                                '#form.leave_id#', 
-                                '#form.from_date#', 
-                                '#form.to_date#', 
-                                '#form.leave_days#',
-                                '#form.txt_reason#', 
+                                <cfqueryparam value='#form.Leave_id#'>, 
+                                <cfqueryparam value='#form.from_date#'>, 
+                                <cfqueryparam value='#form.to_date#'>, 
+                                <cfqueryparam value='#form.leave_days#'>,
+                                <cfqueryparam value='#form.txt_reason#'>, 
                                 #now()#, 
                                 'Pending',
                                 'None'

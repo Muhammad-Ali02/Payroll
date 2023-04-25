@@ -14,14 +14,14 @@
             <cfquery name = "insert_Advance">
                 insert into advance_salary 
                 (employee_id, applied_amount, apply_description, Apply_date, apply_by, Status, term_condition, InstallmentAmount)
-                values('#session.loggedin.username#', '#form.Applied_amount#', '#form.apply_description#', now(), '#session.loggedin.username#', 'N', 'Agreed', '#form.Applied_amount#')
+                values('#session.loggedin.username#', <cfqueryparam value='#form.Applied_amount#'>, <cfqueryparam value='#form.apply_description#'>, now(), '#session.loggedin.username#', 'N', 'Agreed', <cfqueryparam value='#form.Applied_amount#'>)
             </cfquery>
             <cflocation  url="AdvanceSalary_request.cfm?request_generated=true">
         <cfelse>
             <cfquery name = "insert_Advance">
                 insert into advance_salary 
                 (employee_id, applied_amount, apply_description, Apply_date, apply_by, Status, term_condition, InstallmentAmount)
-                values('#session.loggedin.username#', '#form.Applied_amount#', '#form.apply_description#', now(), '#session.loggedin.username#', 'N', 'Agreed', '#form.return_Amount#')
+                values('#session.loggedin.username#', <cfqueryparam value='#form.Applied_amount#'>, <cfqueryparam value='#form.apply_description#'>, now(), '#session.loggedin.username#', 'N', 'Agreed', <cfqueryparam value='#form.return_Amount#'>)
             </cfquery>
             <cflocation  url="AdvanceSalary_request.cfm?request_generated=true">
         </cfif>
