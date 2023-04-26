@@ -64,7 +64,7 @@
                         <div class="col-lg-1"></div>
                         <div class="col-lg-5 mb-1">
                             <span class="ml-1"> Select Employee </span>
-                            <select class="form-select" name="old_Id" id="select_employee" >
+                            <select class="form-select" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' name="old_Id" id="select_employee" >
                                 <option value=""> -- Select Employee -- </option> 
                                 <cfloop query="get_employees">
                                     <option value = "#employee_id#"> #name# </option>

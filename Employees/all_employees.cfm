@@ -13,7 +13,7 @@
             from employee emp, designation des, department dep
             where emp.department = dep.department_id and emp.designation = des.designation_id and (emp.leaving_date IS NULL or emp.leaving_date = "")
         </cfquery>
-        <cfquery name = "left_employees">
+        <cfquery name = "previous_employees">
             select emp.employee_id as id, concat(emp.first_name," ",emp.middle_name," ",emp.last_name) as name, dep.department_name as department, des.designation_title as designation, emp.leaving_date as leaving_date
             from employee emp, designation des, department dep
             where emp.department = dep.department_id and emp.designation = des.designation_id and emp.leaving_date <> ""
@@ -25,8 +25,8 @@
                 </button>
             </a>
             <a target = "_self" id='left' style="display: inline;">
-                <button type = "button" onclick="displayLeftEmployees();" class = "btn btn-outline-dark create_button mb-3 custom_button">
-                    Former Employees
+                <button type = "button" onclick="displayPreviousEmployees();" class = "btn btn-outline-dark create_button mb-3 custom_button">
+                    Previous Employees
                 </button>
             </a>
             <a target = "_self" id='present' style="display: none;">
@@ -36,6 +36,15 @@
             </a>
         </div>
         <div id="present_employees" style="display: inline;">
+            <div class="text-center mb-5">
+                <h3 class="box_heading">Active Employees</h3>
+            </div>
+            <cfparam name="pageNum" default="1">
+            <cfset maxRows = 5>
+            <cfset startRow = min( ( pageNum-1 ) * maxRows+1, max( all_employees.recordCount,1 ) )>
+            <cfset endRow = min( startRow + maxRows-1, all_employees.recordCount )>
+            <cfset totalPages = ceiling( all_employees.recordCount/maxRows )>
+            <cfset loopercount = ceiling( all_employees.recordCount/maxRows )>
             <div style="overflow-x: auto; margin-bottom: 20px;">
                 <table class = "table custom_table">
                     <tr>
@@ -47,7 +56,7 @@
                         <th> Action </th>
                     </tr>
                     <cfset No = 0>
-                    <cfloop query = "all_employees">
+                    <cfloop query = "all_employees" startrow="#startRow#" endrow="#endRow#">
                         <cfset No = No + 1>
                         <tr>
                             <td> #No# </td>
@@ -66,8 +75,37 @@
                     </cfloop>
                 </table>
             </div>
+            <!---        Pageination code start      --->
+            <div class="d-flex justify-content-end">
+                <cfif structKeyExists(url, "pageNum")>
+                    <cfif "#url.pageNum#" lte looperCount>
+                        <cfif "#url.pageNum#" lt looperCount>
+                            <a href="?pageNum=#url.pageNum+1#" class = "btn btn-outline-dark create_button mb-3 custom_button ml-2">Next</a>
+                        </cfif>
+                        <span class="m-2">page #url.pageNum#</span>
+                        <cfif "#url.pageNum#" gt 1>
+                            <a href="?pageNum=#url.pageNum-1#" class = "btn btn-outline-dark create_button mb-3 custom_button mr-2">Prev</a>
+                        </cfif>
+                    </cfif>
+                <cfelse>
+                    <cfset pageNum = 1>
+                    <cfif "#pageNum#" lt looperCount>
+                        <cfif "#pageNum#" lte looperCount>
+                            <a href="?pageNum=#pageNum+1#" class = "btn btn-outline-dark create_button mb-3 custom_button ml-2">Next</a>
+                        </cfif>
+                        <span class="m-2">page #pageNum#</span>
+                        <cfif "#pageNum#" gt 1>
+                            <a href="?pageNum=#pageNum-1#" class = "btn btn-outline-dark create_button mb-3 custom_button mr-2">Prev</a>
+                        </cfif>
+                    </cfif>
+                </cfif>
+            </div>
+        <!---      Pagination End        --->
         </div>
-        <div id="left_employees" style="display: none;">
+        <div id="previous_employees" style="display: none;">
+            <div class="text-center mb-5">
+                <h3 class="box_heading">Previous Employees</h3>
+            </div>
             <div style="overflow-x: auto;">
                 <table class = "table custom_table">
                     <tr>
@@ -80,7 +118,7 @@
                         <th> Action </th>
                     </tr>
                     <cfset No = 0>
-                    <cfloop query = "left_employees">
+                    <cfloop query = "previous_employees">
                         <cfset No = No + 1>
                         <tr>
                             <td> #No# </td>
@@ -104,14 +142,14 @@
     </cfif>
 </cfoutput>
 <script>
-    function displayLeftEmployees(){
-        document.getElementById('left_employees').style.display='inline';
+    function displayPreviousEmployees(){
+        document.getElementById('previous_employees').style.display='inline';
         document.getElementById('present_employees').style.display='none';
         document.getElementById('left').style.display='none';
         document.getElementById('present').style.display='inline';
     }
     function displayEmployees(){
-        document.getElementById('left_employees').style.display='none';
+        document.getElementById('previous_employees').style.display='none';
         document.getElementById('present_employees').style.display='inline';
         document.getElementById('present').style.display='none';
         document.getElementById('left').style.display='inline';
