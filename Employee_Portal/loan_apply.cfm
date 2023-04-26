@@ -128,6 +128,9 @@
             </form>
     </cfoutput>
     <script>
+        function containsNonNumeric(str) {
+                return /\D/.test(str);
+        }
         function formValidate(){
             var Applied_amount = $('#Applied_amount').val();
             var Apply_description = $('#apply_description').val();
@@ -141,9 +144,15 @@
                 }else if(parseInt(Applied_amount) < parseInt(return_Amount)){
                     alert("Installment Amount can't be Greater then Applied Amount!");
                     return false;
-                }else if(Apply_description.length > "900"){
+                }else if(Apply_description.length > "199"){
                     alert("Text is too much long in describe reason box.");
                     $('#apply_description').focus();
+                    return false;
+                }else if((containsNonNumeric(Applied_amount) == true) || (Applied_amount.length > 6)){
+                    alert('Amount Field Countain non Numaric Characters or Amount greater than six Digit. ');
+                    return false;
+                }else if((containsNonNumeric(return_Amount) == true) || (return_Amount.length > 6)){
+                    alert('Recurring Amount Field Countain non Numaric Characters.');
                     return false;
                 }else{
                     return true;
@@ -155,6 +164,9 @@
                 }else if(Apply_description.length > "199"){
                     alert("Text is too much long in describe reason box.");
                     $('#apply_description').focus();
+                    return false;
+                }else if((containsNonNumeric(Applied_amount) == true) || (Applied_amount.length > 6)){
+                    alert('Amount Field Countain non Numaric Characters or Amount greater than six Digit. ');
                     return false;
                 }else{
                     return true;

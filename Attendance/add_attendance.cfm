@@ -3,6 +3,7 @@
     <cfquery name = "get_employees">
         select concat(first_name," ", middle_name, " " , last_name) as name , employee_id
         from employee
+        where leaving_date IS NULL or leaving_date = ""
     </cfquery>
 <!--- In Case of All Employees --->
     <cfif structKeyExists(form, 'multiple_employees')>
@@ -47,7 +48,7 @@
                 <p style = "display:inline; color:rgb(255, 255, 255, 0.8); font-weight:bold;" > *Only Selected Employees will be updated</p>
                 <p style = "display:inline; color:rgb(255, 255, 255, 0.8); font-weight:bold;"><b>Attendance Date </b>: #form.ATTENDANCE_DATE#</p>
             </div>
-            <div style="overflow-x: auto;">
+            <div style="overflow-x: auto; height: 600px; overflow-y: auto;">
                 <table class = "table custom_table mt-3">
                     <tr>
                         <thead>

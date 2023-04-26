@@ -4,6 +4,7 @@
         <cfquery name = "get_employees"> <!--- to print All employees list --->
             select concat(employee_id,' | ',first_name,' ', middle_name, ' ', last_name) as name , employee_id
             from employee
+            where leaving_date IS NULL or leaving_date = ""
         </cfquery>
         <cfquery name = "get_setting">
             select * from setup
@@ -39,7 +40,7 @@
                     </div>
                     <div class = "col-md-6">
                         <label for = "Employee_id" class = "form-select-label"> Select Employee: </label>
-                            <select class = "form-select" name = "Employee_id" id="Employee_id" required="true"> 
+                            <select class = "form-select" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' name = "Employee_id" id="Employee_id" required="true"> 
                                 <option value = ''> -- Select Employee -- </option> 
                                 <cfloop query="get_employees">
                                     <option value = "#employee_id#"> #name# </option>
