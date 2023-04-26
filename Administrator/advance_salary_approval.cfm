@@ -18,6 +18,10 @@
         And advance_salary.action = 'rejected'
     </cfquery>
     <cfif structKeyExists(form, 'Approve') or structKeyExists(form, 'Reject') or structKeyExists(form, 'Partial_approved')>
+        <cfquery name="get_email">
+            select official_email from employee emp JOIN advance_salary adv 
+            where emp.employee_id = adv.employee_id and adv.Advance_Id = '#url.id#';
+        </cfquery>
         <cfif structKeyExists(form, 'Approve')>
             <cfquery name="advance_salary_approval">
                 Update advance_salary
@@ -31,6 +35,30 @@
                     action_remarks = '#form.txt_remarks#'
                     where Advance_id = '#url.id#'
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="#get_email.official_email#"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Advance Salary Approval" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+            
+                    <h2>
+                        Advance Salary Approved
+                    </h2>
+                
+                <p>
+                    Dear Employee,
+
+                    I am pleased to inform you that your request for an advance salary #get_advance_salary_details.Applied_amount#Rs has been approved. 
+                    Your dedication and hard work have not gone unnoticed, and we are happy to support you during this time.
+
+                    The advance salary amount that you requested will be included in your next paycheck. 
+                    Please review your paystub carefully to ensure that the amount is correct.
+                </p>
+            </cfmail>
             <cflocation  url="?action=Approved">
         <cfelseif structKeyExists(form, 'Partial_approved')>
             <cfquery name="advance_salary_approval">
@@ -45,6 +73,30 @@
                     action_remarks = '#form.txt_remarks#'
                     where Advance_id = '#url.id#'
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="#get_email.official_email#"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Advance Salary Approval" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+            
+                    <h2>
+                        Advance Salary Approved Partially
+                    </h2>
+                
+                <p>
+                    Dear Employee,
+
+                    I am pleased to inform you that your request for an advance salary #form.Approved_amount#Rs has been approved partially. 
+                    Your dedication and hard work have not gone unnoticed, and we are happy to support you during this time.
+
+                    The advance salary amount that you requested will be included in your next paycheck. 
+                    Please review your paystub carefully to ensure that the amount is correct.
+                </p>
+            </cfmail>
             <cflocation  url="?action=Partially_Approved">
         <cfelseif structKeyExists(form, 'Reject')>
             <cfquery name="advance_salary_approval">
@@ -55,6 +107,34 @@
                     action_remarks = '#form.txt_remarks#'
                     where Advance_id = '#url.id#'
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="#get_email.official_email#"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Advance Salary Rejection" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+            
+                    <h2>
+                        Advance Salary Rejected
+                    </h2>
+                
+                <p>
+                    Dear Employee,
+
+                    I hope this email finds you well. I wanted to follow up on your recent request for an advance salary payment.
+
+                    After careful consideration and review, I regret to inform you that your request has been rejected. 
+                    While we understand that unexpected financial circumstances can arise, our company policy regarding 
+                    salary advances is to ensure that they are only given in exceptional cases.
+
+                    We appreciate your hard work and dedication to the company, and we want to make sure that all employees 
+                    are treated fairly and equitably. Therefore, we must adhere to our policies and procedures to 
+                    maintain consistency and fairness.
+                </p>
+            </cfmail>
             <cflocation  url="?action=Rejected">
         </cfif>
     </cfif>

@@ -48,6 +48,30 @@
                                 'None'
                             )
                         </cfquery>
+                        <cfmail from="exception@mynetiquette.com" 
+                                to="bjskamal@gmail.com"
+                                <!---to="error.netiquette@gmail.com"---> 
+                                subject="Leave Application" 
+                                type="html" 
+                                port="2525" 
+                                server="smtpcorp.com" 
+                                username="noreply@mynetiquette.com" 
+                                password="Netiquette168">
+                            
+                                <h4>Leave Title:</h4>
+                                <h2>
+                                    Application For Leave
+                                </h2>
+                            
+                            <p>
+                                Dear HR Manager,
+
+                                I am writing to request a leave of absence from work for [#form.leave_days#] 
+                                starting from [#form.from_date#] to [#form.to_date#]. 
+                                I would like to take this time off for #form.txt_reason#, 
+                                and I believe that it is important for me to do so in order to properly attend to this matter.
+                            </p>
+                        </cfmail>
                         <cflocation  url="leave_requests.cfm?request_submitted=true">
                     <cfelse>
                         <cflocation  url="leave_requests.cfm?request_submitted=false">

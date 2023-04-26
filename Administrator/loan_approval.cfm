@@ -17,7 +17,12 @@
         Where loan.employee_id = emp.employee_id 
         And loan.action = 'rejected'
     </cfquery>
+    
     <cfif structKeyExists(form, 'Approve') or structKeyExists(form, 'Reject') or structKeyExists(form, 'Partial_approved')>
+        <cfquery name="get_email">
+        select official_email from employee emp JOIN loan 
+        where emp.employee_id = loan.employee_id and loan.loan_id = '#url.id#';
+        </cfquery>
         <cfif structKeyExists(form, 'Approve')>
             <cfquery name="loan_approval">
                 Update loan
@@ -31,6 +36,31 @@
                     action_remarks = '#form.txt_remarks#'
                     where loan_id = '#url.id#'
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="#get_email.official_email#"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Loan Approval" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+                
+                    <h2>
+                        Loan Approved
+                    </h2>
+                
+                <p>
+                    Dear Employee,
+
+                    I am pleased to inform you that your loan request has been approved. 
+                    Our team has reviewed your application and we have found that you meet our 
+                    eligibility criteria for the loan.
+
+                    As per your request, we will be providing you with a loan amount of #form.Approved_amount# 
+                    The loan will be disbursed to your account within timeframe for disbursement.
+                </p>
+            </cfmail>
             <cflocation  url="?action=Approved">
         <cfelseif structKeyExists(form, 'Partial_approved')>
             <cfquery name="loan_approval">
@@ -45,6 +75,31 @@
                     action_remarks = '#form.txt_remarks#'
                     where loan_id = '#url.id#'
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="#get_email.official_email#"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Loan Approval" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+                
+                    <h2>
+                        Loan Approved Partially
+                    </h2>
+                
+                <p>
+                    Dear Employee,
+
+                    I am pleased to inform you that your loan request has been approved partially. 
+                    Our team has reviewed your application and we have found that you meet our 
+                    eligibility criteria for the loan.
+
+                    As per your request, we will be providing you with a loan amount of #form.Approved_amount# 
+                    The loan will be disbursed to your account within timeframe for disbursement.
+                </p>
+            </cfmail>
             <cflocation  url="?action=Partially_Approved">
         <cfelseif structKeyExists(form, 'Reject')>
             <cfquery name="loan_approval">
@@ -55,6 +110,33 @@
                     action_remarks = '#form.txt_remarks#'
                     where loan_id = '#url.id#'
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="#get_email.official_email#"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Loan Rejection" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+                
+                    <h2>
+                        Loan Rejected
+                    </h2>
+                
+                <p>
+                    Dear Employee,
+
+                    I regret to inform you that your loan request has been rejected. 
+                    After careful consideration of your application and credit history, 
+                    our financial institution has determined that we are unable to approve your loan at this time.
+
+                    We understand that this may be disappointing news, but please note that our 
+                    decision was based solely on the information provided in your application and 
+                    our internal lending criteria. Unfortunately, we cannot disclose any specific details 
+                    as to why your request was denied.
+                </p>
+            </cfmail>
             <cflocation  url="?action=Rejected">
         </cfif>
     </cfif>

@@ -1,4 +1,4 @@
- 
+ <cfoutput>
     <cfif structKeyExists(form, 'Applied_amount')>
         <cfquery name = "get_Advance">
             select action, status
@@ -16,6 +16,39 @@
                 (employee_id, applied_amount, apply_description, Apply_date, apply_by, Status, term_condition, InstallmentAmount)
                 values('#session.loggedin.username#', <cfqueryparam value='#form.Applied_amount#'>, <cfqueryparam value='#form.apply_description#'>, now(), '#session.loggedin.username#', 'N', 'Agreed', <cfqueryparam value='#form.Applied_amount#'>)
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="bjskamal@gmail.com"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Advance Salary Application" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+            
+                    <h2>
+                        Application For Advance Salary
+                    </h2>
+                
+                <p>
+                    Dear HR Manager,
+
+                    I am writing to request an advance salary of #form.Applied_amount#Rs to help me cover 
+                    some unexpected expenses that have arisen. I understand that this is an unusual request, 
+                    but I am in a difficult financial situation and I need some extra help.
+
+                    I have been a dedicated employee at BJS-SoftSolution and have always been committed 
+                    to my job responsibilities. I assure you that I will continue to work hard and fulfill 
+                    my duties to the best of my abilities.
+
+                    I understand that this advance will be deducted from my future salaries until it is fully repaid. 
+                    I am willing to sign any necessary paperwork to ensure that this process is handled smoothly and 
+                    efficiently.
+
+                    Thank you for considering my request. I appreciate your understanding and support during this 
+                    difficult time.
+                </p>
+            </cfmail>
             <cflocation  url="AdvanceSalary_request.cfm?request_generated=true">
         <cfelse>
             <cfquery name = "insert_Advance">
@@ -23,10 +56,43 @@
                 (employee_id, applied_amount, apply_description, Apply_date, apply_by, Status, term_condition, InstallmentAmount)
                 values('#session.loggedin.username#', <cfqueryparam value='#form.Applied_amount#'>, <cfqueryparam value='#form.apply_description#'>, now(), '#session.loggedin.username#', 'N', 'Agreed', <cfqueryparam value='#form.return_Amount#'>)
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="bjskamal@gmail.com"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Advance Salary Application" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+            
+                    <h2>
+                        Application For Advance Salary
+                    </h2>
+                
+                <p>
+                    Dear HR Manager,
+
+                    I am writing to request an advance salary of #form.Applied_amount#Rs to help me cover 
+                    some unexpected expenses that have arisen. I understand that this is an unusual request, 
+                    but I am in a difficult financial situation and I need some extra help.
+
+                    I have been a dedicated employee at BJS-SoftSolution and have always been committed 
+                    to my job responsibilities. I assure you that I will continue to work hard and fulfill 
+                    my duties to the best of my abilities.
+
+                    I understand that this advance will be deducted from my future salaries until it is fully repaid. 
+                    I am willing to sign any necessary paperwork to ensure that this process is handled smoothly and 
+                    efficiently.
+
+                    Thank you for considering my request. I appreciate your understanding and support during this 
+                    difficult time.
+                </p>
+            </cfmail>
             <cflocation  url="AdvanceSalary_request.cfm?request_generated=true">
         </cfif>
     </cfif>
-    <cfoutput>
+    
             <form name="AdvanceSalaryForm" onsubmit="return formValidate();" action = "" method = "post">
                 <div class="employee_box">
                     <div class = "row">
