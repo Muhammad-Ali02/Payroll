@@ -76,38 +76,50 @@
             </form>
     </cfoutput>
     <script>
+        function containsNonNumeric(str) {
+            return /\D/.test(str);
+        }
         function formValidate(){
-                    var Applied_amount = document.forms["AdvanceSalaryForm"]["Applied_amount"].value;
-                    var apply_description = $('#apply_description').val();
-                    var Terms1 = document.forms["AdvanceSalaryForm"]["Terms1"].value;
-                    var return_Amount = document.forms["AdvanceSalaryForm"]["return_Amount"].value;
-                    var Term_Condition = document.forms["AdvanceSalaryForm"]["Term_Condition"].value;
-                    if(Terms1 == "2"){
-                        if((Applied_amount == "")||(apply_description == "")||(return_Amount == "")||(Term_Condition == "")){
-                            alert("All field must be filled out!");
-                            return false;
-                        }else if(parseInt(Applied_amount) < parseInt(return_Amount)){
-                            alert("Installment Amount can't be Greater then Applied Amount!");
-                            return false;
-                        }else if(apply_description.length > "900"){
-                            alert("Text is too much long in describe reason box.");
-                            $('#apply_description').focus();
-                            return false;
-                        }else{
-                            return true;
-                        }
-                    }else if(Terms1 == "1"){
-                     if((Applied_amount == "")||(apply_description == "")||(Term_Condition == "")){
-                        alert("All field must be filled out!");
-                         return false;
-                        }else if(apply_description.length > "199"){
-                            alert("Text is too much long in describe reason box.");
-                            $('#apply_description').focus();
-                            return false;
-                        }else{
-                            return true;
-                        }
-                    }
+            var Applied_amount = document.forms["AdvanceSalaryForm"]["Applied_amount"].value;
+            var apply_description = $('#apply_description').val();
+            var Terms1 = document.forms["AdvanceSalaryForm"]["Terms1"].value;
+            var return_Amount = document.forms["AdvanceSalaryForm"]["return_Amount"].value;
+            var Term_Condition = document.forms["AdvanceSalaryForm"]["Term_Condition"].value;
+            if(Terms1 == "2"){
+                if((Applied_amount == "")||(apply_description == "")||(return_Amount == "")||(Term_Condition == "")){
+                    alert("All field must be filled out!");
+                    return false;
+                }else if(parseInt(Applied_amount) < parseInt(return_Amount)){
+                    alert("Installment Amount can't be Greater then Applied Amount!");
+                    return false;
+                }else if(apply_description.length > "900"){
+                    alert("Text is too much long in describe reason box.");
+                    $('#apply_description').focus();
+                    return false;
+                }else if((containsNonNumeric(Applied_amount) == true) || (Applied_amount.length > 6)){
+                    alert('Applied Amount Field Countain non Numaric Characters or Amount greater than six Digit. ');
+                    return false;
+                }else if((containsNonNumeric(return_Amount) == true) || (return_Amount.length > 6)){
+                    alert('Recurring Amount Field Countain non Numaric Characters.');
+                    return false;
+                }else{
+                    return true;
                 }
+            }else if(Terms1 == "1"){
+                if((Applied_amount == "")||(apply_description == "")||(Term_Condition == "")){
+                alert("All field must be filled out!");
+                    return false;
+                }else if(apply_description.length > "199"){
+                    alert("Text is too much long in describe reason box.");
+                    $('#apply_description').focus();
+                    return false;
+                }else if((containsNonNumeric(Applied_amount) == true) || (Applied_amount.length > 6)){
+                    alert('Applied Amount Field Countain non Numaric Characters or Amount greater than six Digit. ');
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        }
     </script>
  

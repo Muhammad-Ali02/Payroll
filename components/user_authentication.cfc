@@ -30,15 +30,15 @@
                 <cfquery name = "getData">
                     select * 
                     from users
-                    where user_name = '#user_name#'
-                    and password = '#user_password#'
+                    where user_name = <cfqueryparam value='#user_name#'>
+                    and password = <cfqueryparam value='#user_password#'>
                 </cfquery>
             <cfelse>
                 <cfquery name = "getData">
                     select * 
                     from emp_users
-                    where user_name = '#user_name#'
-                    and password = '#user_password#'
+                    where user_name = <cfqueryparam value='#user_name#'>
+                    and password = <cfqueryparam value='#user_password#'>
                 </cfquery>
             </cfif>
 <!---             <cfdump  var="#getdata#"> <cfabort> --->
@@ -51,8 +51,8 @@
                 <cfquery name = "insert_time">
                     update users
                     set last_login = now()
-                    where user_name = '#getData.user_name#'
-                    and password = '#getData.password#'
+                    where user_name = <cfqueryparam value='#getData.user_name#'>
+                    and password = <cfqueryparam value='#getData.password#'>
                 </cfquery>
             <cfelse> 
                 <cfset ipaddress = getData.IP_ADDRESS>
@@ -60,8 +60,8 @@
                     <cfquery name = "insert_time">
                         update emp_users
                         set last_login = now(), ip_address = '#arguments.current_ipAddress#', machine_name = '#arguments.machine_name#'
-                        where user_name = '#getData.user_name#'
-                        and password = '#getData.password#'
+                        where user_name = <cfqueryparam value='#getData.user_name#'>
+                        and password = <cfqueryparam value='#getData.password#'>
                     </cfquery>
                 </cfif>
             </cfif>

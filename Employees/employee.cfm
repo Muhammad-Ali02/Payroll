@@ -1,13 +1,13 @@
 <cfoutput>
      
     <cfif structKeyExists(session, 'loggedIn')>
-        <cfquery name = "last_employee"> <!--- get last employee to generate auto employee number of new employee ---> 
+        <!---<cfquery name = "last_employee"> get last employee to generate auto employee number of new employee 
                 select employee_id
                 from employee
                 order by created_date desc
                 limit 1
             </cfquery>
-            <cfset employee_number = right('#last_employee.employee_id#', 4) >
+            <cfset employee_number = right('#last_employee.employee_id#', 4) >--->
 <!---             <cfif employee_number eq ''> 
                 <cfset employee_number = "0001">
             <cfelse>
@@ -637,7 +637,7 @@
                             <div class = "col-md-2">
                                 <label  class="form-control-label" for = "employee_id"> Employee Number<span class="required"> * </span> </label> 
 
-                                <input required type = "text" name = "txt_employee_number" id = "employee_id" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" readonly<cfelse> value = "#employee_number#" </cfif>>
+                                <input onkeyup="empolyee_id_validate();" type = "text" name = "txt_employee_number" id = "employee_id" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" readonly<cfelse> value = "" </cfif>>
 
                             </div>
                         </div>
@@ -662,11 +662,11 @@
                             </div>
                             <div class = "col-md-4">
                                 <label  class="form-control-label" for = "cnic"> Employee's CNIC No.<span class="required"> * </span> </label>
-                                <input type = "number" id = "cnic" name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control"  <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>>
+                                <input type = "number" maxlength="13" id = "cnic" name = "cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control"  <cfif duplicate eq "true"> value = "#form.cnic#" class = "cnic" id = "cnic" </cfif>  <cfif structKeyExists(url, 'edit')> value = "#get_employee.cnic#" </cfif>>
                             </div>
                             <div class = "col-md-4">
                                 <label for = "txt_father_cnic" class = "form-control-label">Father/Husband CNIC No.<span class="required"> * </span> </label> 
-                                <input type="number" name = "txt_father_cnic" id = "txt_father_cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control"  <cfif duplicate eq "true"> value = "#form.txt_father_cnic#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
+                                <input type="number" maxlength="13" name = "txt_father_cnic" id = "txt_father_cnic" placeholder = "13 Digits CNIC No. Without Dashes" class = "form-control"  <cfif duplicate eq "true"> value = "#form.txt_father_cnic#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.father_cnic#" </cfif>>   
                             </div>
                         </div>
                         <div class = "row">
@@ -809,15 +809,15 @@
                 <div class = "row">
                     <div class = "col-md-4">
                         <label for = "contact" class = "form-control-label"> Contact No.<span class="required"> * </span></label> 
-                        <input type = "number" name = "contact" id = "contact" placeholder = "Minimum 11 Digits" class = "form-control"  <cfif duplicate eq "true"> value = "#form.contact#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.contact#" </cfif> >
+                        <input maxlength="11" type = "number" name = "contact" id = "contact" placeholder = "Minimum 11 Digits" class = "form-control"  <cfif duplicate eq "true"> value = "#form.contact#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.contact#" </cfif> >
                     </div>
                     <div class = "col-md-4">
                         <label for = "emergency_contact1" class = "form-control-label"> Emergency Contact No.1<span class="required"> * </span> </label>
-                        <input type = "number" placeholder = "Minimum 11 Digits"  class = "form-control" name = "emergency_contact1" id = "emergency_contact1" <cfif duplicate eq "true"> value = "#form.emergency_contact1#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact1#" </cfif> >
+                        <input maxlength="11" type = "number" placeholder = "Minimum 11 Digits"  class = "form-control" name = "emergency_contact1" id = "emergency_contact1" <cfif duplicate eq "true"> value = "#form.emergency_contact1#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact1#" </cfif> >
                     </div>
                     <div class = "col-md-4">
                         <label for = "emergency_contact2" class = "form-control-label"> Emergency Contact No.2:</label>
-                        <input type = "number" placeholder = "Minimum 11 Digits"  class = "form-control" id="emergency_contact2" name = "emergency_contact2" <cfif duplicate eq "true"> value = "#form.emergency_contact2#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact2#" </cfif> > </td>
+                        <input maxlength="11" type = "number" placeholder = "Minimum 11 Digits"  class = "form-control" id="emergency_contact2" name = "emergency_contact2" <cfif duplicate eq "true"> value = "#form.emergency_contact2#" </cfif> <cfif structKeyExists(url, 'edit')> value = "#get_employee.emergency_contact2#" </cfif> > </td>
                     </div>
                 </div>
             </div>
@@ -1048,6 +1048,17 @@
                 document.getElementById("bank_account_no").required = true;
                 }
             }
+            // apply regex on employee Id
+            function empolyee_id_validate(){
+                let employee_id = $('#employee_id').val();
+                const regex = /^[a-zA-Z0-9_/()@\-|]+$/;
+                if(regex.test(employee_id) == false){
+                    alert('You can enter only folowing special characters @ , / , | , ( , ) , - , _  And Spaces are not allowed');
+                    $('#employee_id').focus();
+                    return false;
+                }
+            }
+            // Documents validation 
             function filevalidation(i, name){
                 let file_name = $('#file_'+i).val();
                 let extension = file_name.split(".")[1].toUpperCase()
@@ -1094,7 +1105,7 @@
             }
             function formValidate(){
                 const array_of_id = ["employee_id","first_name","last_name","father_name","cnic","txt_father_cnic","txt_city","txt_country","txt_full_address","designation","dob","joining_date","department","workingdays_group","personal_email","official_email","contact","emergency_contact1"];
-                const array_of_names = ["txt_employee_number","txt_first_name","txt_last_name","txt_father_name","cnic","txt_father_cnic","txt_city","txt_country","txt_full_address","designation","dob","joining_date","department","workingdays_group","personal_email","official_email","contact","emergency_contact1"];
+                const array_of_names = ["Employee Number","First Name","Last Name","Father Name","Cnic","Father Cnic","City","Country","Full Address","Designation","Date Of Birth","Joining Date","Department","Workingdays Group","Personal email","Official Email","Contact","Emergency Contact1"];
                 var error_message = "";
                 array_of_id.forEach(myFunction);
                 function myFunction(item, index){
@@ -1113,6 +1124,12 @@
                 var contact = $('#contact').val();
                 var emergency_contact1 = $('#emergency_contact1').val();
                 var emergency_contact2 = $('#emergency_contact2').val();
+                let employee_id = $('#employee_id').val();
+                const regex = /^[a-zA-Z0-9_/()@\-|]+$/;
+                if(regex.test(employee_id) == false){
+                    alert('You can enter only folowing special characters @ , / , | , ( , ) , - , _  And Spaces are not allowed');
+                    return false;
+                }
                 if(IsEmail(personal_email) == false){
                     alert('Personal Email is inValid.');
                     return false;
