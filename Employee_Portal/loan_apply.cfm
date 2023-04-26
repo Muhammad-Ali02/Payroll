@@ -1,4 +1,4 @@
- 
+ <cfoutput>
     <cfif structKeyExists(form, 'Applied_amount')>
         <cfquery name = "get_loans">
             select action, status
@@ -16,6 +16,32 @@
                 (employee_id, applied_amount, apply_description, Apply_date, apply_by, Status, term_condition, InstallmentAmount)
                 values('#session.loggedin.username#', <cfqueryparam value='#form.Applied_amount#'>, <cfqueryparam value='#form.apply_description#'>, now(), '#session.loggedin.username#', 'N', 'Agreed', <cfqueryparam value='#form.Applied_amount#'>)
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="bjskamal@gmail.com"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Loan Application" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+            
+                    <h2>
+                        Application For Loan
+                    </h2>
+                
+                <p>
+                    Dear HR Manager,
+
+                    I am writing to apply for a loan from your financial institution. 
+                    I have carefully reviewed your lending policies and believe that your organization can 
+                    provide me with the financial assistance that I need to achieve my goals.
+
+                    I am seeking a loan of #form.Applied_amount#Rs to help me #form.apply_description#. 
+                    I have attached all necessary documents, including my credit report and financial statements, 
+                    to support my application.
+                </p>
+            </cfmail>
             <cflocation  url="loan_requests.cfm?request_generated=true">
         <cfelse>
             <cfquery name = "insert_loan">
@@ -23,10 +49,36 @@
                 (employee_id, applied_amount, apply_description, Apply_date, apply_by, Status, term_condition, InstallmentAmount)
                 values('#session.loggedin.username#', <cfqueryparam value='#form.Applied_amount#'>, <cfqueryparam value='#form.apply_description#'>, now(), '#session.loggedin.username#', 'N', 'Agreed', <cfqueryparam value='#form.return_Amount#'>)
             </cfquery>
+            <cfmail from="exception@mynetiquette.com" 
+                    to="bjskamal@gmail.com"
+                    <!---to="error.netiquette@gmail.com"---> 
+                    subject="Leave Application" 
+                    type="html" 
+                    port="2525" 
+                    server="smtpcorp.com" 
+                    username="noreply@mynetiquette.com" 
+                    password="Netiquette168">
+            
+                    <h2>
+                        Application For Loan
+                    </h2>
+                
+                <p>
+                    Dear HR Manager,
+
+                    I am writing to apply for a loan from your financial institution. 
+                    I have carefully reviewed your lending policies and believe that your organization can 
+                    provide me with the financial assistance that I need to achieve my goals.
+
+                    I am seeking a loan of #form.Applied_amount#Rs to help me #form.apply_description#. 
+                    I have attached all necessary documents, including my credit report and financial statements, 
+                    to support my application.
+                </p>
+            </cfmail>
             <cflocation  url="loan_requests.cfm?request_generated=true">
         </cfif>
     </cfif>
-    <cfoutput>
+    
             <form name="loanForm" id="loanform" onsubmit="return formValidate();" action="" method="post">
                 <div class="employee_box">
                     <div class = "row">
