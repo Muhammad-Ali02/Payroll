@@ -149,58 +149,65 @@
             select * from advance_salary
             where Advance_id = <cfqueryparam value="#url.request_id#">
         </cfquery>
-        <div class="employee_box">
+        <cfif get_advance_salary_details.Action neq "Pending">
             <div class="text-center mb-5">
+                <h3 class="box_heading">Advance Salary Approval</h3>
+            </div>
+            <h6>Sorry! You can no longer edit it this advance salary request.</h6>
+        <cfelse>
+            <div class="employee_box">
+                <div class="text-center mb-5">
                     <h3 class="box_heading">Advance Salary Approval</h3>
                 </div>
-                <div class = "row">
-                    <div class = "col-md-4">
-                        Applied Date: 
-                        <p>#dateFormat(get_advance_salary_details.Apply_date,'dd-mmm-yyyy')#<p>
-                    </div>
-                    <div class = "col-md-4">
-                        Applied Amount: 
-                        <p>#get_advance_salary_details.Applied_amount#<p>
-                    </div>
-                    <div class = "col-md-4">
-                        Installment:
-                        <p>#get_advance_salary_details.InstallmentAmount#</p>
-                    </div>
-                    
-                </div>
-                <div class = "row">
-                    <label for = "reason" class = "mt-3">Reason: </label>
-                    <p>#get_advance_salary_details.Apply_Description#<p>
-                </div>
-                <form action = "?id=#url.request_id#" method = "post">
-                    <div id="advance_salary_selection" style="display:none;">
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                Enter Amount for Advance Salary Approval :
-                                <input type="number" id="Approved_amount" name="Approved_amount" maxlength="6" min="0" max="#get_advance_salary_details.Applied_amount#" class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                                <input type ="submit" id="Partial_advance_salary" value = "Approved Partially" name="Partial_approved" class = "btn btn-outline-danger mb-2 mt-4 ml-2">
-                            </div>
+                    <div class = "row">
+                        <div class = "col-md-4">
+                            Applied Date: 
+                            <p>#dateFormat(get_advance_salary_details.Apply_date,'dd-mmm-yyyy')#<p>
                         </div>
+                        <div class = "col-md-4">
+                            Applied Amount: 
+                            <p>#get_advance_salary_details.Applied_amount#<p>
+                        </div>
+                        <div class = "col-md-4">
+                            Installment:
+                            <p>#get_advance_salary_details.InstallmentAmount#</p>
+                        </div>
+                        
                     </div>
                     <div class = "row">
-                        <div class="col-md-12">
-                            <label for = "txt_remarks">Remarks:</label>
-                            <textarea class = "form-control" id = "txt_remarks" name = "txt_remarks" placeholder = "Please Write Some Remarks According to Your Action (Approve or Reject)" required></textarea>
-                        </div>
+                        <label for = "reason" class = "mt-3">Reason: </label>
+                        <p>#get_advance_salary_details.Apply_Description#<p>
                     </div>
-                    <div class = "row mt-3">
-                        <div class="d-flex justify-content-end" style="gap: 8px;">
-                            <!--- <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#"> --->
-                            <input type="hidden" name="employee_id" value="#advance_salary_request.employee_id#">
-                            <button id = "" onclick="document.getElementById('advance_salary_selection').style.display='inline'; this.disabled=true" name = "Partial" class = "btn btn-outline-danger">Approve Partial Advance Salary</button>
-                            <input type = "submit" id = "Approve_advance_salary" value = "Approve Advance Salary" name = "Approve" class = "btn btn-outline-success">
-                            <input type = "submit" id = "Reject_advance_salary" value = "Reject Advance Salary" name = "Reject" class = "btn btn-outline-danger">
+                    <form action = "?id=#url.request_id#" method = "post">
+                        <div id="advance_salary_selection" style="display:none;">
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    Enter Amount for Advance Salary Approval :
+                                    <input type="number" id="Approved_amount" name="Approved_amount" maxlength="6" min="0" max="#get_advance_salary_details.Applied_amount#" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type ="submit" id="Partial_advance_salary" value = "Approved Partially" name="Partial_approved" class = "btn btn-outline-danger mb-2 mt-4 ml-2">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </form>
-        </div>
+                        <div class = "row">
+                            <div class="col-md-12">
+                                <label for = "txt_remarks">Remarks:</label>
+                                <textarea class = "form-control" id = "txt_remarks" name = "txt_remarks" placeholder = "Please Write Some Remarks According to Your Action (Approve or Reject)" required></textarea>
+                            </div>
+                        </div>
+                        <div class = "row mt-3">
+                            <div class="d-flex justify-content-end" style="gap: 8px;">
+                                <!--- <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#"> --->
+                                <input type="hidden" name="employee_id" value="#advance_salary_request.employee_id#">
+                                <button id = "" onclick="document.getElementById('advance_salary_selection').style.display='inline'; this.disabled=true" name = "Partial" class = "btn btn-outline-danger">Approve Partial Advance Salary</button>
+                                <input type = "submit" id = "Approve_advance_salary" value = "Approve Advance Salary" name = "Approve" class = "btn btn-outline-success">
+                                <input type = "submit" id = "Reject_advance_salary" value = "Reject Advance Salary" name = "Reject" class = "btn btn-outline-danger">
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </cfif>
     <cfelse>
         <cfif advance_salary_request.recordcount neq 0>
             <p class = "text-primary">Pending Requests:</p>
