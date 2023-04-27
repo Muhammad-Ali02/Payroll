@@ -155,7 +155,7 @@
             <div class="text-center mb-5">
                 <h3 class="box_heading">Loan Approval</h3>
             </div>
-            <h6>Sorry! You can no longer edit it this loan request.</h6>
+            <h6>Sorry! You can no longer edit this loan request.</h6>
         <cfelse>
             <div class="employee_box">
                 <div class="text-center mb-5">
