@@ -42,7 +42,11 @@
                     to support my application.
                 </p>
             </cfmail>
-            <cflocation  url="loan_requests.cfm?request_generated=true">
+            <script>
+                alert("Your Request For Loan Has Been Generated.");
+                window.location.assign('loan_requests.cfm');
+            </script>
+<!---             <cflocation  url="loan_requests.cfm?request_generated=true"> --->
         <cfelse>
             <cfquery name = "insert_loan">
                 insert into loan 
@@ -75,7 +79,11 @@
                     to support my application.
                 </p>
             </cfmail>
-            <cflocation  url="loan_requests.cfm?request_generated=true">
+            <script>
+                alert("Your Request For Loan Has Been Generated.");
+                window.location.assign('loan_requests.cfm');
+            </script>
+<!---             <cflocation  url="loan_requests.cfm?request_generated=true"> --->
         </cfif>
     </cfif>
     

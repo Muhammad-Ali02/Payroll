@@ -33,8 +33,8 @@
                     remaining_balance = Applied_amount,
                     Action_by= <cfqueryparam value= '#session.loggedIn.username#'>,
                     Action_Date = now(),
-                    action_remarks = '#form.txt_remarks#'
-                    where loan_id = '#url.id#'
+                    action_remarks = <cfqueryparam value='#form.txt_remarks#'>
+                    where loan_id = <cfqueryparam value='#url.id#'>
             </cfquery>
             <cfmail from="exception@mynetiquette.com" 
                     to="#get_email.official_email#"
@@ -72,8 +72,8 @@
                     remaining_balance = '#form.Approved_amount#',
                     Action_by= <cfqueryparam value= '#session.loggedIn.username#'>,
                     Action_Date = now(),
-                    action_remarks = '#form.txt_remarks#'
-                    where loan_id = '#url.id#'
+                    action_remarks = <cfqueryparam value='#form.txt_remarks#'>
+                    where loan_id = <cfqueryparam value='#url.id#'>
             </cfquery>
             <cfmail from="exception@mynetiquette.com" 
                     to="#get_email.official_email#"
@@ -107,8 +107,8 @@
                 Set action ='Rejected',
                     Action_by= <cfqueryparam value= '#session.loggedIn.username#'>,
                     Action_Date = now(),
-                    action_remarks = '#form.txt_remarks#'
-                    where loan_id = '#url.id#'
+                    action_remarks = <cfqueryparam value='#form.txt_remarks#'>
+                    where loan_id = <cfqueryparam value='#url.id#'>
             </cfquery>
             <cfmail from="exception@mynetiquette.com" 
                     to="#get_email.official_email#"
@@ -151,58 +151,65 @@
             select * from loan
             where loan_id = <cfqueryparam value="#url.request_id#">
         </cfquery>
-        <div class="employee_box">
+        <cfif get_loan_details.Action neq "pending">
             <div class="text-center mb-5">
-                    <h3 class="box_heading">Loan Approval</h3>
-                </div>
-                <div class = "row">
-                    <div class = "col-md-4">
-                        Applied Date: 
-                        <p>#dateFormat(get_loan_details.Apply_date,'dd-mmm-yyyy')#<p>
-                    </div>
-                    <div class = "col-md-4">
-                        Applied Amount: 
-                        <p>#get_loan_details.Applied_amount#<p>
-                    </div>
-                    <div class = "col-md-4">
-                        Installment:
-                        <p>#get_loan_details.InstallmentAmount#</p>
-                    </div>
-                    
-                </div>
-                <div class = "row">
-                    <label for = "reason" class = "mt-3">Reason: </label>
-                    <p>#get_loan_details.Apply_Description#<p>
-                </div>
-                <form action = "?id=#url.request_id#" method = "post">
-                    <div id="loanSelection" style="display:none;">
-                        <div class="row mb-2">
-                            <div class="col-md-4">
-                                Enter Amount for Loan Approval  :
-                                <input type="number" id="Approved_amount" name="Approved_amount" maxlength="6" min="0" max="#get_loan_details.Applied_amount#" class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                                <input type ="submit" id="Partial_loan" value = "Approved Partially" name="Partial_approved" class = "btn btn-outline-danger mb-2 mt-4 ml-2">
-                            </div>
-                        </div>
+                <h3 class="box_heading">Loan Approval</h3>
+            </div>
+            <h6>Sorry! You can no longer edit it this loan request.</h6>
+        <cfelse>
+            <div class="employee_box">
+                <div class="text-center mb-5">
+                        <h3 class="box_heading">Loan Approval</h3>
                     </div>
                     <div class = "row">
-                        <div class="col-md-12">
-                            <label for = "txt_remarks">Remarks:</label>
-                            <textarea class = "form-control" id = "txt_remarks" name = "txt_remarks" placeholder = "Please Write Some Remarks According to Your Action (Approve or Reject)" required></textarea>
+                        <div class = "col-md-4">
+                            Applied Date: 
+                            <p>#dateFormat(get_loan_details.Apply_date,'dd-mmm-yyyy')#<p>
                         </div>
-                    </div>
-                    <div class = "row mt-3">
-                        <div class="d-flex justify-content-end" style="gap: 8px;">
-                            <!--- <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#"> --->
-                            <input type="hidden" name="employee_id" value="#loan_request.employee_id#">
-                            <button id = "" onclick="document.getElementById('loanSelection').style.display='inline'; this.disabled=true" name = "Partial" class = "btn btn-outline-danger">Approve Partial Loan</button>
-                            <input type = "submit" id = "Approve_loan" value = "Approve Loan" name = "Approve" class = "btn btn-outline-success">
-                            <input type = "submit" id = "Reject_loan" value = "Reject Loan" name = "Reject" class = "btn btn-outline-danger">
+                        <div class = "col-md-4">
+                            Applied Amount: 
+                            <p>#get_loan_details.Applied_amount#<p>
                         </div>
+                        <div class = "col-md-4">
+                            Installment:
+                            <p>#get_loan_details.InstallmentAmount#</p>
+                        </div>
+                        
                     </div>
-                </form>
-        </div>
+                    <div class = "row">
+                        <label for = "reason" class = "mt-3">Reason: </label>
+                        <p>#get_loan_details.Apply_Description#<p>
+                    </div>
+                    <form action = "?id=#url.request_id#" method = "post">
+                        <div id="loanSelection" style="display:none;">
+                            <div class="row mb-2">
+                                <div class="col-md-4">
+                                    Enter Amount for Loan Approval  :
+                                    <input type="number" id="Approved_amount" name="Approved_amount" maxlength="6" min="0" max="#get_loan_details.Applied_amount#" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type ="submit" id="Partial_loan" value = "Approved Partially" name="Partial_approved" class = "btn btn-outline-danger mb-2 mt-4 ml-2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class = "row">
+                            <div class="col-md-12">
+                                <label for = "txt_remarks">Remarks:</label>
+                                <textarea class = "form-control" id = "txt_remarks" name = "txt_remarks" placeholder = "Please Write Some Remarks According to Your Action (Approve or Reject)" required></textarea>
+                            </div>
+                        </div>
+                        <div class = "row mt-3">
+                            <div class="d-flex justify-content-end" style="gap: 8px;">
+                                <!--- <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#"> --->
+                                <input type="hidden" name="employee_id" value="#loan_request.employee_id#">
+                                <button id = "" onclick="document.getElementById('loanSelection').style.display='inline'; this.disabled=true" name = "Partial" class = "btn btn-outline-danger">Approve Partial Loan</button>
+                                <input type = "submit" id = "Approve_loan" value = "Approve Loan" name = "Approve" class = "btn btn-outline-success">
+                                <input type = "submit" id = "Reject_loan" value = "Reject Loan" name = "Reject" class = "btn btn-outline-danger">
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </cfif>
     <cfelse>
         <cfif loan_request.recordcount neq 0>
             <p class = "text-primary">Pending Requests:</p>
