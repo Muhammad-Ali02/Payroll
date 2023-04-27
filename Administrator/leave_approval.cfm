@@ -200,7 +200,7 @@
     </cfif>
     <cfif structKeyExists(url, 'request_id')><!--- Front end when admin user want to approve or reject a leave--->
         <cfquery name="get_leave_detail">
-            select * from all_leaves where id = "#url.request_id#"
+            select * from all_leaves where id = <cfqueryparam value="#url.request_id#">
         </cfquery>
         <cfquery name="employee_detail">
             select concat(emp.first_name,' ',emp.middle_name,' ',emp.last_name) as name
@@ -214,96 +214,101 @@
         </cfquery>
         <!---            <cfdump  var="#employee_detail#"> <cfabort> --->
         <!--- ___________________________________________ Front End _________________________________________________--->
-        <div class="employee_box">
+        <cfif get_leave_detail.Action neq "Pending">
             <div class="text-center mb-5">
-                <h3 class="box_heading">
-                    Leave Approval
-                </h3>
+                <h3 class="box_heading"> Leave Approval</h3>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    Employee Name:
-                    <p>#employee_detail.name#</p>
+            <h6>Sorry! You can no longer edit this leave request.</h6>
+        <cfelse>
+            <div class="employee_box">
+                <div class="text-center mb-5">
+                    <h3 class="box_heading">Leave Approval</h3>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    From Date: 
-                    <p>#dateFormat(get_leave_detail.from_date, 'dd-mmm-yyyy')#<p>
-                </div>
-                <div class="col-md-3">
-                    To Date: 
-                    <p>#dateFormat(get_leave_detail.to_date, 'dd-mmm-yyyy')#<p>
-                </div>
-                <div class="col-md-3">
-                    Days:
-                    <p>#get_leave_detail.leave_days#</p>
-                </div>
-                <div class="col-md-3">
-                    Leave Title:
-                    <p>#leave_requests.leave_title#</p>
-                </div>
-            </div>
-            <div class="row">
-                <label for="reason" class="mt-3">
-                    Reason: 
-                </label>
-                <p>#get_leave_detail.reason#<p>
-            </div>
-            <form onsubmit="return formValidate();" action="leave_approval.cfm?id=#url.request_id#" method="post">
-                <div id="leaveSelection" style="display:none;">
-                    <!--- <script>
-                        document.getElementById('Approve_leave').style.display='none';
-                        document.getElementById('Reject_leave').style.display='none';
-                    </script> --->
-                    <div class="text-center mb-2">
-                        <p style="font-weight: 600;">Select Payment Type For Partial Leave Approval According Dates</p>
-                    </div>
-                    <div class="row mb-2">
-                        <cfset counter = 0>
-                        <!---          This loop show all leave with date for approval on click of partial approval                --->
-                        <cfloop index="index" from="#get_leave_detail.from_date#" to="#get_leave_detail.to_date#">
-                            <cfset counter += 1>
-                            <cfset day = dayOfWeek(index)>
-                            <cfset dayName = dayOfWeekAsString('#day#')>
-                            <cfif evaluate("get_working_days.#dayName#") eq '1'>
-                                <div class="col-md-6 mb-2 mt-2">
-                                    <!---<div class="form-check ml-3 mb-2">
-                                       <input type = "checkbox" class="form-check-input" style="border-radius: 0;" id="#DateFormat("#index#", "yyyy-mm-dd")#" 
-                                       name = "#DateFormat("#index#", "yyyy-mmm-dd")#" required>  </div>--->
-                                    <span class="form-check-label ml-4 mt-1">#DateFormat("#index#", "yyyy-mmm-dd")# ( #dayName# )</span>
-                                </div>
-                                <div class="col-md-4 mb-2 ml-4">
-                                    <select class="form-select" name="date#counter#" id="Payment_type">
-                                        <option value="1">Full Paid</option>
-                                        <option value="0.5">Half Paid</option>
-                                        <option value="0">Reject</option>
-                                    </select>
-                                </div>
-                            </cfif>
-                        </cfloop>
-                    </div>
-                    <div class="text-left">
-                        <input type="submit" id="Partial_leave" value="Approved Partially" name="Partial_leave" class="btn btn-outline-danger mb-2 ml-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        Employee Name:
+                        <p>#employee_detail.name#</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <label for="txt_remarks">Remarks:</label>
-                        <textarea class="form-control" id="txt_remarks" name="txt_remarks" placeholder="Please Write Some Remarks According to Your Action (Approve or Reject)" required></textarea>
+                    <div class="col-md-3">
+                        From Date: 
+                        <p>#dateFormat(get_leave_detail.from_date, 'dd-mmm-yyyy')#<p>
+                    </div>
+                    <div class="col-md-3">
+                        To Date: 
+                        <p>#dateFormat(get_leave_detail.to_date, 'dd-mmm-yyyy')#<p>
+                    </div>
+                    <div class="col-md-3">
+                        Days:
+                        <p>#get_leave_detail.leave_days#</p>
+                    </div>
+                    <div class="col-md-3">
+                        Leave Title:
+                        <p>#leave_requests.leave_title#</p>
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="d-flex justify-content-end flex-wrap" style="gap: 8px;">
-                        <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#">
-                        <input type="hidden" name="employee_id" value="#leave_requests.employee_id#">
-                        <button id="" onclick="document.getElementById('leaveSelection').style.display='inline'; this.disabled=true" name="Partial" class="btn custom_button btn-outline-danger"> Approve Partial Leave </button>
-                        <input type="submit" id="Approve_leave" value="Approve Leave" name="Approve" class="btn btn-outline-success">
-                        <input type="submit" id="Reject_leave" value="Reject Leave" name="Reject" class="btn btn-outline-danger">
-                    </div>
+                <div class="row">
+                    <label for="reason" class="mt-3">
+                        Reason: 
+                    </label>
+                    <p>#get_leave_detail.reason#<p>
                 </div>
-            </form>
-        </div>
+                <form onsubmit="return formValidate();" action="leave_approval.cfm?id=#url.request_id#" method="post">
+                    <div id="leaveSelection" style="display:none;">
+                        <!--- <script>
+                            document.getElementById('Approve_leave').style.display='none';
+                            document.getElementById('Reject_leave').style.display='none';
+                        </script> --->
+                        <div class="text-center mb-2">
+                            <p style="font-weight: 600;">Select Payment Type For Partial Leave Approval According Dates</p>
+                        </div>
+                        <div class="row mb-2">
+                            <cfset counter = 0>
+                            <!---          This loop show all leave with date for approval on click of partial approval                --->
+                            <cfloop index="index" from="#get_leave_detail.from_date#" to="#get_leave_detail.to_date#">
+                                <cfset counter += 1>
+                                <cfset day = dayOfWeek(index)>
+                                <cfset dayName = dayOfWeekAsString('#day#')>
+                                <cfif evaluate("get_working_days.#dayName#") eq '1'>
+                                    <div class="col-md-6 mb-2 mt-2">
+                                        <!---<div class="form-check ml-3 mb-2">
+                                        <input type = "checkbox" class="form-check-input" style="border-radius: 0;" id="#DateFormat("#index#", "yyyy-mm-dd")#" 
+                                        name = "#DateFormat("#index#", "yyyy-mmm-dd")#" required>  </div>--->
+                                        <span class="form-check-label ml-4 mt-1">#DateFormat("#index#", "yyyy-mmm-dd")# ( #dayName# )</span>
+                                    </div>
+                                    <div class="col-md-4 mb-2 ml-4">
+                                        <select class="form-select" name="date#counter#" id="Payment_type">
+                                            <option value="1">Full Paid</option>
+                                            <option value="0.5">Half Paid</option>
+                                            <option value="0">Reject</option>
+                                        </select>
+                                    </div>
+                                </cfif>
+                            </cfloop>
+                        </div>
+                        <div class="text-left">
+                            <input type="submit" id="Partial_leave" value="Approved Partially" name="Partial_leave" class="btn btn-outline-danger mb-2 ml-2">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="txt_remarks">Remarks:</label>
+                            <textarea class="form-control" id="txt_remarks" name="txt_remarks" placeholder="Please Write Some Remarks According to Your Action (Approve or Reject)" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="d-flex justify-content-end flex-wrap" style="gap: 8px;">
+                            <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#">
+                            <input type="hidden" name="employee_id" value="#leave_requests.employee_id#">
+                            <button id="" onclick="document.getElementById('leaveSelection').style.display='inline'; this.disabled=true" name="Partial" class="btn custom_button btn-outline-danger"> Approve Partial Leave </button>
+                            <input type="submit" id="Approve_leave" value="Approve Leave" name="Approve" class="btn btn-outline-success">
+                            <input type="submit" id="Reject_leave" value="Reject Leave" name="Reject" class="btn btn-outline-danger">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </cfif>
     <cfelse>
         <!--- following code shows all approved, rejected and pending requests  --->
         <cfif leave_requests.recordcount neq 0>
