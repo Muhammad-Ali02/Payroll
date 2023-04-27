@@ -315,7 +315,11 @@
                         </cfif>
                     </cfloop>
                 </cftransaction>
-                <cflocation  url="all_employees.cfm?created=true">
+                <script>
+                    alert("Employee Created Successfully");
+                    window.location.assign('all_employees.cfm?created=true');
+                </script>
+<!---                 <cflocation  url="all_employees.cfm?created=true"> --->
             </cfif>
         </cfif>
         <!--- \|/_____________________________\|/_Update_\|/__________________________________\|/ --->
@@ -613,7 +617,11 @@
                     </cfif>
                 </cfloop>
             </cftransaction>
-            <cflocation  url="all_employees.cfm?edited=#form.txt_employee_id#"> 
+            <script>
+                alert("Employee Information Updated Successfully");
+                window.location.assign('all_employees.cfm?edited=#form.txt_employee_id#');
+            </script>
+<!---             <cflocation  url="all_employees.cfm?edited=#form.txt_employee_id#">  --->
         </cfif>
         <!--- \|/_____________________________\|/_Front End_\|/__________________________________\|/ --->
 <nav>
