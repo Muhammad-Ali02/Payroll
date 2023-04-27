@@ -1,13 +1,13 @@
 <cfoutput>
      
     <cfif structKeyExists(session, 'loggedIn')>
-        <script>
+<!---         <script> 
             <cfif structKeyExists(url, 'edited')>
                 alert("Employee Information Updated Successfully");
             <cfelseif structKeyExists(url, 'created')>
                 alert("Employee Created Successfully")
             </cfif>
-        </script>
+        </script>--->
         <cfquery name = "all_employees">
             select emp.employee_id as id, concat(emp.first_name," ",emp.middle_name," ",emp.last_name) as name, dep.department_name as department, des.designation_title as designation
             from employee emp, designation des, department dep
@@ -79,24 +79,24 @@
             <div class="d-flex justify-content-end">
                 <cfif structKeyExists(url, "pageNum")>
                     <cfif "#url.pageNum#" lte looperCount>
-                        <cfif "#url.pageNum#" lt looperCount>
-                            <a href="?pageNum=#url.pageNum+1#" class = "btn btn-outline-dark create_button mb-3 custom_button ml-2">Next</a>
-                        </cfif>
-                        <span class="m-2">page #url.pageNum#</span>
                         <cfif "#url.pageNum#" gt 1>
                             <a href="?pageNum=#url.pageNum-1#" class = "btn btn-outline-dark create_button mb-3 custom_button mr-2">Prev</a>
                         </cfif>
+                        <cfif "#url.pageNum#" lt looperCount>
+                            <a href="?pageNum=#url.pageNum+1#" class = "btn btn-outline-dark create_button mb-3 custom_button ml-2">Next</a>
+                        </cfif>
+                        <span class="m-2">page #url.pageNum# of #looperCount#</span>
                     </cfif>
                 <cfelse>
                     <cfset pageNum = 1>
                     <cfif "#pageNum#" lt looperCount>
-                        <cfif "#pageNum#" lte looperCount>
-                            <a href="?pageNum=#pageNum+1#" class = "btn btn-outline-dark create_button mb-3 custom_button ml-2">Next</a>
-                        </cfif>
-                        <span class="m-2">page #pageNum#</span>
                         <cfif "#pageNum#" gt 1>
                             <a href="?pageNum=#pageNum-1#" class = "btn btn-outline-dark create_button mb-3 custom_button mr-2">Prev</a>
                         </cfif>
+                        <cfif "#pageNum#" lte looperCount>
+                            <a href="?pageNum=#pageNum+1#" class = "btn btn-outline-dark create_button mb-3 custom_button ml-2">Next</a>
+                        </cfif>
+                        <span class="m-2">page #pageNum# of #looperCount#</span>
                     </cfif>
                 </cfif>
             </div>
