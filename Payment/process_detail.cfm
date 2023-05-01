@@ -46,41 +46,86 @@
                 and month(date) = "#setting_info.current_month#" 
                 and year(date) = "#setting_info.current_year#"
             </cfquery>
+            <!--- query for getting current month from setup table --->
+            <cfquery name="get_month">
+                select * from setup;
+            </cfquery>
+            <!--- Get the start date of the month --->
+            <cfset startDate = CreateDate(#get_month.current_year#, #get_month.current_month#, 1)>
+            <!--- Get the end date of the month --->
+            <cfset endDate = DateAdd("d", -1, DateAdd("m", 1, startDate))>
             <!--- Query used to get all Leave Days of an Employee --->
             <cfquery name = "leave_count">
-                select count(a.employee_id) as leave_days, a.leave_id as id, b.leave_title as title
-                from all_leaves a
-                inner join leaves b on a.leave_id = b.leave_id 
-                where a.employee_id = "#url.edit_process_detail#" 
-                and a.action = "Approved"
+                select count(b.leave_Date)as leave_days, a.leave_id as id, c.leave_title as title
+                from all_leaves a, leaves_approval b, leaves c
+                where a.id = b.leave_id
+                And a.leave_id = c.leave_id
+                And a.employee_id = '#url.edit_process_detail#'
+                And b.action = 'Approved'
+                And b.leave_Date >='#DateFormat(startDate, "yyyy-mm-dd")#' 
+                And b.leave_Date <='#DateFormat(endDate, "yyyy-mm-dd")#'
                 group by b.leave_id
+                <!--- select count(a.employee_id) as leave_days, a.leave_id as id, b.leave_title as title
+                -- from all_leaves a
+                -- inner join leaves b on a.leave_id = b.leave_id 
+                -- where a.employee_id = "#url.edit_process_detail#" 
+                -- and a.action = "Approved"
+                -- group by b.leave_id--->
             </cfquery>
             <!--- Query used to get all paid Leave Days of an Employee --->
             <cfquery name = "paid_leave_count">
-                select count(a.employee_id) as leave_days
+                select count(b.leave_Date)as leave_days, a.leave_id as id, c.leave_title as title
+                from all_leaves a, leaves_approval b, leaves c
+                where a.id = b.leave_id
+                And a.leave_id = c.leave_id
+                And a.employee_id = '#url.edit_process_detail#'
+                And b.action = 'Approved'
+                And b.approved_as = '1'
+                And b.leave_Date >='#DateFormat(startDate, "yyyy-mm-dd")#' 
+                And b.leave_Date <='#DateFormat(endDate, "yyyy-mm-dd")#'
+                group by b.leave_id
+                <!---select count(a.employee_id) as leave_days
                 from all_leaves a
                 inner join leaves b on a.leave_id = b.leave_id 
                 where a.employee_id = "#url.edit_process_detail#" 
                 and a.action = "Approved" 
-                and leave_type = "Paid"
+                and leave_type = "Paid"--->
             </cfquery>
             <!--- Query used to get all Hlaf Leave Days of an Employee --->
             <cfquery name = "half_paid_leave_count">
-                select count(a.employee_id) as leave_days
+                select count(b.leave_Date)as leave_days, a.leave_id as id, c.leave_title as title
+                from all_leaves a, leaves_approval b, leaves c
+                where a.id = b.leave_id
+                And a.leave_id = c.leave_id
+                And a.employee_id = '#url.edit_process_detail#'
+                And b.action = 'Approved'
+                And b.approved_as = '0.5'
+                And b.leave_Date >='#DateFormat(startDate, "yyyy-mm-dd")#' 
+                And b.leave_Date <='#DateFormat(endDate, "yyyy-mm-dd")#'
+                group by b.leave_id
+                <!---select count(a.employee_id) as leave_days
                 from all_leaves a
                 inner join leaves b on a.leave_id = b.leave_id 
                 where a.employee_id = "#url.edit_process_detail#" 
                 and a.action = "Approved" 
-                and leave_type = "halfPaid"
+                and leave_type = "halfPaid"--->
             </cfquery>
             <!--- Query used to get all non paid Leave Days of an Employee --->
-            <cfquery name = "Non_paid_leave_count">
-                select count(a.employee_id) as leave_days
+            <cfquery name = "rejected_leaves">
+                select b.*
+                from all_leaves a, leaves_approval b 
+                where a.id = b.leave_id
+                And a.employee_id = '#url.edit_process_detail#'
+                And b.action = 'rejected'
+                And b.approved_as = '0'
+                And b.leave_Date >='#DateFormat(startDate, "yyyy-mm-dd")#' 
+                And b.leave_Date <='#DateFormat(endDate, "yyyy-mm-dd")#'
+                <!---select count(a.employee_id) as leave_days
                 from all_leaves a
                 inner join leaves b on a.leave_id = b.leave_id 
                 where a.employee_id = "#url.edit_process_detail#" 
                 and a.action = "Approved" 
-                and leave_type = "NonPaid"
+                and leave_type = "NonPaid"--->
             </cfquery>
             <!---Query for get loan amount by Kamal--->
             <cfquery  name="get_loan_amt">
@@ -223,7 +268,19 @@
                             <label for = "non_paid_leaves" class = "form-control-label">
                                 Leaves Without Pay: 
                             </label>
-                                <input type = "number"  class = "form-control" min = "0" name = "non_paid_leaves" id = "non_paid_leaves" value = "#Non_paid_leave_count.leave_days#" readonly = "true">
+                            <cfset non_leaves = 0>
+                            <cfloop query="rejected_leaves">
+                                <cfquery name="count_non_paid_leaves">
+                                    select date 
+                                    from attendance a
+                                    where a.date = '#dateFormat(leave_Date,'yyyy-mm-dd')#'
+                                    And a.employee_id = "#url.edit_process_detail#"
+                                </cfquery>
+                                <cfif count_non_paid_leaves.recordcount eq '1'>
+                                    <cfset non_leaves += 1>
+                                </cfif>
+                            </cfloop>
+                                <input type = "number"  class = "form-control" min = "0" name = "non_paid_leaves" id = "non_paid_leaves" value = "#rejected_leaves.recordcount - non_leaves#" readonly = "true">
                     </div>
                 </div>
                 <input name = "employee_id" value = "#get_employee.employee_id#" type = "hidden">
@@ -495,6 +552,12 @@
                 window.location.href = "process_detail.cfm";
             </script>
         <cfelse>
+            <div class="text-center mb-5">
+                <h3 class="box_heading">
+                    Edit Pay
+                </h3>
+            </div>
+            <a href="pay.cfm" class="btn btn-outline-danger custom_button mb-3">Go Back</a>
         <!--- below part will show employee list on front end --->
             <cfquery name = "all_employees">
                 select emp.employee_id as id, concat(emp.first_name,' ', emp.middle_name,' ', emp.last_name) as name, des.designation_title as designation, emp.basic_salary as basic_salary
