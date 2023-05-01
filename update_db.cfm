@@ -659,7 +659,7 @@
 </cftry>
 
 <cftry>
-    <cfquery name="52">
+    <cfquery name="query52">
         ALTER TABLE `payroll`.`past_month_pay` 
         CHANGE COLUMN `employee_id` `employee_id` VARCHAR(45) NULL DEFAULT '' ,
         CHANGE COLUMN `month` `month` INT(11) NULL DEFAULT '0' ,
@@ -669,6 +669,45 @@
     </cfquery>
 <cfcatch type="any">
     query52:<cfdump  var="#cfcatch.cause.message#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query53">
+        ALTER TABLE `payroll`.`current_month_pay`
+        ADD COLUMN `loan_amount` VARCHAR(45) NULL AFTER `processed`;
+    </cfquery>
+<cfcatch type="any">
+    query53:<cfdump  var="#cfcatch.cause.message#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query54">
+        create table advance_salary_installments like loan_installments;
+    </cfquery>
+<cfcatch type="any">
+    query54:<cfdump  var="#cfcatch.cause.message#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query55">
+        ALTER TABLE `payroll`.`advance_salary_installments` 
+        CHANGE COLUMN `loan_id` `Advance_Id` INT(11) NULL DEFAULT NULL ;
+    </cfquery>
+<cfcatch type="any">
+    query55:<cfdump  var="#cfcatch.cause.message#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query56">
+        ALTER TABLE `payroll`.`current_month_pay`
+        ADD COLUMN `adv_salary_amount` VARCHAR(45) NULL AFTER `loan_amount`;
+    </cfquery>
+<cfcatch type="any">
+    query56:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 </cfoutput>
