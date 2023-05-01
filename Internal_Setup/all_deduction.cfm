@@ -43,6 +43,9 @@
             <cfelseif structKeyExists(url, 'created')>
                 <p class = "text-success" style = "text-align:center; font-weight:bold;"> *New Deduction Created Successfuly <p>
             </cfif>
+            <div class="text-center mb-5">
+                <h3 class="box_heading">Manage Deductions</h3>
+            </div>
             <a href = "deduction.cfm">
                 <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
                     Create New Deduction

@@ -88,6 +88,9 @@
     </cfif>
     
             <form name="loanForm" id="loanform" onsubmit="return formValidate();" action="" method="post">
+                <div class="text-center mb-5">
+                    <h3 class="box_heading">Apply For Loan</h3>
+                </div>
                 <div class="employee_box">
                     <div class = "row">
                         <div class = "col-md-4">

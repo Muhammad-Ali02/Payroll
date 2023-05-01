@@ -209,6 +209,9 @@
             </div>
         </cfif>
     <cfelse>
+        <div class="text-center mb-5">
+            <h3 class="box_heading">Advance Salary Approval</h3>
+        </div>
         <cfif advance_salary_request.recordcount neq 0>
             <p class = "text-primary">Pending Requests:</p>
             <table class = "table table-bordered custom_table">

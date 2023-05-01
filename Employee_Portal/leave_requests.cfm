@@ -21,6 +21,9 @@
                 </p>
             </cfif>
         </cfif>
+        <div class="text-center mb-5">
+            <h3 class="box_heading">Leave Requests</h3>
+        </div>
         <a href = "request_leave.cfm" >
             <button type = "button" class = "btn btn-outline-dark mb-3 custom_button">
                 Request Leave
@@ -46,7 +49,7 @@
                         <th>Action</th>
                         <th>Action By </th>
                     </thead>
-                        <cfset No = 0>
+                        <cfset No = #startRow# - 1>
                         <cfloop query="leave_requests" startrow="#startRow#" endrow="#endRow#">
                             <cfset No = No + 1>
                             <tr>
