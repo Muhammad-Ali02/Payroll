@@ -94,6 +94,9 @@
     </cfif>
     
             <form name="AdvanceSalaryForm" onsubmit="return formValidate();" action = "" method = "post">
+                <div class="text-center mb-5">
+                    <h3 class="box_heading">Apply For Advance Salary</h3>
+                </div>
                 <div class="employee_box">
                     <div class = "row">
                         <div class = "col-md-4">

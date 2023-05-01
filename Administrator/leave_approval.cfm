@@ -310,6 +310,9 @@
             </div>
         </cfif>
     <cfelse>
+        <div class="text-center mb-5">
+            <h3 class="box_heading">Leave Approval</h3>
+        </div>
         <!--- following code shows all approved, rejected and pending requests  --->
         <cfif leave_requests.recordcount neq 0>
             <p class="text-primary">
@@ -356,7 +359,7 @@
                             Action
                         </th>
                     </thead>
-                    <cfset No = 0>
+                    <cfset No = startRow -1>
                     <cfloop query="leave_requests" startrow="#startRow#" endrow="#endRow#">
                         <cfset No = No + 1>
                         <tr>
@@ -475,7 +478,7 @@
                             Action
                         </th>
                     </thead>
-                    <cfset No = 0>
+                    <cfset No = approved_request_startRow - 1>
                     <cfloop query="get_approved_requests" startrow="#approved_request_startRow#" endrow="#approved_request_endRow#">
                         <cfset No = No + 1>
                         <tr>
@@ -594,7 +597,7 @@
                             Action
                         </th>
                     </thead>
-                    <cfset No = 0>
+                    <cfset No = rejected_requests_startRow - 1>
                     <cfloop query="get_rejected_requests" startrow="#rejected_requests_startRow#" endrow="#rejected_requests_endRow#">
                         <cfset No = No + 1>
                         <tr>

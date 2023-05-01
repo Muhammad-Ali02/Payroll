@@ -8,13 +8,16 @@
     </cfquery>
     <!--- front end --->
     <cfif leave_list.recordcount neq 0>
+        <div class="text-center mb-5">
+            <h3 class="box_heading">Available Leave</h3>
+        </div>
         <a href = "request_leave.cfm" >
             <button type = "button" class = "btn btn-outline-dark custom_button">
                 Request Leave
             </button>
         </a>
         <table class = "table mt-4 custom_table">
-            <thead class = "thead-dark">
+            <thead>
                 <th> Leave Title </th>
                 <th> Total Allowed</th>
                 <th> Availed </th>

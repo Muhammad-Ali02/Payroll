@@ -79,7 +79,7 @@
                         </a>
                         <ul class="collapse list-unstyled" id="adminSubmenu">
                             <li>
-                                <a href="..\administrator\all_users.cfm">Manange Users</a>
+                                <a href="..\administrator\all_users.cfm">Manage Users</a>
                             </li>
                             <li>
                                 <a href="..\administrator\leave_approval.cfm">Leave Approval</a>
@@ -144,7 +144,7 @@
                                 <a href="..\general_setup\setting.cfm">System Setting</a>
                             </li>
                             <li>
-                                <a href="..\general_setup\all_workingdays.cfm">Manange Working Days</a>
+                                <a href="..\general_setup\all_workingdays.cfm">Manage Working Days</a>
                             </li>
                             <li>
                                 <a href="..\general_setup\month_end.cfm">Month End</a>
@@ -227,7 +227,7 @@
                         </a>
                         <ul class="collapse list-unstyled" id="salarySubmenu">
                             <li>
-                                <a href="..\employee_portal\AdvanceSalary_request.cfm">Advance Salary Request</a>
+                                <a href="..\employee_portal\AdvanceSalary_request.cfm">Advance Salary Requests</a>
                             </li>
                             <li>
                                 <a href="..\employee_portal\AdvanceSalary.cfm">Apply for Salary Advance</a>
@@ -353,7 +353,8 @@
                                                 <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
                                             </svg>
                                         </a>
-                                        <span class="notification-count">#get_survey.recordcount#</span>
+                                        <cfset pending_survey_for_review = #get_survey.recordcount# - check_survey.RecordCount>
+                                        <span class="notification-count">#pending_survey_for_review#</span>
                                     </div>
                                 </li>
                             </cfif>

@@ -641,6 +641,13 @@
         <div class="tab-pane fade show active" id="nav-personal" role="tabpanel" aria-labelledby="nav-home-tab">
         <!---   Personal Detail --->
                 <div class = "employee_box">
+                        <div class="text-center mb-3">
+                            <cfif structKeyExists(url, 'edit')>
+                                <h3 class="box_heading">Update Employee</h3>
+                            <cfelse>
+                                <h3 class="box_heading">Create New Employee</h3>
+                            </cfif>
+                        </div>
                         <div class = "row">
                             <div class = "col-md-2">
                                 <label  class="form-control-label" for = "employee_id"> Employee Number<span class="required"> * </span> </label> 
