@@ -14,7 +14,7 @@
             </cfquery>
             <!--- query to get pay status active or not --->
             <cfquery name = "get_pay_status">
-                select pay_status
+                select pay_status,loan_amount,adv_salary_amount
                 from current_month_pay
                 where employee_id = "#url.edit_process_detail#"
             </cfquery>
@@ -82,6 +82,14 @@
                 and a.action = "Approved" 
                 and leave_type = "NonPaid"
             </cfquery>
+            <!---Query for get loan amount by Kamal--->
+            <cfquery  name="get_loan_amt">
+                select * from loan where employee_Id = '#get_employee.employee_id#' and status = 'Y'
+            </cfquery>
+            <!---Query for get advance_salary amount by Kamal--->
+            <cfquery  name="get_advance_salary_amt">
+                select * from advance_salary where employee_Id = '#get_employee.employee_id#' and status = 'Y'
+            </cfquery>
             <!--- Calculating Working Days of Current Month --->
             <cfquery name = "workingdays">
                 SELECT a.sunday, a.monday, a.tuesday, a.wednesday, a.thursday, a.friday, a.saturday
@@ -126,7 +134,9 @@
                     <p> Transaction Mode: #get_bank_details.mode#
                 </div>
             </div>
-            <form action = "process_detail.cfm?updated=true" method = "post">
+            <cfset remaining_adv_balance = get_advance_salary_amt.remaining_balance>
+            <cfset remaining_loan_balance = get_loan_amt.remaining_balance>
+            <form onsubmit="return formvalidate(#remaining_adv_balance#,#remaining_loan_balance#);" action = "process_detail.cfm?updated=true" method = "post">
                 <div class = "row container mb-3">
                     <div class = "col-md-4 mb-2">
                         <label for = "working_days" class = "form-control-label"> Working Days: </label>
@@ -174,8 +184,20 @@
                             <cfloop query="get_deduction">
                                 <label for = "deduction_amount#id#" class = "form-control-label"> #name#: </label>
                                 <input type = "hidden" name = "deduction_id#id#" value = "#id#">
-                                <input type = "number"  min = "0" id = "deduction_amount#id#" name = "deduction_amount#id#" value = "#amount#" class = "form-control"> <br>
+                                <input type = "number"  min = "0" id = "deduction_amount#id#" name = "deduction_amount#id#" value = "#amount#" class = "form-control"> <br>   
                             </cfloop>
+                            <!---input of loan amount by Kamal--->
+                            <cfif get_loan_amt.RecordCount gt 0>
+                                <label for = "loan_amt" class = "form-control-label"> Loan Installment: </label>
+                                <input type = "number"  min = "0" id = "loan_amt" name = "loan_amt" <cfif #get_pay_status.loan_amount# eq ""> value = "#get_loan_amt.installmentAmount#"<cfelse> value = "#get_pay_status.loan_amount#" </cfif> class = "form-control">
+                                <label for = "loan_amt" class = "form-control-label" style="font-size:14px"> Remaining Loan Balance: <cfif isNull(get_loan_amt.remaining_balance)> #get_loan_amt.total_amount# <cfelse> #remaining_loan_balance# </cfif></label> <br>
+                            </cfif>
+                            <!---input of advance salary amount by Kamal--->
+                            <cfif get_advance_salary_amt.RecordCount gt 0>
+                                <label for = "advance_salary_amt" class = "form-control-label"> Advance Salary Installment: </label>
+                                <input type = "number"  min = "0" id = "advance_salary_amt" name = "advance_salary_amt" <cfif #get_pay_status.adv_salary_amount# eq ""> value = "#get_advance_salary_amt.installmentAmount#"<cfelse> value = "#get_pay_status.adv_salary_amount#" </cfif> class = "form-control">
+                                <label for = "advance_salary_amt" class = "form-control-label" style="font-size:14px"> Remaining Advance : <cfif isNull(get_advance_salary_amt.remaining_balance)> #get_advance_salary_amt.total_amount# <cfelse> #remaining_adv_balance# </cfif></label> <br>
+                            </cfif>
                     </div>
                     <!--- Leaves --->
                     <div class = "col-md-4">
@@ -274,6 +296,13 @@
                 </cfloop>
                 <!--- Update --->
             <cfelse>
+                <cfquery  name="get_loan_amt">
+                    select * from loan where employee_Id = '#form.employee_id#' and status = 'Y'
+                </cfquery>
+                <!---Query for get advance_salary amount by Kamal--->
+                <cfquery  name="get_advance_salary_amt">
+                    select * from advance_salary where employee_Id = '#form.employee_id#' and status = 'Y'
+                </cfquery>
                 <!--- Update main table of salary "current month"--->
                 <cfquery name = "update_pay">
                     update current_month_pay 
@@ -294,7 +323,138 @@
                         half_paid_leaves = '#form.half_paid_leaves#',
                         leaves_without_pay = '#form.non_paid_leaves#',
                         processed = 'N'
+                        <cfif get_loan_amt.RecordCount gt 0>
+                            ,loan_amount = <cfqueryparam value='#form.loan_amt#'>
+                        </cfif>
+                        <cfif get_advance_salary_amt.RecordCount gt 0>
+                            ,adv_salary_amount = <cfqueryparam value='#form.advance_salary_amt#'>
+                        </cfif>
+
                     where employee_id = '#form.employee_id#'
+                </cfquery>
+                <!---query for update installment by Kamal
+                <cfif month(#loan_check.installment_date#) eq month(now())>
+                    <cfquery name="update_loan_installment">
+                        update loan_installments,
+                        (select loan_id as id from loan where employee_id = "#form.employee_id#") as get_loan_id
+                        set installment_amount = "#form.loan_amt#"
+                        where loan_id = get_loan_id.id
+                    </cfquery>
+                </cfif> --->   
+                <!----and (#get_data_chk.installment_date# eq "" or isNull(#get_data_chk.installment_date#) or month(#get_data_chk.installment_date#) neq Month(Now()))---->
+                
+                <cfquery name="get_loan_amount"><!---Query for get loan records by Kamal--->
+                    select * from loan 
+                    where employee_id = "#form.employee_id#"
+                    and status ='Y'
+                </cfquery>
+                <cfquery name = "setting_info">
+                    select * from setup
+                </cfquery>
+                <cfquery name="loan_check">
+                    select * from loan a
+                    join loan_installments b
+                    where a.loan_id = b.loan_id
+                    and a.employee_id = "#form.employee_id#"
+                    and month(installment_date) = '#setting_info.current_month#'
+                </cfquery>
+                
+                <!--- Process of loan updation by Kamal--->
+                <cfset installment_date = createDate(#setting_info.current_year#, #setting_info.current_month#, 1)>
+                <cfset installment_date = DateFormat(installment_date, "yyyy-mm-dd") & " " & TimeFormat(now(), "hh:mm:ss")>
+                
+                <cfif get_loan_amt.RecordCount gt 0>
+                    <cfif loan_check.RecordCount gt 0>
+                        <cfif month(#loan_check.installment_date#) neq #setting_info.current_month#>
+                            <cfquery name="insert_loan_installment">
+                                insert into loan_installments
+                                (loan_id,installment_amount,installment_date)
+                                values(
+                                    <cfqueryparam value = '#get_loan_amount.loan_id#'>,
+                                    <cfqueryparam value = '#form.loan_amt#'>,
+                                    <cfqueryparam value = '#installment_date#'>
+                                    )
+                            </cfquery>
+                        <cfelse>
+                            <!---query for update installment by Kamal--->
+                            <cfquery name="update_loan_installment">
+                                update loan_installments,
+                                (select loan_id as id from loan where employee_id = "#form.employee_id#") as get_loan_id
+                                set installment_amount = "#form.loan_amt#"
+                                where loan_id = get_loan_id.id
+                                and month(installment_date) = '#setting_info.current_month#'
+                            </cfquery>
+                        </cfif>    
+                    <cfelse>
+                        <cfquery name="insert_loan_installment">
+                            insert into loan_installments
+                            (loan_id,installment_amount,installment_date)
+                            values(
+                                <cfqueryparam value = '#get_loan_amount.loan_id#'>,
+                                <cfqueryparam value = '#form.loan_amt#'>,
+                                <cfqueryparam value = '#installment_date#'>
+                                )
+                        </cfquery>
+                    </cfif>
+                </cfif>
+
+                <cfquery name="get_adv_salary_amount"><!---Query for get advance salary records by Kamal--->
+                    select * from advance_salary 
+                    where employee_id = "#form.employee_id#"
+                    and status ='Y'
+                </cfquery>
+                <cfquery name = "setting_info">
+                    select * from setup
+                </cfquery>
+                <cfquery name="advance_salary_check">
+                    select * from advance_salary a
+                    join advance_salary_installments b
+                    where a.advance_id = b.advance_id
+                    and a.employee_id = "#form.employee_id#"
+                    and month(installment_date) = '#setting_info.current_month#'
+                </cfquery>
+                
+                <!--- Process of loan updation by Kamal--->
+                <cfset adv_salary_installment_date = createDate(#setting_info.current_year#, #setting_info.current_month#, 1)>
+                <cfset adv_salary_installment_date = DateFormat(adv_salary_installment_date, "yyyy-mm-dd") & " " & TimeFormat(now(), "hh:mm:ss")>
+                
+                <cfif get_advance_salary_amt.RecordCount gt 0>
+                    <cfif advance_salary_check.RecordCount gt 0>
+                        <cfif month(#advance_salary_check.installment_date#) neq #setting_info.current_month#>
+                            <cfquery name="insert_advance_salary_installment">
+                                insert into advance_salary_installments
+                                (advance_id,installment_amount,installment_date)
+                                values(
+                                    <cfqueryparam value = '#get_adv_salary_amount.advance_id#'>,
+                                    <cfqueryparam value = '#form.advance_salary_amt#'>,
+                                    <cfqueryparam value = '#adv_salary_installment_date#'>
+                                    )
+                            </cfquery>
+                        <cfelse>
+                            <!---query for update installment by Kamal--->
+                            <cfquery name="insert_advance_salary_installment">
+                                update advance_salary_installments,
+                                (select advance_id as id from advance_salary where employee_id = "#form.employee_id#" and status = 'Y') as get_adv_salary_id
+                                set installment_amount = "#form.advance_salary_amt#"
+                                where advance_id = get_adv_salary_id.id
+                                and month(installment_date) = '#setting_info.current_month#'
+                            </cfquery>
+                        </cfif>    
+                    <cfelse>
+                        <cfquery name="insert_advance_salary_installment">
+                            insert into advance_salary_installments
+                            (advance_id,installment_amount,installment_date)
+                            values(
+                                <cfqueryparam value = '#get_adv_salary_amount.advance_id#'>,
+                                <cfqueryparam value = '#form.advance_salary_amt#'>,
+                                <cfqueryparam value = '#adv_salary_installment_date#'>
+                                )
+                        </cfquery>
+                    </cfif>
+                </cfif>
+
+                <cfquery name="get_data_chk">
+                    select * from loan_installments where loan_id = '#get_loan_amount.loan_id#'
                 </cfquery>
                 <!--- Update pay allowances if existing already --->
                 <cfloop query = "get_allowance">
@@ -366,6 +526,21 @@
         </cfif>
         <!--- Javascript --->   
         <script>
+            function formvalidate(rem_adv_bal,rem_loan_bal){
+                debugger;
+                let remaining_adv_balance = rem_adv_bal;
+                let advance_salary_amt = $('##advance_salary_amt').val();
+                let remaining_loan_balance=rem_loan_bal;
+                let loan_amt = $('##loan_amt').val();
+                if(parseInt(remaining_loan_balance) < loan_amt){
+                    alert('Laon Installment Amount cannot greater than Remaining Loan Amount');
+                    return false;
+                }
+                if(parseInt(remaining_adv_balance) < advance_salary_amt){
+                    alert('Advance Salary Installment Amount cannot greater than Remaining Advance Amount');
+                    return false;
+                }
+            }
         // Now not using this function
         // this function calculating working days static.... A dynamic calculation is performing in cf code.... no using javascript 
         /*    function getDates () {

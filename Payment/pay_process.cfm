@@ -97,17 +97,22 @@
                 <cfquery name = "setting_info">
                     select * from setup
                 </cfquery>
-                <cfquery name="left_emp">
-                    select * from employee where leaving_date <> '' and employee_id = '#get_employee_list.id#'
+                <cfquery name="previous_employee"><!---query for employees that exit--->
+                    select * from employee where leaving_date <> '' and 
+                    <cfif form.employee_id neq "all">
+                            employee_id = "#form.employee_id#" 
+                        <cfelse>
+                            employee_id = "#employee_id#"
+                        </cfif>
                 </cfquery>
 
-                <cfif left_emp.RecordCount gt 0>
-                    <cfif year(left_emp.joining_date) neq year(now()) or month(left_emp.joining_date) neq month(now())>
+                <cfif previous_employee.RecordCount gt 0>
+                    <cfif year(previous_employee.joining_date) neq year(now()) or month(previous_employee.joining_date) neq month(now())>
                         <cfset startMonth = CreateDate(Year(now()), Month(now()), 1)>
                     <cfelse>
-                        <cfset startMonth = #left_emp.joining_date#>
+                        <cfset startMonth = #previous_employee.joining_date#>
                     </cfif>    
-                    <cfset endMonth = #left_emp.leaving_date#>
+                    <cfset endMonth = #previous_employee.leaving_date#>
                     <cfset workingDays = 0>
                     <cfloop from="#startMonth#" to="#endMonth#" index="day">
                         <cfif DayOfWeek(day) neq 1 and DayOfWeek(day) neq 7>
@@ -127,6 +132,96 @@
                     </cfloop>
                     <cfset total_work_days = #workdaysInMonth#>
                 </cfif>
+
+                <cfquery name="get_loan_amount"><!---Query for get loan records by Kamal--->
+                    select * from loan where 
+                        <cfif form.employee_id neq "all">
+                            employee_id = "#form.employee_id#" 
+                        <cfelse>
+                            employee_id = "#employee_id#"
+                        </cfif> 
+                        and status = 'Y'
+                </cfquery>
+                <cfquery name="get_advance_salary_amount"><!---Query for get advance salary records by Kamal--->
+                    select * from advance_salary where 
+                        <cfif form.employee_id neq "all">
+                            employee_id = "#form.employee_id#" 
+                        <cfelse>
+                            employee_id = "#employee_id#"
+                        </cfif> 
+                        and status = 'Y'
+                </cfquery>
+                
+                <!---process of installments by Kamal--->
+                <cfif get_loan_amount.RecordCount neq 0>
+                    <cfquery name="installments">
+                        select * from loan a , loan_installments b
+                        where a.loan_id = b.loan_id and a.Status = 'y' 
+                        and 
+                        <cfif form.employee_id neq "all">
+                            a.employee_id = "#form.employee_id#" 
+                        <cfelse>
+                            a.employee_id = "#employee_id#"
+                        </cfif> 
+                        order by installment_date desc
+                    </cfquery>
+                    <!--- process of add installments by Kamal--->
+                    <cfset var_returned_amount = 0>
+                    <cfif installments.RecordCount neq 0>
+                        <cfloop query="installments">
+                            <cfset var_returned_amount = var_returned_amount + installment_amount>
+                        </cfloop>
+                    </cfif>
+                    <!---query for loan return by Kamal--->
+                    <!---<cfquery name="get_loan_employees">
+                        select *, sum(b.installment_amount) as returned_amt from loan a
+                        join loan_installments b
+                        where a.loan_id = b.loan_id
+                        and 
+                        <cfif form.employee_id neq "all">
+                            a.employee_id = "#form.employee_id#" 
+                        <cfelse>
+                            a.employee_id = "#employee_id#"
+                        </cfif> 
+                        and status = 'Y'
+                        and 
+                    </cfquery>--->
+                    
+                    <!--- this code update remaining balance from loan by Kamal--->
+                    <cfif installments.RecordCount neq 0>    
+                        <cfset var_total_amount = #installments.total_amount#>
+                        <cfset var_installment_amount = #installments.installment_amount#>
+                        <cfset var_remaining_amount = var_total_amount - var_returned_amount>
+                    </cfif>  
+                </cfif> 
+                <!---process of advance salary installments by Kamal--->
+                <cfif get_advance_salary_amount.RecordCount neq 0>
+                    <cfquery name="adv_salary_installments">
+                        select * from advance_salary a , advance_salary_installments b
+                        where a.advance_id = b.advance_id and a.Status = 'Y' 
+                        and 
+                        <cfif form.employee_id neq "all">
+                            a.employee_id = "#form.employee_id#" 
+                        <cfelse>
+                            a.employee_id = "#employee_id#"
+                        </cfif> 
+                        order by installment_date desc
+                    </cfquery>
+                    <!--- process of add installments by Kamal--->
+                    <cfset var_adv_salary_returned_amount = 0>
+                    <cfif adv_salary_installments.RecordCount neq 0>
+                        <cfloop query="adv_salary_installments">
+                            <cfset var_adv_salary_returned_amount = var_adv_salary_returned_amount + installment_amount>
+                        </cfloop>
+                    </cfif>
+                    
+                    <!--- this code update remaining balance from advance_salary by Kamal--->
+                    <cfif adv_salary_installments.RecordCount neq 0>    
+                        <cfset var_adv_salary_total_amount = #adv_salary_installments.total_amount#>
+                        <cfset var_adv_salary_installment_amount = #adv_salary_installments.installment_amount#>
+                        <cfset var_adv_salary_remaining_amount = var_adv_salary_total_amount - var_adv_salary_returned_amount>
+                    </cfif>  
+                </cfif> 
                     <cfset absent_days = (total_work_days - days_worked) - paid_leaves - (half_paid_leaves/2) - leaves_without_pay>
                     <cfset worked_days = working_days - absent_days>
                     <cfset var_gross_allowances = allowance_amount + (basic_rate * (paid_leaves + additional_days + (half_paid_leaves/2)))>
@@ -134,7 +229,26 @@
                     <cfset amount_of_percentage_tax = (var_gross_salary/100) * deduction_percent >
                     <cfset total_deduction = deduction_tax_amount + amount_of_percentage_tax>
                     <cfset var_gross_deductions = total_deduction + (basic_rate * (leaves_without_pay + deducted_days))>
-                    <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
+                    <!---process of loan instalment deduction from salary by Kamal--->
+                    <cfif get_loan_amount.RecordCount neq 0>
+                        <cfif installments.RecordCount neq 0>
+                            <cfset var_net_salary = (var_gross_salary - var_gross_deductions) - var_installment_amount>
+                        <cfelse>
+                            <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
+                        </cfif>
+                    <cfelse>
+                        <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
+                    </cfif>  
+                    <!---process of advance salary instalment deduction from salary by Kamal--->
+                    <cfif get_advance_salary_amount.RecordCount neq 0>
+                        <cfif adv_salary_installments.RecordCount neq 0>
+                            <cfset var_net_salary = (var_gross_salary - var_gross_deductions) - var_adv_salary_installment_amount>
+                        <cfelse>
+                            <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
+                        </cfif>
+                    <cfelse>
+                        <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
+                    </cfif>   
 
                     <cfquery name = "update_pay"> <!--- Query Will update all requirements --->
                     
@@ -155,7 +269,49 @@
                     </cfoutput> 
                    
                    </cfquery> 
-                   
+                    
+                    <!---process of updation of loan table on the basis of deduction by Kamal--->
+                    <cfif get_loan_amount.RecordCount gt 0>
+                        <cfif installments.RecordCount neq 0>
+                            <cfquery name="update_loan">
+                                update loan
+                                set Remaining_balance = <cfqueryparam value = '#var_remaining_amount#'>,
+                                Returned_Amount = <cfqueryparam value = '#var_returned_amount#'>
+                                <cfif var_returned_amount eq installments.total_amount>
+                                    ,status = 'N',
+                                    Loan_End_Date = now()
+                                </cfif>
+                                where
+                                <cfif form.employee_id neq "All">
+                                    employee_id = '#form.employee_id#'
+                                <cfelse>
+                                    employee_id = '#employee_id#'
+                                </cfif> 
+                                and status = 'Y'
+                            </cfquery>
+                        </cfif>
+                    </cfif>
+                    <!---process of updation of advance salary table on the basis of deduction by Kamal--->
+                    <cfif get_advance_salary_amount.RecordCount gt 0>
+                        <cfif adv_salary_installments.RecordCount neq 0>
+                            <cfquery name="update_adv_salary">
+                                update advance_salary
+                                set Remaining_balance = <cfqueryparam value = '#var_adv_salary_remaining_amount#'>,
+                                Returned_Amount = <cfqueryparam value = '#var_adv_salary_returned_amount#'>
+                                <cfif var_adv_salary_returned_amount eq adv_salary_installments.total_amount>
+                                    ,status = 'N',
+                                    advance_End_Date = now()
+                                </cfif>
+                                where
+                                <cfif form.employee_id neq "All">
+                                    employee_id = '#form.employee_id#'
+                                <cfelse>
+                                    employee_id = '#employee_id#'
+                                </cfif>
+                                and status = 'Y' 
+                            </cfquery>
+                        </cfif>
+                    </cfif>
                 </cfloop>
                 <script>
                     alert("Pay Process Run Successfully!");
