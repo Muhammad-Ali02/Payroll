@@ -66,10 +66,10 @@
                 
                 <cfquery name="send_current_month_data_past_month">
                     insert into past_month_pay (employee_id,basic_salary,month,year,transaction_mode,bank_name,bank_account_no,transaction_date,pay_status,days_worked,working_days,additional_days
-                                    ,deducted_days,basic_rate,paid_leaves,half_paid_leaves,leaves_without_pay,gross_salary,net_salary,gross_allowances,gross_deductions,processed)
+                                    ,deducted_days,basic_rate,paid_leaves,half_paid_leaves,leaves_without_pay,gross_salary,net_salary,gross_allowances,gross_deductions,processed,loan_amount,adv_salary_amount)
 
                     select employee_id,basic_salary,month,year,transaction_mode,bank_name,bank_account_no,transaction_date,pay_status,days_worked,working_days,additional_days
-                                    ,deducted_days,basic_rate,paid_leaves,half_paid_leaves,leaves_without_pay,gross_salary,net_salary,gross_allowances,gross_deductions,processed
+                                    ,deducted_days,basic_rate,paid_leaves,half_paid_leaves,leaves_without_pay,gross_salary,net_salary,gross_allowances,gross_deductions,processed,loan_amount,adv_salary_amount
                     from current_month_pay
                 </cfquery>
 

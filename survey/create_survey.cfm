@@ -45,7 +45,7 @@
             return false;
         }else{
             $(document).ready(function(){
-                console.log('hello');
+                // console.log('hello');
                 $.post("insert_survey.cfc?method=Insert_Question&array="+question_array+"&title="+title+"&description="+description, function(data, status){
                     if(data == 'true'){
                         alert('Survey Created Successfully.')
@@ -67,7 +67,7 @@
         }else if(length < 10){
             length = question_array.push(question);
             $('#question').val('');
-            console.log(question_array);
+            // console.log(question_array);
             // question_array.forEach(function(questions,index)
             var counter = question_array.length -1;
             for(i = counter ; i < question_array.length ; i++){

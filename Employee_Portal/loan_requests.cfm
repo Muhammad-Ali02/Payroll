@@ -18,6 +18,9 @@
             </script>
         </cfif>
     </cfif>
+    <div class="text-center mb-5">
+        <h3 class="box_heading">Loan Requests</h3>
+    </div>
     <div>
         <a href = "loan_apply.cfm" target = "_self">
             <button type = "button" class = "btn btn-outline-dark create_button mb-3 custom_button">

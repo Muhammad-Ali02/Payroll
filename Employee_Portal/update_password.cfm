@@ -34,10 +34,10 @@
             </cfif>
         </cfif>
         <!--- Front End      --->
+        <div class="text-center mb-5">
+            <h3 class="box_heading">Reset Your Password</h3>
+        </div>
         <div class="employee_box">
-            <div class="text-center mb-5">
-                <h3 class="box_heading">Reset Your Password</h3>
-            </div>
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
