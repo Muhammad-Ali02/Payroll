@@ -654,7 +654,7 @@
             ADD COLUMN `deduction10` VARCHAR(45) NULL DEFAULT '0' AFTER `deduction9`; 
         </cfquery>
 <cfcatch type="any">
-    query51:<cfdump  var="#cfcatch#"> <br>
+    query51:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 
@@ -708,6 +708,28 @@
     </cfquery>
 <cfcatch type="any">
     query56:<cfdump  var="#cfcatch.cause.message#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query57">
+        ALTER TABLE `payroll`.`current_month_pay_audit` 
+        ADD COLUMN `loan_amount` VARCHAR(45) NULL DEFAULT NULL AFTER `processed`,
+        ADD COLUMN `adv_salary_amount` VARCHAR(45) NULL DEFAULT NULL AFTER `loan_amount`;
+    </cfquery>
+<cfcatch type="any">
+    query57:<cfdump  var="#cfcatch.cause.message#"> <br>
+</cfcatch>
+</cftry>
+
+<cftry>
+    <cfquery name="query58">
+        ALTER TABLE `payroll`.`past_month_pay` 
+        ADD COLUMN `loan_amount` VARCHAR(45) NULL DEFAULT '0',
+        ADD COLUMN `adv_salary_amount` VARCHAR(45) NULL DEFAULT '0';
+    </cfquery>
+<cfcatch type="any">
+    query58:<cfdump  var="#cfcatch.cause.message#"> <br>
 </cfcatch>
 </cftry>
 </cfoutput>

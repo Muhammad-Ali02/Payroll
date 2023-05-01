@@ -13,6 +13,9 @@
             <cfquery name = "all_users">
                 select * from users
             </cfquery>
+            <div class="text-center mb-5">
+                <h3 class="box_heading">Manage Users</h3>
+            </div>
             <div>
                 <a href = "create_user.cfm" target = "_self">
                     <button type = "button" class = "btn btn-outline-dark create_button mb-3 custom_button">

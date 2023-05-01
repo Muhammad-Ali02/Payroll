@@ -18,6 +18,16 @@
             from employee emp, designation des, department dep
             where emp.department = dep.department_id and emp.designation = des.designation_id and emp.leaving_date <> ""
         </cfquery>
+        <div id="present_employees_heading" style="display: inline;">
+            <div class="text-center mb-5">
+                <h3 class="box_heading">Active Employees</h3>
+            </div>
+        </div>
+        <div id="previous_employees_heading" style="display: none;">
+            <div class="text-center mb-5">
+                <h3 class="box_heading">Previous Employees</h3>
+            </div>
+        </div>
         <div>
             <a href = "employee.cfm" target = "_self">
                 <button type = "button" class = "btn btn-outline-dark create_button mb-3 custom_button">
@@ -36,9 +46,6 @@
             </a>
         </div>
         <div id="present_employees" style="display: inline;">
-            <div class="text-center mb-5">
-                <h3 class="box_heading">Active Employees</h3>
-            </div>
             <cfparam name="pageNum" default="1">
             <cfset maxRows = 5>
             <cfset startRow = min( ( pageNum-1 ) * maxRows+1, max( all_employees.recordCount,1 ) )>
@@ -55,7 +62,7 @@
                         <th> Designation </th>
                         <th> Action </th>
                     </tr>
-                    <cfset No = 0>
+                    <cfset No = #startRow#-1>
                     <cfloop query = "all_employees" startrow="#startRow#" endrow="#endRow#">
                         <cfset No = No + 1>
                         <tr>
@@ -103,9 +110,6 @@
         <!---      Pagination End        --->
         </div>
         <div id="previous_employees" style="display: none;">
-            <div class="text-center mb-5">
-                <h3 class="box_heading">Previous Employees</h3>
-            </div>
             <div style="overflow-x: auto;">
                 <table class = "table custom_table">
                     <tr>
@@ -147,12 +151,16 @@
         document.getElementById('present_employees').style.display='none';
         document.getElementById('left').style.display='none';
         document.getElementById('present').style.display='inline';
+        document.getElementById('previous_employees_heading').style.display='inline';
+        document.getElementById('present_employees_heading').style.display='none';
     }
     function displayEmployees(){
         document.getElementById('previous_employees').style.display='none';
         document.getElementById('present_employees').style.display='inline';
         document.getElementById('present').style.display='none';
         document.getElementById('left').style.display='inline';
+        document.getElementById('previous_employees_heading').style.display='none';
+        document.getElementById('present_employees_heading').style.display='inline';
     }
 </script>
  

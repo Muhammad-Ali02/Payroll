@@ -106,6 +106,9 @@
             <cfset firstDay = createDate(#setting_info.current_year#, #setting_info.current_month#, 1)>
             <cfset lastDay = createDate(#setting_info.current_year#, #setting_info.current_month#, daysInMonth(firstDay))> 
             <cfif leave_list.recordcount neq 0>
+                <div class="text-center mb-5">
+                    <h3 class="box_heading">Request For Leave</h3>
+                </div>
                 <div class="employee_box">
                     <form name="leaveRequest" onsubmit="return formValidate();" action = "request_leave.cfm" method = "post">
                         <div class = "row">
