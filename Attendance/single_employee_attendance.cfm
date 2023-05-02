@@ -27,13 +27,18 @@
                         <cfset inserted_employees = false>
                     </cfif>
                 </cftransaction>
-                <div class="employee_box">
+                <!---<div class="employee_box">--->
+                <!--- script for showing alert by Kamal Ahmad--->
                     <cfif inserted_employees eq true>
-                        <p> Attendance of #form.employee_id# Inserted. </p>
+                        <script>
+                            alert("Attendance of #form.employee_id# is Inserted.") 
+                        </script>
                     <cfelse>
-                        <p> Attendance of #form.employee_id# Employees Updated. </p>
+                        <script>
+                            alert("Attendance of #form.employee_id# is Updated.")
+                        </script>
                     </cfif>
-                </div>
+                <!---</div>--->
             <cfcatch type="any">
                 <cfdump  var="#cfcatch.cause.message#">
             </cfcatch>
@@ -45,7 +50,7 @@
             <div class="text-center">
                 <h3 class="mb-5 box_heading"> Add Attendance Manually</h3>
             </div>
-            <form action = "" method = "post">
+            <form action = "" onsubmit="return formValidate();" method = "post">
                 <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') >
                 <div class = "row m-4">
                     <div class = "col-md-4">  
@@ -76,3 +81,14 @@
             </form>
         </div>
 </cfoutput>
+<script>
+    function formValidate(){
+        let employee_id = $('#employee_id').val();
+        if(employee_id == ''){
+            alert('Please Select an Employee for Attendance');
+            return false;
+        }else{
+            return true;
+        }
+    }
+</script>

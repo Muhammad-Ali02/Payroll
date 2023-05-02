@@ -260,11 +260,11 @@
                             <label for = "paid_leaves" class = "form-control-label">
                                 Paid Leaves: 
                             </label>
-                                <input type = "number" class = "form-control" min = "0" name = "paid_leaves" id = "paid_leaves" value = "#paid_leave_count.leave_days#" readonly = "true"> <br>
+                                <input type = "number" class = "form-control" min = "0" name = "paid_leaves" id = "paid_leaves" <cfif "#paid_leave_count.leave_days#" eq ''>value = "0"<cfelse>value = "#paid_leave_count.leave_days#"</cfif> readonly = "true"> <br>
                             <label for = "half_paid_leaves" class = "form-control-label">
                                 Half Pay Leaves: 
                             </label>
-                                <input type = "number" class = "form-control" min = "0" name = "half_paid_leaves" id = "half_paid_leaves" value = "#half_paid_leave_count.leave_days#" readonly = "true"> <br>
+                                <input type = "number" class = "form-control" min = "0" name = "half_paid_leaves" id = "half_paid_leaves" <cfif "#half_paid_leave_count.leave_days#" eq ''>value = "0"<cfelse>value = "#half_paid_leave_count.leave_days#"</cfif> readonly = "true"> <br>
                             <label for = "non_paid_leaves" class = "form-control-label">
                                 Leaves Without Pay: 
                             </label>
