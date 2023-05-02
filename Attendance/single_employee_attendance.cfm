@@ -50,7 +50,7 @@
             <div class="text-center">
                 <h3 class="mb-5 box_heading"> Add Attendance Manually</h3>
             </div>
-            <form action = "" method = "post">
+            <form action = "" onsubmit="return formValidate();" method = "post">
                 <cfset current_date = dateFormat(now(), 'yyyy-mm-dd') >
                 <div class = "row m-4">
                     <div class = "col-md-4">  
@@ -81,3 +81,14 @@
             </form>
         </div>
 </cfoutput>
+<script>
+    function formValidate(){
+        let employee_id = $('#employee_id').val();
+        if(employee_id == ''){
+            alert('Please Select an Employee for Attendance');
+            return false;
+        }else{
+            return true;
+        }
+    }
+</script>

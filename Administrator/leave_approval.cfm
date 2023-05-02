@@ -68,8 +68,8 @@
                     <cfquery name="update_leave_balance">
                         Update employee_leaves
                         Set
-                        leaves_balance = leaves_balance - 1,
-                        leaves_availed = IFNULL(leaves_availed, 0) + 1
+                        leaves_balance = (leaves_balance - 1),
+                        leaves_availed = (IFNULL(leaves_availed, 0) + 1)
                         where leave_id = <cfqueryparam value="#form.leave_type#">
                         And employee_id = <cfqueryparam value="#form.employee_id#">
                     </cfquery>
@@ -99,8 +99,8 @@
                         <cfquery name="update_leave_balance">
                             Update employee_leaves
                             Set
-                            leaves_balance = leaves_balance - 1,
-                            leaves_availed = IFNULL(leaves_availed, 0) + 1
+                            leaves_balance = (leaves_balance - 1),
+                            leaves_availed = (IFNULL(leaves_availed, 0) + 1)
                             Where leave_id = <cfqueryparam value="#form.leave_type#">
                             And employee_id = <cfqueryparam value="#form.employee_id#">
                         </cfquery>
