@@ -235,13 +235,13 @@
                             <cfif get_loan_amt.RecordCount gt 0>
                                 <label for = "loan_amt" class = "form-control-label"> Loan Installment: </label>
                                 <input type = "number"  min = "0" id = "loan_amt" name = "loan_amt" <cfif #get_pay_status.loan_amount# eq ""> value = "#get_loan_amt.installmentAmount#"<cfelse> value = "#get_pay_status.loan_amount#" </cfif> class = "form-control">
-                                <label for = "loan_amt" class = "form-control-label" style="font-size:14px"> Remaining Loan Balance: <cfif isNull(get_loan_amt.remaining_balance)> #get_loan_amt.total_amount# <cfelse> #remaining_loan_balance# </cfif></label> <br>
+                                <label for = "loan_amt" class = "form-control-label" style="font-size:14px"> Remaining Loan Balance: <cfif isNull(get_loan_amt.remaining_balance) or get_loan_amt.remaining_balance eq ""> #get_loan_amt.total_amount# <cfelse> #remaining_loan_balance# </cfif></label> <br>
                             </cfif>
                             <!---input of advance salary amount by Kamal--->
                             <cfif get_advance_salary_amt.RecordCount gt 0>
                                 <label for = "advance_salary_amt" class = "form-control-label"> Advance Salary Installment: </label>
                                 <input type = "number"  min = "0" id = "advance_salary_amt" name = "advance_salary_amt" <cfif #get_pay_status.adv_salary_amount# eq ""> value = "#get_advance_salary_amt.installmentAmount#"<cfelse> value = "#get_pay_status.adv_salary_amount#" </cfif> class = "form-control">
-                                <label for = "advance_salary_amt" class = "form-control-label" style="font-size:14px"> Remaining Advance : <cfif isNull(get_advance_salary_amt.remaining_balance)> #get_advance_salary_amt.total_amount# <cfelse> #remaining_adv_balance# </cfif></label> <br>
+                                <label for = "advance_salary_amt" class = "form-control-label" style="font-size:14px"> Remaining Advance : <cfif isNull(get_advance_salary_amt.remaining_balance) or get_advance_salary_amt.remaining_balance eq ""> #get_advance_salary_amt.total_amount# <cfelse> #remaining_adv_balance# </cfif></label> <br>
                             </cfif>
                     </div>
                     <!--- Leaves --->
@@ -628,4 +628,3 @@
         </script>
     </cfif>
 </cfoutput>
- 

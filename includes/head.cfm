@@ -62,10 +62,10 @@
                                 <a href="..\attendance\attendance.cfm">Attendance Sheet</a>
                             </li>
                             <li>
-                                <a href="..\attendance\add_attendance.cfm">Manual Attendance</a>
+                                <a href="..\attendance\add_attendance.cfm">Manual Attendance (All)</a>
                             </li>
                             <li>
-                                <a href="..\attendance\single_employee_attendance.cfm">By Name Attendance</a>
+                                <a href="..\attendance\single_employee_attendance.cfm">Attendance (One by One)</a>
                             </li>
                         </ul>
                     </li>
