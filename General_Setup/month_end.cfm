@@ -49,17 +49,25 @@
                 Month End Process
             </h3>
         </div>
-        <div class="text-center">
-            <form id="month_end_form" onsubmit="return confirmation();" name="month_end" action="" method="post">
-                <input type="submit" class="btn btn-outline-dark" name="month_end_process" value="Month End">
-            </form>
-        </div>
+        <cfquery name="check_current_month_data">
+            select * from current_month_pay
+            where basic_salary <> '' or basic_salary is not null
+        </cfquery>
+        <cfif check_current_month_data.recordcount neq 0>
+            <div class="text-center">
+                <form id="month_end_form" onsubmit="return confirmation();" name="month_end" action="" method="post">
+                    <input type="submit" class="btn btn-outline-dark" name="month_end_process" value="Month End">
+                </form>
+            </div>
+        <cfelse>
+            <p>No Record found for month end process.</p>
+        </cfif>
         <cfif structKeyExists(form, 'month_end_process')>
             <cftransaction>
                 <cfquery name="get_setup">
                     select * from setup
                 </cfquery>
-                <cfquery name="left_employees">
+                <cfquery name="previous_employees">
                     select employee_id from employee 
                     where leaving_date <> ''
                 </cfquery>
@@ -82,7 +90,12 @@
                         <cfquery name="update_data">
                             UPDATE current_month_pay
                             SET
-                            `#column_name#` = <cfqueryparam value="#get_setup.current_month#">
+                            <cfif get_setup.current_month eq 12>
+                                `#column_name#` = <cfqueryparam value="1">
+                            <cfelse>
+                                <cfset month = get_setup.current_month + 1>
+                                `#column_name#` = <cfqueryparam value="#month#">
+                            </cfif>
                         </cfquery>
                     <cfelse>
                         <cfquery name="update_data">
@@ -97,11 +110,11 @@
                     select employee_id from current_month_pay
                 </cfquery>
                 <!---           This query delete the record of left employees after month end process   --->
-                <cfif left_employees.recordcount gt 0>
-                    <cfloop query="left_employees">
-                        <cfquery name="delete_left_employee">
+                <cfif previous_employees.recordcount gt 0>
+                    <cfloop query="previous_employees">
+                        <cfquery name="delete_previous_employee">
                             delete from current_month_pay
-                            where employee_id = <cfqueryparam value="#left_employees.employee_id#">
+                            where employee_id = <cfqueryparam value="#previous_employees.employee_id#">
                         </cfquery>
                     </cfloop>
                 </cfif>
@@ -189,7 +202,18 @@
                         </cfquery>
                     </cfif>
                 </cfloop>
-
+                <cfquery name = "update_setting">
+                    update setup
+                    set 
+                    <cfif get_setup.current_month eq 12>
+                        <cfset new_month = 1>
+                        <cfset new_year = get_setup.current_year + 1>
+                        current_month = '#new_month#', current_year = '#new_year#'
+                    <cfelse>
+                        <cfset new_month = get_setup.current_month + 1>
+                        current_month = '#new_month#'
+                    </cfif>
+                </cfquery>
             </cftransaction>
             <cfquery name="check">
                 select basic_salary from current_month_pay
