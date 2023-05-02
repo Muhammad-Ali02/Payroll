@@ -179,6 +179,16 @@
                     <p> Transaction Mode: #get_bank_details.mode#
                 </div>
             </div>
+             <cfif get_advance_salary_amt.remaining_balance eq ''>
+                <cfset remaining_adv_balance = 0>
+            <cfelse>
+                <cfset remaining_adv_balance = get_advance_salary_amt.remaining_balance>
+            </cfif>
+            <cfif get_loan_amt.remaining_balance eq ''>
+                <cfset remaining_loan_balance = 0>
+            <cfelse>
+                <cfset remaining_loan_balance = get_loan_amt.remaining_balance>
+            </cfif>
             <cfset remaining_adv_balance = get_advance_salary_amt.remaining_balance>
             <cfset remaining_loan_balance = get_loan_amt.remaining_balance>
             <form onsubmit="return formvalidate(#remaining_adv_balance#,#remaining_loan_balance#);" action = "process_detail.cfm?updated=true" method = "post">
@@ -587,44 +597,45 @@
                 </cfloop>
             </table>
         </cfif>
-        <!--- Javascript --->   
-        <script>
-            function formvalidate(rem_adv_bal,rem_loan_bal){
-                debugger;
-                let remaining_adv_balance = rem_adv_bal;
-                let advance_salary_amt = $('##advance_salary_amt').val();
-                let remaining_loan_balance=rem_loan_bal;
-                let loan_amt = $('##loan_amt').val();
-                if(parseInt(remaining_loan_balance) < loan_amt){
-                    alert('Laon Installment Amount cannot greater than Remaining Loan Amount');
-                    return false;
-                }
-                if(parseInt(remaining_adv_balance) < advance_salary_amt){
-                    alert('Advance Salary Installment Amount cannot greater than Remaining Advance Amount');
-                    return false;
-                }
+    </cfif>    
+    <!--- Javascript --->   
+    <script>
+        function formvalidate(rem_adv_bal,rem_loan_bal){
+            debugger;
+            let remaining_adv_balance = rem_adv_bal;
+            let advance_salary_amt = $('##advance_salary_amt').val();
+            let remaining_loan_balance=rem_loan_bal;
+            let loan_amt = $('##loan_amt').val();
+            if(parseInt(remaining_loan_balance) < loan_amt){
+                alert('Laon Installment Amount cannot greater than Remaining Loan Amount');
+                return false;
             }
-        // Now not using this function
-        // this function calculating working days static.... A dynamic calculation is performing in cf code.... no using javascript 
-        /*    function getDates () {
-                const dates = []
-                var from_date = new Date(document.getElementById("fromDate").value);    
-                var to_date = new Date(document.getElementById("toDate").value);
-                let currentDate = from_date
-                const addDays = function (days) {
-                    const date = new Date(this.valueOf())
-                    date.setDate(date.getDate() + days)
-                    return date
-                }
-                while (currentDate <= to_date ) {
-                    if(currentDate.getDay() != 0 && currentDate.getDay() != 6)
-                    dates.push(currentDate)
-                    currentDate = addDays.call(currentDate, 1)
-                }
-                document.getElementById("total_days").value = dates.length;
-                return dates //dates[0].getDay();
-                }
-            */
-        </script>
-    </cfif>
+            if(parseInt(remaining_adv_balance) < advance_salary_amt){
+                alert('Advance Salary Installment Amount cannot greater than Remaining Advance Amount');
+                return false;
+            }
+        }
+    // Now not using this function
+    // this function calculating working days static.... A dynamic calculation is performing in cf code.... no using javascript 
+    /*    function getDates () {
+            const dates = []
+            var from_date = new Date(document.getElementById("fromDate").value);    
+            var to_date = new Date(document.getElementById("toDate").value);
+            let currentDate = from_date
+            const addDays = function (days) {
+                const date = new Date(this.valueOf())
+                date.setDate(date.getDate() + days)
+                return date
+            }
+            while (currentDate <= to_date ) {
+                if(currentDate.getDay() != 0 && currentDate.getDay() != 6)
+                dates.push(currentDate)
+                currentDate = addDays.call(currentDate, 1)
+            }
+            document.getElementById("total_days").value = dates.length;
+            return dates //dates[0].getDay();
+            }
+        */
+    </script>
+    
 </cfoutput>
