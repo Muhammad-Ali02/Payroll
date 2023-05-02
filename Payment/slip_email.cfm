@@ -41,6 +41,14 @@
                 select official_email from employee
                 where employee_id = "#get_employees.employee_id#"
             </cfquery>
+            <cfquery name="loan">
+                select * from loan 
+                where employee_id = "#url.generate#" and status = "Y"
+            </cfquery>
+            <cfquery name="adv_salary">
+                select * from advance_salary 
+                where employee_id = "#url.generate#" and status = "Y"
+            </cfquery>
       
 
         <!--- ____________________________________ Front End ______________________________________________ --->

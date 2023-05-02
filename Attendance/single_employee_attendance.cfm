@@ -27,13 +27,18 @@
                         <cfset inserted_employees = false>
                     </cfif>
                 </cftransaction>
-                <div class="employee_box">
+                <!---<div class="employee_box">--->
+                <!--- script for showing alert by Kamal Ahmad--->
                     <cfif inserted_employees eq true>
-                        <p> Attendance of #form.employee_id# Inserted. </p>
+                        <script>
+                            alert("Attendance of #form.employee_id# is Inserted.") 
+                        </script>
                     <cfelse>
-                        <p> Attendance of #form.employee_id# Employees Updated. </p>
+                        <script>
+                            alert("Attendance of #form.employee_id# is Updated.")
+                        </script>
                     </cfif>
-                </div>
+                <!---</div>--->
             <cfcatch type="any">
                 <cfdump  var="#cfcatch.cause.message#">
             </cfcatch>

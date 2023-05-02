@@ -61,11 +61,11 @@
             </cfquery>
 <!---             <div class="employee_box"> --->
                 <div style="display: flex; justify-content: space-between;">
-                    <p> Employee Id: <u> #get_employee.employee_id# </u> </p>
-                    <p> Attendance Month: <u>#monthAsString(form.month)#</u> </p>
+                    <p> Employee Id: <u><b> #get_employee.employee_id# </b></u> </p>
+                    <p> Attendance Month: <u><b> #monthAsString(form.month)# #year(now())#</b> </u></p>
                 </div>
-                <p> Employee Name: <u> #get_employee.name# </u> </p>
-                <p> CNIC: <u> #get_employee.cnic# </u> </p>
+                <p> Employee Name: <u><b> #get_employee.name# </b></u> </p>
+                <p> CNIC: <u><b> #get_employee.cnic# </b></u> </p>
                 <div style="overflow-x: auto;">
                     <table class = "table custom_table">
                         <tr>
