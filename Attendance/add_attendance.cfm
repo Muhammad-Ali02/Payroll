@@ -35,10 +35,14 @@
                 </cfif>
             </cfif>
         </cfloop>
-        <div class="employee_box">
+        <!---<div class="employee_box">
             <p> Attendance of #inserted_employees# Employees Inserted. </p>
             <p> Attendance of #updated_employees# Employees Updated. </p>
-        </div>
+        </div>--->
+        <!--- script for showing alert by Kamal Ahmad--->
+        <script>
+            alert("Attendance of #inserted_employees# Employees Inserted & #updated_employees# Employees Updated.")
+        </script>
     </cfif>
 <!--- __________________________________ Front End ________________________________________ --->
 
@@ -46,7 +50,7 @@
         <form action = "add_attendance.cfm" method = "post"> 
             <div class="d-flex justify-content-between">
                 <p style = "display:inline; color:rgb(255, 255, 255, 0.8); font-weight:bold;" > *Only Selected Employees will be updated</p>
-                <p style = "display:inline; color:rgb(255, 255, 255, 0.8); font-weight:bold;"><b>Attendance Date </b>: #form.ATTENDANCE_DATE#</p>
+                <p style = "display:inline; color:rgb(255, 255, 255, 0.8); font-weight:bold;"><b>Attendance Date </b>: #dateformat(form.ATTENDANCE_DATE,("dd-mm-yyyy"))#</p>
             </div>
             <div style="overflow-x: auto; height: 600px; overflow-y: auto;">
                 <table class = "table custom_table mt-3">
@@ -131,6 +135,10 @@
                     </div>
                 </div>
             </form>
+            <!---<cfif structKeyExists(form, 'multiple_employees')>
+                <p> Attendance of #inserted_employees# Employees Inserted. </p>
+                <p> Attendance of #updated_employees# Employees Updated. </p>
+            </cfif>--->
         </div>
     </cfif>
 
