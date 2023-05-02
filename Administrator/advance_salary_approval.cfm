@@ -19,7 +19,7 @@
     </cfquery>
     <cfif structKeyExists(form, 'Approve') or structKeyExists(form, 'Reject') or structKeyExists(form, 'Partial_approved')>
         <cfquery name="get_email">
-            select official_email from employee emp JOIN advance_salary adv 
+            select concat(first_name," ", middle_name, " " , last_name) as name, official_email from employee emp JOIN advance_salary adv 
             where emp.employee_id = adv.employee_id and adv.Advance_Id = '#url.id#';
         </cfquery>
         <cfif structKeyExists(form, 'Approve')>
@@ -50,7 +50,7 @@
                     </h2>
                 
                 <p>
-                    Dear Employee,
+                    Dear #get_email.name#,<br>
 
                     I am pleased to inform you that your request for an advance salary #get_advance_salary_details.Applied_amount#Rs has been approved. 
                     Your dedication and hard work have not gone unnoticed, and we are happy to support you during this time.
@@ -88,7 +88,7 @@
                     </h2>
                 
                 <p>
-                    Dear Employee,
+                    Dear #get_email.name#,<br>
 
                     I am pleased to inform you that your request for an advance salary #form.Approved_amount#Rs has been approved partially. 
                     Your dedication and hard work have not gone unnoticed, and we are happy to support you during this time.
@@ -122,7 +122,7 @@
                     </h2>
                 
                 <p>
-                    Dear Employee,
+                    Dear #get_email.name#,<br>
 
                     I hope this email finds you well. I wanted to follow up on your recent request for an advance salary payment.
 

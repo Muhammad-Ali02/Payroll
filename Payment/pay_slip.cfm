@@ -21,6 +21,14 @@
                 inner join deduction b on a.deduction_id = b.deduction_id
                 where employee_id = "#url.generate#" and a.status = "Y" and b.is_deleted = 'N'
             </cfquery>
+            <cfquery name="loan">
+                select * from loan 
+                where employee_id = "#url.generate#" and status = "Y"
+            </cfquery>
+            <cfquery name="adv_salary">
+                select * from advance_salary 
+                where employee_id = "#url.generate#" and status = "Y"
+            </cfquery>
             <cfquery name = "pay_info"> <!--- get all required  information about pay slip ---> 
                 select a.*, concat(b.first_name,' ', b.middle_name, ' ', b.last_name) as employee_name, (
                     select 
