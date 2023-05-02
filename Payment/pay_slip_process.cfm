@@ -30,15 +30,15 @@
         <div class = "container">    
             <div class = "row">
                 <div class = "col-6" style = "position:absolute; top:150px;left:30px; font-size:15px;">
-                    <p> Employee ID: <strong><u> #get_employees.employee_id# </u></strong></p> 
+                    <p> Employee ID: <strong><u> #pay_info.employee_id# </u></strong></p> 
                     <p> Employee Name:<strong><u> #pay_info.employee_name# </u></strong></p> 
                     <p> Designation:<strong><u> #pay_info.designation#</u></strong></p>
                 </div>
                 <div class = "col-6" style = "position:absolute; top:150px;right:30px; font-size:15px;">
                     <p> Month: <u><strong>#monthAsString(pay_info.month)# </strong> <strong> #pay_info.year# </strong></u></p>
 <!---                                 <p> Year: <u></u></p> --->
-                    <p> Days Worked : <strong>#pay_info.days_worked#</strong></p>
-                    <p> Working Days : <strong>#pay_info.working_days#</strong></p>
+                    <p> Days Worked : <strong>#numberformat(pay_info.days_worked)#</strong></p>
+                    <p> Working Days : <strong>#numberformat(pay_info.working_days)#</strong></p>
                     <p> Print Date: <u><strong> #dateFormat(now(),"dd-mmm-yyyy")# </strong></u></p>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                             <td>Leaves</td>
                             <td>
                                 <cfset leaves = (pay_info.leaves_without_pay + (pay_info.half_paid_leaves/2)) * pay_info.basic_rate> 
-                                #leaves#
+                                #evaluate("numberFormat(#leaves#,'0.00')")#
                             </td>
                         </tr>
                         
@@ -94,6 +94,25 @@
                                 </cfif>
                             </tr>
                         </cfloop>
+
+                        <cfif #pay_info.loan_amount# neq "">
+                            <cfif #loan.total_amount# neq #loan.remaining_balance#>
+                                <tr>
+                                    <td>Loan Installment</td>
+                                    <td>#evaluate("numberFormat(#pay_info.loan_amount#,'0.00')")#</td>
+                                </tr>
+                            </cfif>
+                        </cfif>
+
+                        <cfif #pay_info.adv_salary_amount# neq "">
+                            <cfif #adv_salary.total_amount# neq #adv_salary.remaining_balance#>
+                                <tr>
+                                    <td>Advance Salary Installment</td>
+                                    <td>#evaluate("numberFormat(#pay_info.adv_salary_amount#,'0.00')")#</td>
+                                </tr>
+                            </cfif>
+                        </cfif>
+
                         <tr style = "border:1px solid;border-collapse: collapse;">
                             <td><strong>Total Deductions</strong></td>
                             <td><strong>#evaluate("numberFormat(#pay_info.gross_deductions#,'0.00')")#</strong></td>

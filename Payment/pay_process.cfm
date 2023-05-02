@@ -224,15 +224,17 @@
                 </cfif> 
                     <cfset absent_days = (total_work_days - days_worked) - paid_leaves - (half_paid_leaves/2) - leaves_without_pay>
                     <cfset worked_days = working_days - absent_days>
-                    <cfset var_gross_allowances = allowance_amount + (basic_rate * (paid_leaves + additional_days + (half_paid_leaves/2)))>
+                    <cfset var_gross_allowances = allowance_amount>
+                    <!---<cfset var_gross_allowances = allowance_amount + (basic_rate * (paid_leaves + additional_days + (half_paid_leaves/2)))>--->
                     <cfset var_gross_salary = (basic_rate * (worked_days + additional_days)) + var_gross_allowances>
                     <cfset amount_of_percentage_tax = (var_gross_salary/100) * deduction_percent >
                     <cfset total_deduction = deduction_tax_amount + amount_of_percentage_tax>
                     <cfset var_gross_deductions = total_deduction + (basic_rate * (leaves_without_pay + deducted_days))>
-                    <!---process of loan instalment deduction from salary by Kamal--->
                     <cfif get_loan_amount.RecordCount neq 0>
                         <cfif installments.RecordCount neq 0>
                             <cfset var_net_salary = (var_gross_salary - var_gross_deductions) - var_installment_amount>
+                            <cfset var_gross_deductions += var_installment_amount>
+                    <!---process of loan instalment deduction from salary by Kamal--->
                         <cfelse>
                             <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
                         </cfif>
@@ -242,7 +244,8 @@
                     <!---process of advance salary instalment deduction from salary by Kamal--->
                     <cfif get_advance_salary_amount.RecordCount neq 0>
                         <cfif adv_salary_installments.RecordCount neq 0>
-                            <cfset var_net_salary = (var_gross_salary - var_gross_deductions) - var_adv_salary_installment_amount>
+                            <cfset var_net_salary = var_net_salary - var_adv_salary_installment_amount>
+                            <cfset var_gross_deductions += var_adv_salary_installment_amount>
                         <cfelse>
                             <cfset var_net_salary = (var_gross_salary - var_gross_deductions)>
                         </cfif>

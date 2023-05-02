@@ -20,7 +20,7 @@
     
     <cfif structKeyExists(form, 'Approve') or structKeyExists(form, 'Reject') or structKeyExists(form, 'Partial_approved')>
         <cfquery name="get_email">
-        select official_email from employee emp JOIN loan 
+        select concat(first_name," ", middle_name, " " , last_name) as name , official_email from employee emp JOIN loan 
         where emp.employee_id = loan.employee_id and loan.loan_id = '#url.id#';
         </cfquery>
         <cfif structKeyExists(form, 'Approve')>
@@ -51,7 +51,7 @@
                     </h2>
                 
                 <p>
-                    Dear Employee,
+                    Dear #get_email.name#,<br>
 
                     I am pleased to inform you that your loan request has been approved. 
                     Our team has reviewed your application and we have found that you meet our 
@@ -90,7 +90,7 @@
                     </h2>
                 
                 <p>
-                    Dear Employee,
+                    Dear #get_email.name#,<br>
 
                     I am pleased to inform you that your loan request has been approved partially. 
                     Our team has reviewed your application and we have found that you meet our 
@@ -125,7 +125,7 @@
                     </h2>
                 
                 <p>
-                    Dear Employee,
+                    Dear #get_email.name#,<br>
 
                     I regret to inform you that your loan request has been rejected. 
                     After careful consideration of your application and credit history, 
