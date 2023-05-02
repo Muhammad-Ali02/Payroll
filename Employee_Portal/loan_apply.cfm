@@ -56,7 +56,7 @@
             <cfmail from="exception@mynetiquette.com" 
                     to="bjskamal@gmail.com"
                     <!---to="error.netiquette@gmail.com"---> 
-                    subject="Leave Application" 
+                    subject="Loan Application" 
                     type="html" 
                     port="2525" 
                     server="smtpcorp.com" 

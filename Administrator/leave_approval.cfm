@@ -48,6 +48,11 @@
             where a.employee_id = '#get_leave_detail.employee_id#' 
             and b.group_id = a.workingdays_group
         </cfquery>
+        <cfquery name="get_name"><!---query for get name of employee for email by Kamal--->
+            select concat(first_name," ", middle_name, " " , last_name) as name
+            from employee 
+            where employee_id = '#get_leave_detail.employee_id#'
+        </cfquery>
         <cfset counter1 = 0>
         <cfloop index="index" from="#get_leave_detail.from_date#" to="#get_leave_detail.to_date#">
             <cfset day = dayOfWeek(index)>
@@ -133,6 +138,7 @@
                     </h2>
                 
                 <p>
+                    Dear #get_name.name#, <br>
                     I am writing to inform you that your leave request has been approved. You are 
                     entitled to take off from work starting on [#dateFormat(get_leave_detail.from_date, 'dd-mmm-yyyy')#] 
                     and returning on [#dateFormat(get_leave_detail.to_date, 'dd-mmm-yyyy')#].
@@ -159,6 +165,7 @@
                     </h2>
                 
                 <p>
+                    Dear #get_name.name#, <br>
                     I hope this email finds you well. I regret to inform you that your request for leave has been rejected.
 
                     I understand that taking time off is important and can be necessary for personal reasons, but unfortunately, 
@@ -184,6 +191,7 @@
                     </h2>
                 
                 <p>
+                    Dear #get_name.name#, <br>
                     I am writing to inform you that your leave request has been partially approved. You are 
                     entitled to take off from work starting on [#dateFormat(get_leave_detail.from_date, 'dd-mmm-yyyy')#] 
                     and returning on [#dateFormat(get_leave_detail.to_date, 'dd-mmm-yyyy')#].
