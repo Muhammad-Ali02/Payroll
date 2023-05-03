@@ -73,7 +73,7 @@
                         </div>
                         <div class="col-lg-3 mb-1">
                             <span class="ml-1"> Employee No </span> 
-                            <input type="text" name="new_emp_No" id="emp_No" class="form-control">
+                            <input onkeyup="empolyee_id_validate();" type="text" name="new_emp_No" id="new_emp_No" class="form-control">
                         </div>
                         <div class="col-lg-3 mt-4">
                             <input type="submit" value="Change" class="btn custom_button" onclick="return formvalidate();">
@@ -84,11 +84,26 @@
         </div>
     </div>
     <script>
+        function empolyee_id_validate(){
+                let new_emp_No = $('##new_emp_No').val();
+                const regex = /^[a-zA-Z0-9_/()@\-|]+$/;
+                if(regex.test(new_emp_No) == false){
+                    alert('You can enter only folowing special characters @ , / , | , ( , ) , - , _  And Spaces are not allowed');
+                    $('##new_emp_No').focus();
+                    return false;
+                }
+            }
         function formvalidate(){
             let old_id = document.forms["Change_Employee_Name"]["select_employee"].value;
             let new_id = document.forms["Change_Employee_Name"]["new_emp_No"].value;
+            let new_emp_No = $('##new_emp_No').val();
+            const regex = /^[a-zA-Z0-9_/()@\-|]+$/;
             if( (old_id == "") || (new_id == "")){
                 alert("All field must be filled out!");
+                return false;
+            }
+            if(regex.test(new_emp_No) == false){
+                alert('You can enter only folowing special characters @ , / , | , ( , ) , - , _  And Spaces are not allowed');
                 return false;
             }
         }
