@@ -34,6 +34,7 @@
                             and a.status = "Y"
                     </cfquery>
                     <!--- Query used to get all Deduction of an employee --->
+                    <!---             This query get percentage for deduction            --->
                     <cfquery name="deduction_percentage">
                         select sum(deduction.deduction_amount) as percentage
                         from deduction , pay_deduction
@@ -46,7 +47,7 @@
                         And deduction.is_percent='y'
                         And deduction.is_deleted = 'N';
                     </cfquery>
-
+                    <!---             update query and get tax according to requirement              --->
                      <cfquery name="deduction_of_Tax">
                         select sum(deduction.deduction_amount) as tax_amount
                         from deduction , pay_deduction
