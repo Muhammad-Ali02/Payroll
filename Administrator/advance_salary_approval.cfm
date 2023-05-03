@@ -182,7 +182,7 @@
                         <label for = "reason" class = "mt-3">Reason: </label>
                         <p>#get_advance_salary_details.Apply_Description#<p>
                     </div>
-                    <form action = "?id=#url.request_id#" method = "post">
+                    <form action = "?id=#url.request_id#" onsubmit="return formValidate();" method = "post">
                         <div id="advance_salary_selection" style="display:none;">
                             <div class="row mb-2">
                                 <div class="col-md-6">
@@ -190,7 +190,7 @@
                                     <input type="number" id="Approved_amount" name="Approved_amount" maxlength="6" min="0" max="#get_advance_salary_details.Applied_amount#" class="form-control">
                                 </div>
                                 <div class="col-md-4">
-                                    <input type ="submit" id="Partial_advance_salary" value = "Approved Partially" name="Partial_approved" class = "btn btn-outline-danger mb-2 mt-4 ml-2">
+                                    <input type ="submit" id="Partial_advance_salary" value = "Approved Partially" name="Partial_approved" onclick="document.getElementById('approval_type').value='partial_approved';" class = "btn btn-outline-danger mb-2 mt-4 ml-2">
                                 </div>
                             </div>
                         </div>
@@ -204,8 +204,9 @@
                             <div class="d-flex justify-content-end" style="gap: 8px;">
                                 <!--- <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#"> --->
                                 <input type="hidden" name="employee_id" value="#advance_salary_request.employee_id#">
-                                <button id = "" onclick="document.getElementById('advance_salary_selection').style.display='inline'; this.disabled=true" name = "Partial" class = "btn btn-outline-danger">Approve Partial Advance Salary</button>
-                                <input type = "submit" id = "Approve_advance_salary" value = "Approve Advance Salary" name = "Approve" class = "btn btn-outline-success">
+                                <input type="hidden" name="approval_type" id="approval_type">
+                                <button id = "" onclick="document.getElementById('advance_salary_selection').style.display='inline'; this.disabled=true; document.getElementById('Approve_advance_salary').style.display='none';" name = "Partial" class = "btn btn-outline-danger">Approve Partial Advance Salary</button>
+                                <input type = "submit" id = "Approve_advance_salary" value = "Approve Advance Salary" onclick="document.getElementById('approval_type').value='full_approved';" name = "Approve" class = "btn btn-outline-success">
                                 <input type = "submit" id = "Reject_advance_salary" value = "Reject Advance Salary" name = "Reject" class = "btn btn-outline-danger">
                             </div>
                         </div>
@@ -338,5 +339,20 @@
         </cfif>
     </cfif>
 </cfoutput>
-
+<script>
+    function formValidate(){
+        debugger
+        let approval_type = $('#approval_type').val();
+        let txt_remarks = $('#txt_remarks').val();
+        let Approved_amount = $('#Approved_amount').val();
+        if(approval_type == 'partial_approved'){
+            if(Approved_amount == '' || txt_remarks == ''){
+                alert('All fields must be filled out.');
+                return false;
+            }else{
+                return true;
+            }
+        }
+    }
+</script>
  
