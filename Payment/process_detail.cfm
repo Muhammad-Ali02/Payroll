@@ -55,6 +55,7 @@
             <!--- Get the end date of the month --->
             <cfset endDate = DateAdd("d", -1, DateAdd("m", 1, startDate))>
             <!--- Query used to get all Leave Days of an Employee --->
+            <!---             update query according to date of current month by usama               --->
             <cfquery name = "leave_count">
                 select count(b.leave_Date)as leave_days, a.leave_id as id, c.leave_title as title
                 from all_leaves a, leaves_approval b, leaves c
@@ -73,6 +74,7 @@
                 -- group by b.leave_id--->
             </cfquery>
             <!--- Query used to get all paid Leave Days of an Employee --->
+            <!---             update query according to date of current month by usama               --->
             <cfquery name = "paid_leave_count">
                 select count(b.leave_Date)as leave_days, a.leave_id as id, c.leave_title as title
                 from all_leaves a, leaves_approval b, leaves c
@@ -92,6 +94,7 @@
                 and leave_type = "Paid"--->
             </cfquery>
             <!--- Query used to get all Hlaf Leave Days of an Employee --->
+            <!---             update query according to date of current month by usama               --->
             <cfquery name = "half_paid_leave_count">
                 select count(b.leave_Date)as leave_days, a.leave_id as id, c.leave_title as title
                 from all_leaves a, leaves_approval b, leaves c
@@ -111,6 +114,7 @@
                 and leave_type = "halfPaid"--->
             </cfquery>
             <!--- Query used to get all non paid Leave Days of an Employee --->
+            <!---             update query according to date of current month by usama               --->
             <cfquery name = "rejected_leaves">
                 select b.*
                 from all_leaves a, leaves_approval b 
@@ -268,7 +272,8 @@
                             <label for = "non_paid_leaves" class = "form-control-label">
                                 Leaves Without Pay: 
                             </label>
-                            <cfset non_leaves = 0>
+                        <!---             calculate Non paid leaves  by  usama            --->
+                            <cfset present_on_rejected_leave_day = 0>
                             <cfloop query="rejected_leaves">
                                 <cfquery name="count_non_paid_leaves">
                                     select date 
@@ -277,10 +282,11 @@
                                     And a.employee_id = "#url.edit_process_detail#"
                                 </cfquery>
                                 <cfif count_non_paid_leaves.recordcount eq '1'>
-                                    <cfset non_leaves += 1>
+                                    <cfset present_on_rejected_leave_day += 1>
                                 </cfif>
                             </cfloop>
-                                <input type = "number"  class = "form-control" min = "0" name = "non_paid_leaves" id = "non_paid_leaves" value = "#rejected_leaves.recordcount - non_leaves#" readonly = "true">
+                            <!---             calculate Non paid leaves  by  usama            --->
+                                <input type = "number"  class = "form-control" min = "0" name = "non_paid_leaves" id = "non_paid_leaves" value = "#rejected_leaves.recordcount - present_on_rejected_leave_day#" readonly = "true">
                     </div>
                 </div>
                 <input name = "employee_id" value = "#get_employee.employee_id#" type = "hidden">

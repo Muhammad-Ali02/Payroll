@@ -301,7 +301,7 @@
                         <div class="d-flex justify-content-end flex-wrap" style="gap: 8px;">
                             <input type="hidden" name="leave_type" value="#get_leave_detail.leave_id#">
                             <input type="hidden" name="employee_id" value="#leave_requests.employee_id#">
-                            <button id="" onclick="document.getElementById('leaveSelection').style.display='inline'; this.disabled=true" name="Partial" class="btn custom_button btn-outline-danger"> Approve Partial Leave </button>
+                            <button id="" onclick="document.getElementById('leaveSelection').style.display='inline'; this.disabled=true; document.getElementById('Approve_leave').style.display='none';" name="Partial" class="btn custom_button btn-outline-danger"> Approve Partial Leave </button>
                             <input type="submit" id="Approve_leave" value="Approve Leave" name="Approve" class="btn btn-outline-success">
                             <input type="submit" id="Reject_leave" value="Reject Leave" name="Reject" class="btn btn-outline-danger">
                         </div>
