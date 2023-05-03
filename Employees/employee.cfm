@@ -41,15 +41,15 @@
         <!--- \|/_____________________________\|/_Create_\|/__________________________________\|/ --->  
         <cfif structKeyExists(form, 'create')>
             <cfquery name = "get_data">  <!--- query will get the last employee number --->
-                select cnic as cnic, official_email as email
+                select cnic as cnic, official_email as email, employee_id
                 from employee
-                where cnic = '#form.cnic#' or official_email = '#form.official_email#'
+                where cnic = <cfqueryparam value='#form.cnic#'> or official_email = <cfqueryparam value='#form.official_email#'> or employee_id = <cfqueryparam value="#form.txt_employee_number#">
             </cfquery>
             <cfif get_data.cnic eq #form.cnic#> <!--- Comparing Result to show error if cnic already exist --->
                 <script>
                     alert('Employee cnic already Exists.');
                 </script>
-                <h3 style="color:red; text-align:center;" id = "error_massage1" > *Employee CNIC already Exists </h3>
+                <h6 style="color:red; text-align:center;" id = "error_massage1" > *Employee CNIC already Exists </h6>
                     <style> <!--- if error occor style will apply to input --->
                         .cnic{
                             border-color: red;
@@ -62,9 +62,23 @@
                 <script>
                     alert('Employee official Email already Exists.');
                 </script>
-                <h3 style="color:red; text-align:center;" id = "error_massage2"> *Official Email already Exists </h3>
+                <h6 style="color:red; text-align:center;" id = "error_massage2"> *Official Email already Exists </h6>
                     <style> <!--- if error occor style will apply to input --->
                         .email{
+                            border-color: red;
+                            color: red;
+                        }
+                    </style>
+                <cfset duplicate = "true"> <!--- will be used to restore form information --->
+
+            <!---       check for duplicate employee id        --->
+            <cfelseif get_data.employee_id eq '#form.txt_employee_number#'>
+                <script>
+                    alert('Employee Number already Exists.');
+                </script>
+                <h6 style="color:red; text-align:center;" id = "error_massage2"> *Employee Number already Exists</h6>
+                    <style> <!--- if error occor style will apply to input --->
+                        .employee_id{
                             border-color: red;
                             color: red;
                         }
@@ -652,7 +666,7 @@
                             <div class = "col-md-2">
                                 <label  class="form-control-label" for = "employee_id"> Employee Number<span class="required"> * </span> </label> 
 
-                                <input onkeyup="empolyee_id_validate();" type = "text" name = "txt_employee_number" id = "employee_id" class = "form-control inpt" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" readonly<cfelse> value = "" </cfif>>
+                                <input onkeyup="empolyee_id_validate();" type = "text" name = "txt_employee_number" id = "employee_id" class = "form-control employee_id" <cfif structKeyExists(url, 'edit')>value = "#url.edit#" readonly<cfelse> value = "" </cfif>>
 
                             </div>
                         </div>
