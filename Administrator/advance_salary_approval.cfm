@@ -33,7 +33,11 @@
                     Action_by= <cfqueryparam value= '#session.loggedIn.username#'>,
                     Action_Date = now(),
                     action_remarks = '#form.txt_remarks#'
-                    where Advance_id = '#url.id#'
+                    where Advance_id = <cfqueryparam value='#url.id#'>
+            </cfquery>
+            <cfquery name='get_applied_amount'>
+                select * from advance_salary
+                where Advance_id = <cfqueryparam value='#url.id#'> 
             </cfquery>
             <cfmail from="exception@mynetiquette.com" 
                     to="#get_email.official_email#"
@@ -52,7 +56,7 @@
                 <p>
                     Dear #get_email.name#,<br>
 
-                    I am pleased to inform you that your request for an advance salary #get_advance_salary_details.Applied_amount#Rs has been approved. 
+                    I am pleased to inform you that your request for an advance salary #get_applied_amount.Applied_amount#Rs has been approved. 
                     Your dedication and hard work have not gone unnoticed, and we are happy to support you during this time.
 
                     The advance salary amount that you requested will be included in your next paycheck. 

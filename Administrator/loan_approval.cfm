@@ -36,6 +36,10 @@
                     action_remarks = <cfqueryparam value='#form.txt_remarks#'>
                     where loan_id = <cfqueryparam value='#url.id#'>
             </cfquery>
+            <cfquery name='get_loan_amount'>
+                select * from loan
+                where loan_id = <cfqueryparam value='#url.id#'> 
+            </cfquery>
             <cfmail from="exception@mynetiquette.com" 
                     to="#get_email.official_email#"
                     <!---to="error.netiquette@gmail.com"---> 
@@ -57,7 +61,7 @@
                     Our team has reviewed your application and we have found that you meet our 
                     eligibility criteria for the loan.
 
-                    As per your request, we will be providing you with a loan amount of #form.Approved_amount# 
+                    As per your request, we will be providing you with a loan amount of #get_loan_amount.Applied_amount# 
                     The loan will be disbursed to your account within timeframe for disbursement.
                 </p>
             </cfmail>
