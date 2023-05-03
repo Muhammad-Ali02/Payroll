@@ -419,30 +419,55 @@ label{
 .form-group{
     text-align: center;
 }
+/* by muhammad usama update autofil code */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
+input:-webkit-autofill:active,
 input:-webkit-autofill:focus,
 input:-webkit-autofill {
-  -webkit-text-fill-color: white;
-  -webkit-box-shadow: 0 0 0px 0px rgb(255, 255, 255) inset;
-  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: rgb(133, 131, 131) !important;
+  -webkit-box-shadow: 0 0 0px 1000px rgb(10, 12, 12) inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
 }
+input:-webkit-autofill:hover{
+  -webkit-text-fill-color: rgb(255, 255, 255) !important;
+  -webkit-box-shadow: 0 0 0px 1000px rgb(0, 0, 0) inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.887) !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgb(0, 0, 0) inset !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+} */
 select:-webkit-autofill,
-select:-webkit-autofill:hover, 
 select:-webkit-autofill:focus,
+select:-webkit-autofill:active,
 select:-webkit-autofill {
-  -webkit-text-fill-color: white;
-  -webkit-box-shadow: 0 0 0px 0px rgb(255, 255, 255) inset;
-  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: rgb(133, 131, 131) !important;
+  -webkit-box-shadow: 0 0 0px 1000px rgb(10, 12, 12) inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+select:-webkit-autofill:hover{
+    -webkit-text-fill-color: rgb(255, 255, 255) !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgb(0, 0, 0) inset !important;
+    transition: background-color 5000s ease-in-out 0s !important; 
 }
 textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover, 
+textarea:-webkit-autofill:active, 
 textarea:-webkit-autofill:focus,
 textarea:-webkit-autofill {
-  -webkit-text-fill-color: white;
-  -webkit-box-shadow: 0 0 0px 0px rgb(255, 255, 255) inset;
-  transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: rgb(133, 131, 131) !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgb(10, 12, 12) inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
 }
+textarea:-webkit-autofill:hover{
+    -webkit-text-fill-color: rgb(255, 255, 255) !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgb(0, 0, 0) inset !important;
+    transition: background-color 5000s ease-in-out 0s !important; 
+}
+/* by muhammad usama update autofil code */
 input[type="date"]::-webkit-calendar-picker-indicator {
     color: rgba(225, 11, 11) !important;
     filter: invert(60%);
