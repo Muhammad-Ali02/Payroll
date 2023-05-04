@@ -64,6 +64,49 @@
         </cfif>
         <cfif structKeyExists(form, 'month_end_process')>
             <cftransaction>
+
+                <!---process of update status by Kamal--->
+                <cfquery name="get_current_employees">
+                    select employee_id from current_month_pay
+                </cfquery>
+                
+                <cfloop query="get_current_employees">
+                    <!---update advance salary status by Kamal--->
+                    <cfquery name="get_adv_salary_record">
+                        select * from advance_salary
+                        where employee_id = '#get_current_employees.employee_id#'
+                        and status = 'Y'
+                    </cfquery>
+
+                    <cfif get_adv_salary_record.RecordCount gt 0>
+                        <cfif #get_adv_salary_record.total_amount# eq #get_adv_salary_record.returned_amount#>
+                            <cfquery name="update_adv_salary_status">
+                                update advance_salary
+                                set status = 'N',
+                                    advance_End_Date = now()
+                                where advance_id = '#get_adv_salary_record.advance_id#'  
+                            </cfquery>
+                        </cfif>
+                    </cfif>
+                    <!---update loan status by Kamal--->
+                    <cfquery name="get_loan_record">
+                        select * from loan
+                        where employee_id = '#get_current_employees.employee_id#'
+                        and status = 'Y'
+                    </cfquery>
+
+                    <cfif get_loan_record.RecordCount gt 0>
+                        <cfif #get_loan_record.Returned_Amount# eq #get_loan_record.total_amount#>
+                            <cfquery name="update_loan_status">
+                                update loan
+                                set status = 'N',
+                                    Loan_End_Date = now()
+                                where loan_id = '#get_loan_record.loan_id#' 
+                            </cfquery>
+                        </cfif>
+                    </cfif>
+                </cfloop>
+
                 <cfquery name="get_setup">
                     select * from setup
                 </cfquery>

@@ -64,7 +64,7 @@
                                 </h2>
                             
                             <p>
-                                Dear HR Manager,
+                                Dear HR Manager,<br>
 
                                 I am writing to request a leave of absence from work for [#form.leave_days#] 
                                 starting from [#form.from_date#] to [#form.to_date#]. 
