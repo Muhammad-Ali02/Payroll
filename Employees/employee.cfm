@@ -717,7 +717,8 @@
                                 <label for = "designation" class = "form-select-label">Designation<span class="required"> * </span></label>
                                 <cfquery name = "designation_list"> <!---With the help of Result, generate a dynamic list of designations --->
                                     select designation_title as title, designation_id as id
-                                    from designation
+                                    from designation 
+                                    where is_deleted <> 'Y' or is_deleted is null
                                 </cfquery>
                                 <select  name = "designation" id = "designation" class="form-select form-select-md mb-3" aria-label=".form-select-md example">
                                     <option disabled> Select Designation </option>  

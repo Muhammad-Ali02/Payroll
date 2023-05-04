@@ -343,7 +343,6 @@
 </cfoutput>
 <script>
     function formValidate(){
-        debugger
         let approval_type = $('#approval_type').val();
         let txt_remarks = $('#txt_remarks').val();
         let Approved_amount = $('#Approved_amount').val();
