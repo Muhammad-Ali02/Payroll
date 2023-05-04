@@ -6,7 +6,7 @@
             select a.employee_id, concat(b.employee_id,' | ',b.first_name,' ', b.middle_name, ' ', b.last_name) as name , b.official_email
             from current_month_pay a
             inner join employee b on a.employee_id = b.employee_id
-            where processed = 'Y'
+            where processed = 'Y' and pay_status = "Y"
         </cfquery>
         <cfif structKeyExists(url, 'generate')>
             <cfquery name = "allowances"> <!--- Get Saved Allowances edited before process --->

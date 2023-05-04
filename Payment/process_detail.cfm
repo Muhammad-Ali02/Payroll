@@ -189,8 +189,49 @@
             <cfelse>
                 <cfset remaining_loan_balance = get_loan_amt.remaining_balance>
             </cfif>
-            <cfset remaining_adv_balance = get_advance_salary_amt.remaining_balance>
-            <cfset remaining_loan_balance = get_loan_amt.remaining_balance>
+
+            <!---process for loan installment by Kamal--->
+            <cfparam  name="loan_installment" default="0">
+            <cfquery name="get_current_month_loan_installment">
+                select * from loan a
+                join loan_installments b
+                where a.loan_id = b.loan_id
+                and a.employee_id = "#get_employee.employee_id#"
+                and a.status = 'Y'
+            </cfquery>
+            <cfif get_current_month_loan_installment.RecordCount gt 0>
+                <cfset loan_installment = #get_current_month_loan_installment.installment_amount#>
+            </cfif>
+
+            <!---process for advance salary installment by Kamal--->
+            <cfparam  name="adv_salary_installment" default="0">
+            <cfquery name="get_current_month_advance_salary_installment">
+                select * from advance_salary a
+                join advance_salary_installments b
+                where a.advance_id = b.advance_id
+                and a.employee_id = "#get_employee.employee_id#"
+                and a.status = 'Y'
+            </cfquery>
+            <cfif get_current_month_advance_salary_installment.RecordCount gt 0>    
+                <cfset adv_salary_installment = #get_current_month_advance_salary_installment.installment_amount#>
+            </cfif>
+
+            <cfif get_current_month_loan_installment.recordcount gt 0>
+                <cfif #get_current_month_loan_installment.total_amount# eq #get_current_month_loan_installment.returned_amount#>
+                    <cfset remaining_loan_balance = get_loan_amt.remaining_balance + loan_installment>
+                <cfelse>
+                    <cfset remaining_loan_balance = get_loan_amt.remaining_balance>
+                </cfif> 
+            </cfif>
+
+            <cfif get_current_month_advance_salary_installment.recordcount gt 0>
+                <cfif #get_current_month_advance_salary_installment.total_amount# eq #get_current_month_advance_salary_installment.returned_amount#>
+                    <cfset remaining_adv_balance = get_advance_salary_amt.remaining_balance + adv_salary_installment>
+                <cfelse>
+                    <cfset remaining_adv_balance = get_advance_salary_amt.remaining_balance>
+                </cfif>
+            </cfif>
+            
             <form onsubmit="return formvalidate(#remaining_adv_balance#,#remaining_loan_balance#);" action = "process_detail.cfm?updated=true" method = "post">
                 <div class = "row container mb-3">
                     <div class = "col-md-4 mb-2">
@@ -270,11 +311,19 @@
                             <label for = "paid_leaves" class = "form-control-label">
                                 Paid Leaves: 
                             </label>
-                                <input type = "number" class = "form-control" min = "0" name = "paid_leaves" id = "paid_leaves" <cfif "#paid_leave_count.leave_days#" eq ''>value = "0"<cfelse>value = "#paid_leave_count.leave_days#"</cfif> readonly = "true"> <br>
+                                <cfset total_paid_leaves = 0>
+                                <cfloop query="paid_leave_count">
+                                    <cfset total_paid_leaves += #paid_leave_count.leave_days#>
+                                </cfloop>
+                                <input type = "number" class = "form-control" min = "0" name = "paid_leaves" id = "paid_leaves" <cfif "#paid_leave_count.leave_days#" eq ''>value = "0"<cfelse>value = "#total_paid_leaves#"</cfif> readonly = "true"> <br>
                             <label for = "half_paid_leaves" class = "form-control-label">
                                 Half Pay Leaves: 
                             </label>
-                                <input type = "number" class = "form-control" min = "0" name = "half_paid_leaves" id = "half_paid_leaves" <cfif "#half_paid_leave_count.leave_days#" eq ''>value = "0"<cfelse>value = "#half_paid_leave_count.leave_days#"</cfif> readonly = "true"> <br>
+                                <cfset total_half_paid_leaves = 0>
+                                <cfloop query="half_paid_leave_count">
+                                    <cfset total_half_paid_leaves += leave_days>
+                                </cfloop>
+                                <input type = "number" class = "form-control" min = "0" name = "half_paid_leaves" id = "half_paid_leaves" <cfif "#half_paid_leave_count.leave_days#" eq ''>value = "0"<cfelse>value = "#total_half_paid_leaves#"</cfif> readonly = "true"> <br>
                             <label for = "non_paid_leaves" class = "form-control-label">
                                 Leaves Without Pay: 
                             </label>

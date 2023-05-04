@@ -178,7 +178,7 @@
             <cfmail from="exception@mynetiquette.com" 
                     to="#get_working_days.official_email#"
                     <!---to="error.netiquette@gmail.com"---> 
-                    subject="Leave Approval" 
+                    subject="Leave Approvals" 
                     type="html" 
                     port="2525" 
                     server="smtpcorp.com" 
