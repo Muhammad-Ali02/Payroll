@@ -31,7 +31,7 @@
                     </h2>
                 
                 <p>
-                    Dear HR Manager,
+                    Dear HR Manager,<br>
 
                     I am writing to apply for a loan from your financial institution. 
                     I have carefully reviewed your lending policies and believe that your organization can 
@@ -68,7 +68,7 @@
                     </h2>
                 
                 <p>
-                    Dear HR Manager,
+                    Dear HR Manager,<br>
 
                     I am writing to apply for a loan from your financial institution. 
                     I have carefully reviewed your lending policies and believe that your organization can 

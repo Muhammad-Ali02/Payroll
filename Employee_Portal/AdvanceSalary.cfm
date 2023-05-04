@@ -31,7 +31,7 @@
                     </h2>
                 
                 <p>
-                    Dear HR Manager,
+                    Dear HR Manager,<br>
 
                     I am writing to request an advance salary of #form.Applied_amount#Rs to help me cover 
                     some unexpected expenses that have arisen. I understand that this is an unusual request, 
@@ -71,7 +71,7 @@
                     </h2>
                 
                 <p>
-                    Dear HR Manager,
+                    Dear HR Manager,<br>
 
                     I am writing to request an advance salary of #form.Applied_amount#Rs to help me cover 
                     some unexpected expenses that have arisen. I understand that this is an unusual request, 

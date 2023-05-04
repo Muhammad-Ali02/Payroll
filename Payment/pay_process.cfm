@@ -107,6 +107,7 @@
                         </cfif>
                 </cfquery>
 
+                <!---Process of getting total working days in month except weekend by Kamal--->
                 <cfif previous_employee.RecordCount gt 0>
                     <cfif year(previous_employee.joining_date) neq year(now()) or month(previous_employee.joining_date) neq month(now())>
                         <cfset startMonth = CreateDate(Year(now()), Month(now()), 1)>
@@ -121,6 +122,10 @@
                         </cfif>
                     </cfloop>
                     <cfset total_work_days = #workingDays#>
+
+                    <!---get total days from joining date to leaving date by Kamal--->
+                    <cfset total_days = DateDiff("d", startMonth, endMonth) + 1>
+                    
                 <cfelse>    
                     <cfset year = #setting_info.current_year#> 
                     <cfset month = #setting_info.current_month#> 
@@ -224,13 +229,17 @@
                     </cfif>  
                 </cfif> 
                     <cfset absent_days = (total_work_days - days_worked) - paid_leaves - (half_paid_leaves/2) - leaves_without_pay>
-                    <cfset worked_days = working_days - absent_days>
+                    <cfif previous_employee.RecordCount gt 0>
+                        <cfset worked_days = total_days - absent_days>
+                    <cfelse>
+                        <cfset worked_days = working_days - absent_days>
+                    </cfif>
                     <cfset var_gross_allowances = allowance_amount>
                     <!---<cfset var_gross_allowances = allowance_amount + (basic_rate * (paid_leaves + additional_days + (half_paid_leaves/2)))>--->
                     <cfset var_gross_salary = (basic_rate * (worked_days + additional_days)) + var_gross_allowances>
                     <cfset amount_of_percentage_tax = (var_gross_salary/100) * deduction_percent >
                     <cfset total_deduction = deduction_tax_amount + amount_of_percentage_tax>
-                    <cfset var_gross_deductions = total_deduction + (basic_rate * (leaves_without_pay + deducted_days))>
+                    <cfset var_gross_deductions = total_deduction + (basic_rate * (leaves_without_pay + (half_paid_leaves/2) +deducted_days))>
                     <cfif get_loan_amount.RecordCount neq 0>
                         <cfif installments.RecordCount neq 0>
                             <cfset var_net_salary = (var_gross_salary - var_gross_deductions) - var_installment_amount>
@@ -281,10 +290,11 @@
                                 update loan
                                 set Remaining_balance = <cfqueryparam value = '#var_remaining_amount#'>,
                                 Returned_Amount = <cfqueryparam value = '#var_returned_amount#'>
-                                <cfif var_returned_amount eq installments.total_amount>
+                                <!---this process is on month end not here from Kamal--->
+                                <!---<cfif var_returned_amount eq installments.total_amount>
                                     ,status = 'N',
                                     Loan_End_Date = now()
-                                </cfif>
+                                </cfif>--->
                                 where
                                 <cfif form.employee_id neq "All">
                                     employee_id = '#form.employee_id#'
@@ -302,10 +312,11 @@
                                 update advance_salary
                                 set Remaining_balance = <cfqueryparam value = '#var_adv_salary_remaining_amount#'>,
                                 Returned_Amount = <cfqueryparam value = '#var_adv_salary_returned_amount#'>
-                                <cfif var_adv_salary_returned_amount eq adv_salary_installments.total_amount>
+                                <!---this process is on month end not here from Kamal--->
+                                <!---<cfif var_adv_salary_returned_amount eq adv_salary_installments.total_amount>
                                     ,status = 'N',
                                     advance_End_Date = now()
-                                </cfif>
+                                </cfif>--->
                                 where
                                 <cfif form.employee_id neq "All">
                                     employee_id = '#form.employee_id#'
