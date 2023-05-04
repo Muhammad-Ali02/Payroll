@@ -96,21 +96,17 @@
                         </cfloop>
 
                         <cfif #pay_info.loan_amount# neq "">
-                            <cfif #loan.total_amount# neq #loan.remaining_balance#>
-                                <tr>
-                                    <td>Loan Installment</td>
-                                    <td>#evaluate("numberFormat(#pay_info.loan_amount#,'0.00')")#</td>
-                                </tr>
-                            </cfif>
+                            <tr>
+                                <td>Loan Installment</td>
+                                <td>#evaluate("numberFormat(#pay_info.loan_amount#,'0.00')")#</td>
+                            </tr>
                         </cfif>
 
                         <cfif #pay_info.adv_salary_amount# neq "">
-                            <cfif #adv_salary.total_amount# neq #adv_salary.remaining_balance#>
-                                <tr>
-                                    <td>Advance Salary Installment</td>
-                                    <td>#evaluate("numberFormat(#pay_info.adv_salary_amount#,'0.00')")#</td>
-                                </tr>
-                            </cfif>
+                            <tr>
+                                <td>Advance Salary Installment</td>
+                                <td>#evaluate("numberFormat(#pay_info.adv_salary_amount#,'0.00')")#</td>
+                            </tr>
                         </cfif>
 
                         <tr style = "border:1px solid;border-collapse: collapse;">
