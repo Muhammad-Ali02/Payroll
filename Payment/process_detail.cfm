@@ -607,7 +607,6 @@
     <!--- Javascript --->   
     <script>
         function formvalidate(rem_adv_bal,rem_loan_bal){
-            debugger;
             let remaining_adv_balance = rem_adv_bal;
             let advance_salary_amt = $('##advance_salary_amt').val();
             let remaining_loan_balance=rem_loan_bal;
