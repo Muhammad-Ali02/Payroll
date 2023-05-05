@@ -13,6 +13,10 @@
   crossorigin="anonymous"></script> -->
   <!-- <script src="/assets/jquery/jquery.js"></script> -->
   <script language="JavaScript" type="text/javascript" src="/assets/jquery/jquery.js"></script>
+
+  <!---   jquery data tables file paths  --->
+    <link rel="stylesheet" type="text/css" href="/assets/datatables/datatable_css.css"/>
+    <script type="text/javascript" src="/assets/datatables/datatables.js"></script>
 <style>
   
 </style>

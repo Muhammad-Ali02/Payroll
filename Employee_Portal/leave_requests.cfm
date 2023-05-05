@@ -1,4 +1,3 @@
- 
     <cfoutput>
         <!--- _________________________________________ Back End ______________________________________--->
         <cfquery name = "leave_requests">
@@ -30,27 +29,114 @@
             </button>
         </a>
         <cfif leave_requests.recordcount neq 0>
-            <cfparam name="pageNum" default="1">
+<!---             <cfparam name="pageNum" default="1"> 
             <cfset maxRows = 5>
             <cfset startRow = min( ( pageNum-1 ) * maxRows+1, max( leave_requests.recordCount,1 ) )>
             <cfset endRow = min( startRow + maxRows-1, leave_requests.recordCount )>
             <cfset totalPages = ceiling( leave_requests.recordCount/maxRows )>
-            <cfset loopercount = ceiling( leave_requests.recordCount/maxRows )>
+            <cfset loopercount = ceiling( leave_requests.recordCount/maxRows )>--->
             <div>
-                <table class = "table custom_table">
+                <!---<table class = "table custom_table">
                     <thead>
-                        <th>No.</th>
+                    <tr>
+                        <th>No.</th> 
                         <th>Request ID</th>
                         <th>Employee ID</th>
                         <th>Leave Title </th>
                         <th>From Date</th>
                         <th>To Date </th>
                         <th>Leave Days</th>
-                        <th>Action</th>
+                        <th>Action</th> 
                         <th>Action By </th>
+                    </tr>
                     </thead>
-                        <cfset No = #startRow# - 1>
-                        <cfloop query="leave_requests" startrow="#startRow#" endrow="#endRow#">
+                        <cfset No = 0>  
+                        <tbody>
+                            <cfloop query="leave_requests" startrow="#startRow#" endrow="#endRow#">
+                                 <cfset No = No + 1> 
+                                <tr>
+                                   <td>#No#</td> 
+                                    <td>#id#</td>
+                                    <td>#employee_id#</td>
+                                    <td>#leave_title#</td>
+                                    <td>#dateFormat(from_date,'DD-MMM-YYYY')#</td>
+                                    <td>#dateFormat(to_date,'DD-MMM-YYYY')#</td>
+                                    <td>#leave_days#</td>
+                                    <td <cfif action eq 'rejected'> class = "text-danger" <cfelseif action eq 'approved'> class = "text-success" <cfelseif action eq 'partial approved'> style="color: rgb(242, 162, 24);"</cfif>>
+                                        <cfif action eq 'rejected'>
+                                            <div class="hover-popup">
+                                                <span class="trigger">
+                                                    #action#
+                                                </span>
+                                                <div class="content ">
+                                                    <!-- <div style="text-align: center; text-decoration: underline; color: rgb(255, 255, 255, 0.8);">
+                                                        <h6>Rejected Remarks</h6>
+                                                    </div> -->
+                                                    <div class="mt-1" style="color: rgb(255, 255, 255); font-size: 12px;">
+                                                    <p style="text-align: justify; text-justify: inter-word;">#action_remarks#</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <cfelseif action eq 'partial approved'>
+                                            <cfquery name="partial_approved">
+                                                select * from leaves_approval
+                                                where leave_id = <cfqueryparam value="#leave_requests.id#">
+                                            </cfquery>
+                                            <div class="hover-popup">
+                                                <span class="trigger">
+                                                    #action#
+                                                </span>
+                                                <div class="content">
+                                                    <!-- <div style="text-align: center; text-decoration: underline; color: rgb(255, 255, 255, 0.8);">
+                                                        <h6>Rejected Remarks</h6>
+                                                    </div> -->
+                                                    <div class="mt-1" style="color: rgb(255, 255, 255); font-size: 12px;">
+                                                        <p style="text-align: justify; text-justify: inter-word; font-weight: bolder; margin-left: 5px;">Date &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Action</p>
+                                                        <cfloop query="partial_approved">
+                                                            <p style="text-align: justify; text-justify: inter-word;">
+                                                                #dateFormat('#leave_date#','yyyy-mm-dd')# <strong> : </strong> 
+                                                                <cfif approved_as eq '1'>
+                                                                Approve As Full Leave
+                                                                <cfelseif approved_as eq '0.5'>
+                                                                Approve As Half Leave 
+                                                                <cfelse>
+                                                                    Rejected
+                                                                </cfif>
+                                                            </p>
+                                                        </cfloop>
+                                                        <p style="text-align: justify; text-justify: inter-word; font-weight: bolder; text-align: center;">Remarks</p>
+                                                        <p style="text-align: justify; text-justify: inter-word;">#action_remarks#</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <cfelse>
+                                            #action#
+                                        </cfif>
+                                    </td>
+                                    <td>#action_by#</td>
+                                <tr>
+                            </cfloop>
+                        </tbody>
+                </table>--->
+
+                <!---       Remove customize pagination and add data tables           --->
+                <table class="table custom_table" id="mytable">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Request ID</th>
+                            <th>Employee ID</th>
+                            <th>Leave Title </th>
+                            <th>From Date</th>
+                            <th>To Date </th>
+                            <th>Leave Days</th>
+                            <th>Action</th> 
+                            <th>Action By </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <cfset No = 0>
+                        <cfloop query="leave_requests">
                             <cfset No = No + 1>
                             <tr>
                                 <td>#No#</td>
@@ -67,11 +153,11 @@
                                                 #action#
                                             </span>
                                             <div class="content ">
-                                                <!-- <div style="text-align: center; text-decoration: underline; color: rgb(255, 255, 255, 0.8);">
+                                                <!--- <div style="text-align: center; text-decoration: underline; color: rgb(255, 255, 255, 0.8);">
                                                     <h6>Rejected Remarks</h6>
-                                                </div> -->
+                                                </div> --->
                                                 <div class="mt-1" style="color: rgb(255, 255, 255); font-size: 12px;">
-                                                   <p style="text-align: justify; text-justify: inter-word;">#action_remarks#</p>
+                                                <p style="text-align: justify; text-justify: inter-word;">#action_remarks#</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -94,9 +180,9 @@
                                                         <p style="text-align: justify; text-justify: inter-word;">
                                                             #dateFormat('#leave_date#','yyyy-mm-dd')# <strong> : </strong> 
                                                             <cfif approved_as eq '1'>
-                                                               Approve As Full Leave
+                                                            Approve As Full Leave
                                                             <cfelseif approved_as eq '0.5'>
-                                                               Approve As Half Leave 
+                                                            Approve As Half Leave 
                                                             <cfelse>
                                                                 Rejected
                                                             </cfif>
@@ -112,17 +198,12 @@
                                     </cfif>
                                 </td>
                                 <td>#action_by#</td>
-                            <tr>
-                            <!--- <cfif action eq 'rejected'>
-                                <tr class = "table-danger">
-                                    <td><strong>Rejected Remarks</strong></td>
-                                    <td colspan = "8" class = "text-danger">#action_remarks#</td>
-                                </tr>
-                            </cfif> --->
+                            </tr>
                         </cfloop>
+                    </tbody>
                 </table>
             </div>
-            <!---        Pageination code start      --->
+            <!---        Pageination code start      
             <div class="d-flex justify-content-end">
                 <cfif structKeyExists(url, "pageNum")>
                     <cfif "#url.pageNum#" lte looperCount>
@@ -146,10 +227,25 @@
                         <span class="m-2">page #pageNum# of #looperCount#</span>
                     </cfif>
                 </cfif>
-            </div>
+            </div>--->
             <!---      Pagination End        --->
         <cfelse>
             <p> No Leave Requests! You Have Not Any Request For Leave.</p>
         </cfif>
     </cfoutput>
+    <script type="text/javascript">
+    // data tabel code
+        $(document).ready(function() {
+            $.noConflict();
+            var table = $('#mytable').dataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "createdRow": function( row, data, dataIndex ) {
+                $(row).css('background-color', 'rgb(0,0,0,0.2)');
+                }
+            });
+        });
+    </script>
  
