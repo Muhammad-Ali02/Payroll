@@ -126,7 +126,9 @@
 
                 <cfquery name = 'get_column'>
                     select column_name from information_schema.columns 
-                    where table_name = "current_month_pay" And column_name <> "employee_id"
+                    where table_name = "current_month_pay" 
+                    And column_name <> "employee_id" 
+                    And column_name <> "pay_status"
                 </cfquery>
                 <cfloop query="get_column">
                     <cfif get_column.column_name eq 'month'>
