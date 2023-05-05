@@ -4,10 +4,9 @@
         select a.*, l.leave_title, concat(emp.first_name,' ',emp.middle_name,' ',emp.last_name) as name
         from all_leaves a , leaves l , employee emp
         where a.leave_id = l.leave_id
-        and a.employee_id = emp.employee_id
-        and action = 'pending'
+        and a.employee_id = emp.employee_id order by id desc
     </cfquery>
-    <cfquery name="get_approved_requests">
+    <!---<cfquery name="get_approved_requests">
         select a.*, l.leave_title, emp.official_email, concat(emp.first_name,' ',emp.middle_name,' ',emp.last_name) as name
         from all_leaves a , leaves l , employee emp
         where a.leave_id = l.leave_id
@@ -20,7 +19,7 @@
         where a.leave_id = l.leave_id
         and a.employee_id = emp.employee_id
         and action = 'rejected' order by a.request_date desc
-    </cfquery>
+    </cfquery>--->
     
     <!--- update leave as approved or rejected --->
     <cfif structKeyExists(form, 'Approve') or structKeyExists(form, 'Reject') or structKeyExists(form, 'Partial_leave')>
@@ -321,8 +320,61 @@
         <div class="text-center mb-5">
             <h3 class="box_heading">Leave Approval</h3>
         </div>
+        <!---       Remove customize pagination and add data tables           --->
+        <table id="mytable" class="table custom_table">
+            <thead>
+                <tr>
+                    <th> No.</th>
+                    <th>Request ID</th>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Leave Title</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Days</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <cfset No = 0>
+                <cfloop query="leave_requests">
+                    <cfset No = No + 1>
+                    <tr>
+                    <td>#No#</td>
+                    <td>#id#</td>
+                    <td>#employee_id#</td>
+                    <td>#name#</td>
+                    <td>#leave_title#</td>
+                    <td>#dateFormat(from_date, 'DD-MMM-YYYY')#</td>
+                    <td>#dateFormat(to_date, 'DD-MMM-YYYY')#</td>
+                    <td>#leave_days#</td>
+                    <td>#action#</td>
+                    <td> 
+                    <!---     this if condition use for approved requests user can only view details of approved requests       --->
+                        <cfif action neq 'Pending'>
+                            <a title='detail view' href = "approved_request_view.cfm?leave_request_id=#id#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-ticket-detailed" viewBox="0 0 16 16">
+                                    <path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5ZM5 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z"/>
+                                    <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5ZM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5h-13Z"/>
+                                </svg>
+                            </a>
+                        <cfelse>
+                            <a href = "?request_id=#id#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                    <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                                    <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                </svg>
+                            </a>
+                        </cfif>
+                    </td>
+                    </tr>
+                </cfloop>
+            </tbody>
+        </table>
+        
         <!--- following code shows all approved, rejected and pending requests  --->
-        <cfif leave_requests.recordcount neq 0>
+        <!---<cfif leave_requests.recordcount neq 0>
             <p class="text-primary">
                 Pending Requests:
             </p>
@@ -678,10 +730,24 @@
             <p class="text-danger">
                 No Rejected Requests! 
             </p>
-        </cfif>
+        </cfif>--->
     </cfif>
 </cfoutput>
 <script>
+    // data table code
+    $(document).ready(function() {
+        $.noConflict();
+        var table = $('#mytable').dataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "createdRow": function( row, data, dataIndex ) {
+                $(row).css('background-color', 'rgb(0,0,0,0.2)');
+            }
+        });
+        // $('#mytable tbody tr').css('background-color', 'rgb(0,0,0,0.2)');
+    });
     // following function run on form submit 
     function formValidate(){
         let remarks = $('#txt_remarks').val();

@@ -3,10 +3,9 @@
     <cfquery name='loan_request'>
         Select loan.*, concat(emp.first_name,' ',emp.middle_name,' ',emp.last_name) as name
         From loan , employee emp
-        Where loan.employee_id = emp.employee_id 
-        And loan.action = 'pending'
+        Where loan.employee_id = emp.employee_id order by loan_id desc
     </cfquery>
-    <cfquery name='get_approved_request'>
+    <!---<cfquery name='get_approved_request'>
         Select loan.*, concat(emp.first_name,' ',emp.middle_name,' ',emp.last_name) as name
         From loan , employee emp
         Where loan.employee_id = emp.employee_id And (loan.action = 'Approved' or loan.action = 'Partial Approved')
@@ -16,7 +15,7 @@
         From loan , employee emp
         Where loan.employee_id = emp.employee_id 
         And loan.action = 'rejected'
-    </cfquery>
+    </cfquery>--->
     
     <cfif structKeyExists(form, 'Approve') or structKeyExists(form, 'Reject') or structKeyExists(form, 'Partial_approved')>
         <cfquery name="get_email">
@@ -219,7 +218,59 @@
         <div class="text-center mb-5">
             <h3 class="box_heading">Loan Approval</h3>
         </div>
-        <cfif loan_request.recordcount neq 0>
+        <div>
+            <!---       Remove customize pagination and add data tables           --->
+            <table id="mytable" class="table custom_table">
+                <thead>
+                    <tr>
+                    <th>No.</th>
+                        <th>Request ID</th>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Loan Amount</th>
+                        <th>Applied Date</th>
+                        <th>InstallMent Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <cfset No = 0>
+                    <cfloop query="loan_request">
+                        <cfset No = No + 1>
+                        <tr>
+                        <td>#No#</td>
+                        <td>#loan_id#</td>
+                        <td>#employee_id#</td>
+                        <td>#name#</td>
+                        <td>#Applied_Amount#</td>
+                        <td>#dateFormat(Apply_date ,'DD-MMM-YYYY')#</td>
+                        <td>#InstallMentAmount#</td>
+                        <td>#action#</td>
+                        <td>
+                            <!---     this if condition use for approved requests user can only view details of approved requests       --->
+                            <cfif action neq 'Pending'>
+                                <a href = "approved_request_view.cfm?loan_request_id=#loan_id#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                                        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                    </svg>
+                                </a>
+                            <cfelse>
+                                <a href = "?request_id=#loan_id#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                                        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                    </svg>
+                                </a>
+                            </cfif>
+                        </td>
+                        </tr>
+                    </cfloop>
+                </tbody>
+            </table>
+        </div>
+        <!---<cfif loan_request.recordcount neq 0>
             <p class = "text-primary">Pending Requests:</p>
             <table class = "table table-bordered custom_table">
                 <thead>
@@ -338,10 +389,23 @@
             </table>
         <cfelse>
             <p class="text-light"> No Rejected Requests! </p>
-        </cfif>
+        </cfif>--->
     </cfif>
 </cfoutput>
 <script>
+    // data table code
+    $(document).ready(function() {
+        $.noConflict();
+        var table = $('#mytable').dataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "createdRow": function( row, data, dataIndex ) {
+                $(row).css('background-color', 'rgb(0,0,0,0.2)');
+            }
+        });
+    });
     function formValidate(){
         let approval_type = $('#approval_type').val();
         let txt_remarks = $('#txt_remarks').val();
