@@ -163,8 +163,12 @@
                         </cfif>
                         --->
                 </cfloop>--->
-            <!--- Calculate Basic Rate Per Day using Basic Salary of Employee --->
-            <cfset basic_rate = get_employee.basic_salary / working_days>
+            <!--- Calculate Basic Rate Per Day using Basic Salary and allowances of Employee --->
+            <cfset total_allowance = 0>
+            <cfloop query="get_allowance">
+                <cfset total_allowance += #amount#>
+            </cfloop>
+            <cfset basic_rate = (get_employee.basic_salary + total_allowance) / working_days>
 
         <!---________________________________________________________Create/Update Front End _________________________________________________________--->
         <div class="employee_box"> 
@@ -275,7 +279,7 @@
                             <cfloop query="get_allowance">
                                 <label for = "allowance_amount#id#" class = "form-control-label"> #name#: </label>
                                 <input type = "hidden" name = "allowance_id#id#" value = "#id#">
-                                <input type = "number"  min = "0" name = "allowance_amount#id#" id = "allowance_amount#id#" value = "#amount#" class = "form-control"> <br>
+                                <input type = "number"  min = "0" name = "allowance_amount#id#" id = "allowance_amount#id#" value = "#amount#" class = "form-control" onblur="basic_rate_calculation(#get_employee.basic_salary#, #working_days#);"> <br>
                             </cfloop>
                     </div>
                     <!--- Deductions --->
@@ -713,6 +717,26 @@
             return dates //dates[0].getDay();
             }
         */
+        // below code run on changes allowance amount and calculate basic rate per day
+        const allowance_id = [];
+        <cfloop query="get_allowance">
+            <cfoutput>
+                var #toScript(id, "jsid")#;
+            </cfoutput>
+                allowance_id.push(jsid);
+        </cfloop>
+    
+        function basic_rate_calculation(basic_salary, working_days){
+                    var total_ids = allowance_id.length;
+                    var total_allowances = 0;
+                for(let i = 0; i < total_ids; i++){
+                    var id = allowance_id[i];
+                    allowances = document.getElementById("allowance_amount"+id).value
+                    total_allowances = total_allowances + parseInt(allowances)
+                }
+                var rate_per_day = (total_allowances + basic_salary) / working_days;
+                $('##basic_rate').val(rate_per_day.toFixed(2));
+            }
     </script>
     
 </cfoutput>
